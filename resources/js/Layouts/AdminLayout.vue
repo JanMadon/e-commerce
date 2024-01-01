@@ -16,7 +16,7 @@
                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                     Orders
                 </NavLink>
-                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                <NavLink :href="route('admin.usersList')" :active="route().current('admin.usersList')">
                     Users
                 </NavLink>
                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
@@ -191,7 +191,7 @@
                 <NavLink :href="route('dashboard')">
                     Gameing
                 </NavLink>
-                <NavLink :href="route('dashboard')">
+                <NavLink :href="route('admin.usersList')">
                     Desks
                 </NavLink>
             </div>
@@ -219,6 +219,6 @@ const isDark = useDark();
 const toggleDark = useToggle(isDark);
 const showList = ref(false)
 const showProfil = ref(false);
-const showAdminPanel = ref(false);
+const showAdminPanel = ref(true);
 
 </script>
