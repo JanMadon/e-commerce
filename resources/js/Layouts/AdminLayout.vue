@@ -3,7 +3,7 @@
         <!-- admin panel -->
         <div v-show="showAdminPanel" class="flex flex-col items-center w-48 bg-slate-700 text-white">
             <p class="m-5 font-bold text-xl"> Admin Panel</p>
-            <div class="text-center w-full border">
+            <div class="flex flex-col items-center text-center w-full border">
                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                     Dashboard
                 </NavLink>
@@ -11,7 +11,10 @@
                     Shop
                 </NavLink>
                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                    Products
+                    Products list
+                </NavLink>
+                <NavLink :href="route('form.add.product')" :active="route().current('form.add.product')">
+                    Add products
                 </NavLink>
                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                     Orders

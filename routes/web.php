@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,11 @@ Route::get('/dashboard', function () {
 Route::controller(AdminController::class)
     -> middleware(['auth', 'verified'])->group(function () {
     Route::get('/admin/user-list' , 'usersList')->name('admin.usersList');
+});
+
+Route::controller(ProductController::class)
+->middleware(['auth', 'verified'])->group(function () {
+    Route::get('/addProducts', 'create')->name('form.add.product');
 });
 
 Route::middleware('auth')->group(function () {
