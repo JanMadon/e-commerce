@@ -38,7 +38,9 @@ Route::controller(AdminController::class)
 
 Route::controller(ProductController::class)
 ->middleware(['auth', 'verified'])->group(function () {
-    Route::get('/addProducts', 'create')->name('form.add.product');
+    Route::get('/addProducts', 'form')->name('form.add.product');
+    Route::post('/addProducts', 'create')->name('create.add.product');
+    // Route::post('/uploadFoto', 'savePhoto')->name('uplodad.photo');
 });
 
 Route::middleware('auth')->group(function () {
@@ -46,5 +48,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
 
 require __DIR__.'/auth.php';
