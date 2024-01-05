@@ -20,4 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::post('/save-photo', [ProductController::class, 'savePhoto'])->name('uplodad.photo');;
+//Route::post('/save-photo', [ProductController::class, 'savePhoto'])->name('uplodad.photo');;

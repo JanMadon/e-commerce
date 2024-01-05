@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddProductRequest;
+use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -14,29 +17,64 @@ class ProductController extends Controller
      */
     public function list()
     {
-        //
+        
+       return Inertia::render('Admin/ProductsList');
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function form()
+    public function form(Request $request)
     {
-       return Inertia::render('Admin/AddProduct');
+    
+
+       return Inertia::render('Admin/AddProduct', [
+        'message' => $request->message,
+       ]
+       
+    );
     }
 
-    public function create(Request $request) {  
+    public function create(AddProductRequest $request) {  
+        
+        
+        $request = $request->validated();
+        
+        $model = new Product();
 
-        dd($request);
-        //return Inertia::render('Admin/AddProduct');
+        $date = [
+            'name' => $request['name'],
+            'category'=> $request['category'],
+            'description' => $request['description'],
+            'price' => $request['price'],
+            'quantity' => $request['quantity'],
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ];
+
+        $model->fill($date);
+        $model->save();
+        $productId = $model->id;
+
+        foreach($request['photos'] as $photo) {
+            // $path = $photo[0]->disc('public')->store("products/$productId");
+            $path = Storage::put('product',$photo[0]);
+            dump($path);
+        }
+
+
+        dd($productId);
+
+       
+        return to_route('list.products');
     }
 
     public function savePhoto(Request $request) {
-        //dd($request->data);
+        dd($request->data);
+
         Storage::disk('public')->put('./list.txt', '$request->data');
         
-        return response()->json(['message' => 'file uploadet successfully'], 200);
-        //return to_route('form.add.product');
+        return to_route('form.add.product', ['message' => 'file uploadet successfully']);
     }
 
     /**

@@ -38,6 +38,7 @@ Route::controller(AdminController::class)
 
 Route::controller(ProductController::class)
 ->middleware(['auth', 'verified'])->group(function () {
+    Route::get('/addedProducts', 'list')->name('list.products');
     Route::get('/addProducts', 'form')->name('form.add.product');
     Route::post('/addProducts', 'create')->name('create.add.product');
     // Route::post('/uploadFoto', 'savePhoto')->name('uplodad.photo');
