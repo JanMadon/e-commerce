@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use PhpParser\Node\Stmt\Return_;
 
+use function PHPSTORM_META\map;
+
 class ProductController extends Controller
 {
     /**
@@ -17,8 +19,28 @@ class ProductController extends Controller
      */
     public function list()
     {
+        $products = Product::get();
+        $photosData = [];
+
+        // All files name
+
+
+        foreach($products as $product) {
+            $productId = $product->id;
+            $photoName = Storage::files("product/$productId");
+            $photoName = array_map('basename', $photoName);
+            $photo = Storage::get("product/$productId/$photoName[0]");
+
+            $base64Image = base64_encode($photo);
+            $photosData[$productId] = $base64Image;
+            
+        }
         
-       return Inertia::render('Admin/ProductsList');
+        // dump($products);
+       return Inertia::render('Admin/ProductsList', [
+        'products' => $products,
+        'photos' => $photosData
+       ]);
     }
 
     /**
@@ -36,7 +58,6 @@ class ProductController extends Controller
     }
 
     public function create(AddProductRequest $request) {  
-        
         
         $request = $request->validated();
         
@@ -58,24 +79,12 @@ class ProductController extends Controller
 
         foreach($request['photos'] as $photo) {
             // $path = $photo[0]->disc('public')->store("products/$productId");
-            $path = Storage::put('product',$photo[0]);
-            dump($path);
+            $path = Storage::put("product/$productId",$photo[0]);
         }
 
-
-        dd($productId);
-
-       
         return to_route('list.products');
     }
 
-    public function savePhoto(Request $request) {
-        dd($request->data);
-
-        Storage::disk('public')->put('./list.txt', '$request->data');
-        
-        return to_route('form.add.product', ['message' => 'file uploadet successfully']);
-    }
 
     /**
      * Store a newly created resource in storage.
