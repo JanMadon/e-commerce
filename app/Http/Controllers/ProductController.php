@@ -100,12 +100,24 @@ class ProductController extends Controller
     public function show(string $id)
     {
         
-       
+        $photosName = Storage::files("product/$id");
+        $photosName = array_map('basename', $photosName);
+        //dd($photosName);
+        
+        $photosData = [];
+
+        foreach($photosName as $photoName) {
+            $photo = Storage::get("product/$id/$photoName");
+            $base64Image = base64_encode($photo);
+
+            $photosData[] = $base64Image;
+        }
+        //dd($photosData[0]);
 
         return Inertia::render('Admin/ProductPage', [
-            // 'product' => Product::find($id),
+            'product' => Product::find($id),
+            'photos' => $photosData 
         ]);
-
     }
 
     /**

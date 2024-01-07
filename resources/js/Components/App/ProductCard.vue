@@ -18,9 +18,7 @@
                     <h5 class="font-bold">$ {{ product.price }}</h5>
                 </div>
                 <div class="flex justify-between items-end t-10 py-3 px-4">
-                    <PrimaryButton class="btn-primary" @click="addToCart()">
-                        Add to Cart
-                    </PrimaryButton>
+                    <AddToCartBtn :product="product" :quantity="1"/>
                 </div>
             </div>
            
@@ -30,6 +28,7 @@
 import PrimaryButton from '../PrimaryButton.vue';
 import { router } from '@inertiajs/vue3';
 import {showSuccessNotification} from '@/event-bus.js';
+import AddToCartBtn from './AddToCartBtn.vue';
 
 
 const emit = defineEmits('addToCart');
@@ -38,21 +37,5 @@ const props = defineProps({
     photo: String,
     product: Object
 })
-
-function addToCart() {
-   
-    router.post(route('addToCart'), 
-        { //data
-            id: props.product.id,
-            quantity: 1
-        },
-        { // optins
-            onSuccess: ()=> {
-                showSuccessNotification(`The product:  <strong> ${props.product.name} </strong> has been added to the cart`)    
-            } 
-        }
-    );
-}
-
 
 </script>

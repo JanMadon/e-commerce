@@ -199,7 +199,7 @@
                 </NavLink>
             </div>
 
-            <main>
+            <main class="border">
                 <slot />
             </main>
         </div>

@@ -18,6 +18,8 @@ class OrderController extends Controller
             'id' => ['required', 'exists:products,id'],
             'quantity' => ['required', 'min:1']
         ]);
+
+        dd($request['quantity']);
         
         try{
             if (!Order::where('user_id', Auth::user()->id)->exists()) {
