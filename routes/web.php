@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -32,17 +33,17 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::controller(AdminController::class)
-    -> middleware(['auth', 'verified'])->group(function () {
-    Route::get('/admin/user-list' , 'usersList')->name('admin.usersList');
-});
+    ->middleware(['auth', 'verified'])->group(function () {
+        Route::get('/admin/user-list', 'usersList')->name('admin.usersList');
+    });
 
 Route::controller(ProductController::class)
-->middleware(['auth', 'verified'])->group(function () {
-    Route::get('/addedProducts', 'list')->name('list.products');
-    Route::get('/addProducts', 'form')->name('form.add.product');
-    Route::post('/addProducts', 'create')->name('create.add.product');
-    // Route::post('/uploadFoto', 'savePhoto')->name('uplodad.photo');
-});
+    ->middleware(['auth', 'verified'])->group(function () {
+        Route::get('/addedProducts', 'list')->name('list.products');
+        Route::get('/addProducts', 'form')->name('form.add.product');
+        Route::post('/addProducts', 'create')->name('create.add.product');
+        // Route::post('/uploadFoto', 'savePhoto')->name('uplodad.photo');
+    });
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -50,5 +51,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::controller(OrderController::class)
+    // ->middleware(['auth', 'verified'])
+    ->group(function () {
+        Route::post('/order', 'create')->name('addToCart');
+    });
 
-require __DIR__.'/auth.php';
+
+require __DIR__ . '/auth.php';

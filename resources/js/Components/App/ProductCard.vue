@@ -28,9 +28,15 @@
 <script setup>
 import PrimaryButton from '../PrimaryButton.vue';
 
+const emit = defineEmits();
+
 const props = defineProps({
     photo: String,
     product: Object
 })
+
+function addToCart() {
+    emit('addToCart', props.product)
+}
 
 </script>
