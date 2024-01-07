@@ -99,7 +99,13 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+        
+       
+
+        return Inertia::render('Admin/ProductPage', [
+            // 'product' => Product::find($id),
+        ]);
+
     }
 
     /**

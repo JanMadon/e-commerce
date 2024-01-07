@@ -42,7 +42,14 @@ Route::controller(ProductController::class)
         Route::get('/addedProducts', 'list')->name('list.products');
         Route::get('/addProducts', 'form')->name('form.add.product');
         Route::post('/addProducts', 'create')->name('create.add.product');
+        Route::get('/product/{id}', 'show')->name('show.product');
         // Route::post('/uploadFoto', 'savePhoto')->name('uplodad.photo');
+    });
+    
+Route::controller(OrderController::class)
+    // ->middleware(['auth', 'verified'])
+    ->group(function () {
+        Route::post('/order', 'create')->name('addToCart');
     });
 
 Route::middleware('auth')->group(function () {
@@ -51,11 +58,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::controller(OrderController::class)
-    // ->middleware(['auth', 'verified'])
-    ->group(function () {
-        Route::post('/order', 'create')->name('addToCart');
-    });
 
 
 require __DIR__ . '/auth.php';

@@ -1,6 +1,6 @@
 <template>
     <div class="border border-1 border-gray-200 rounded-md hover:border-purple-600 transition-colors bg-white">
-                <a href="https://lcommerce.net/product/2022-apple-macbook-pro-laptop-with-m2-chip-13-inch-retina-display"
+                <a :href="route('show.product', product.id)"
                     class="flex justify-center aspect-w-3 aspect-h-2 block overflow-hidden">
                     <img alt="product" class=" object-cover rounded-lg hover:scale-105 hover:rotate-1 transition-transform"
                     :src="'data:image/jpeg;base64,' + photo">
