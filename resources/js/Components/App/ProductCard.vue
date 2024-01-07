@@ -23,12 +23,16 @@
                     </PrimaryButton>
                 </div>
             </div>
+           
 </template>
 
 <script setup>
 import PrimaryButton from '../PrimaryButton.vue';
+import { router } from '@inertiajs/vue3';
+import {showSuccessNotification} from '@/event-bus.js';
 
-const emit = defineEmits();
+
+const emit = defineEmits('addToCart');
 
 const props = defineProps({
     photo: String,
@@ -36,7 +40,19 @@ const props = defineProps({
 })
 
 function addToCart() {
-    emit('addToCart', props.product)
+   
+    router.post(route('addToCart'), 
+        { //data
+            id: props.product.id,
+            quantity: 1
+        },
+        { // optins
+            onSuccess: ()=> {
+                showSuccessNotification(`The product:  <strong> ${props.product.name} </strong> has been added to the cart`)    
+            } 
+        }
+    );
 }
+
 
 </script>

@@ -204,6 +204,8 @@
             </main>
         </div>
     </div>
+    <Notification/>
+
 </template>
 
 <script setup>
@@ -215,6 +217,8 @@ import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
 import { useDark, useToggle } from '@vueuse/core'
+import Notification from '@/Components/App/Notification.vue'
+
 
 const showingNavigationDropdown = ref(false);
 const dark = ref(false)
