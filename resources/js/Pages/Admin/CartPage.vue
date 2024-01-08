@@ -50,7 +50,8 @@
             <div class="flex justify-between  w-2/3 h-2/3  p-2
             bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
                 <p v-if="showError" class="text-center w-full text-red-600">Please provide correct quantyti!</p>
-                <PrimaryButton v-else class=" flex justify-center w-full bg-orange-400 hover:bg-orange-600 focus:bg-orange-600">
+                <PrimaryButton v-else class=" flex justify-center w-full bg-orange-400 hover:bg-orange-600 focus:bg-orange-600"
+                    @click.prevent="makeOrder">
                     Proceed to Checkout
                 </PrimaryButton>
             </div>
@@ -93,11 +94,20 @@ calculate()
 function updateTotalPrice(event, index) {
     props.products[index].quantity = parseInt(event.target.value)
     calculate()
+    updatCart(index)
 }
 
 function deleteProduct(product) {
-    console.log(product.id);
     router.delete(route('cart.deleteProduct', {productId: product.id}))
+}
+
+function updatCart(index) {
+
+    router.patch(route('cart.updateOrder'),  props.products[index])
+}
+
+function makeOrder() {
+    router.post(route('cart.makeOrder'), props.products)
 }
 
 

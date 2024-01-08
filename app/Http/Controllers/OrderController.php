@@ -91,7 +91,6 @@ class OrderController extends Controller
     }
 
     public function deleteProduct(Request $request) {
-
         $order = Order::where('user_id', Auth::id())
             ->where('status', 'active')
             ->first();
@@ -103,5 +102,27 @@ class OrderController extends Controller
         $orderProduct->delete();
         
         return to_route('cart');
+    }
+
+    public function updateOrder(Request $request) {
+
+        $request->validate([
+            'quantity' => ['integer','min:1'],
+        ]);
+        
+        $activeOrderForUser = Order::where('user_id', Auth::id())
+                                ->where('status', 'active')
+                                ->first(); 
+
+        $product = DetalsOrder::where('order_id', $activeOrderForUser->id)
+                                ->where('product_id', $request->id)
+                                ->first();
+
+        $product->quantity = $request->quantity;
+        $product->save();
+    }
+
+    public function makeOrder(){
+        dd('makeOrder');
     }
 }
