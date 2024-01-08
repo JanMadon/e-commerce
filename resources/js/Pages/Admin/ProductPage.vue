@@ -6,9 +6,9 @@
 
         <div class="flex justify-center mt-8 mx-auto ">
             <div class="flex flex-col items-center w-2/3 h-2/3 mx-5 p-5
-            border border-gray-300 rounded-xl shadow-2xl">
+            bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
                 <!-- Zdjęcie -->
-                <img :src="'data:image/pag;base64,' + mainPhoto" alt="Product Image" class="w-2/3  mb-4">
+                <img :src="'data:image/pag;base64,' + mainPhoto" alt="Product Image" class="w-2/3   h-96 m-10 object-cover">
                 <!-- Przewijana lista -->
                 <div class="overflow-y-auto">
                     <ul class="flex ">
@@ -21,18 +21,22 @@
                 </div>
             </div>
 
-            <div class="flex flex-col justify-between w-60 right-column p-4 border border-gray-300 rounded-xl shadow-2xl">
+            <div class="flex flex-col justify-between w-60 right-column p-4 bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
                 <div>
                     <p class="text-gray-700 text-sm border-b border-gray-400">{{ product.category }}</p>
 
-                    <h2 class="text-xl mb-4">{{ product.name }}</h2>
+                    <h2 class="text-xl font-bold mb-4">{{ product.name }}</h2>
                     <p class="text-gray-700 mb-10">{{ product.description }}</p>
 
+                    <div class="flex items-center mb-10">
+                        <label for="quantity" class="mr-5 font-medium text-gray-600">Price:</label>
+                        <p class="text-xl font-bold"> {{ product.price }} PLN</p>
+                    </div>
                 </div>
 
                 <div class="flex flex-col">
                     <div class="flex items-center mb-10">
-                        <label for="quantity" class="mr-5 text-sm font-medium text-gray-600">Quantity:</label>
+                        <label for="quantity" class="mr-10 font-bold text-gray-600">Quantity:</label>
                         <input v-model="setQuantity" type="number" min="1" class="text-center w-full border rounded-md">
                     </div>
                     <AddToCartBtn  :product="product" :quantity="setQuantity" />

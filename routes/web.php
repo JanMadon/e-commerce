@@ -50,6 +50,7 @@ Route::controller(OrderController::class)
     // ->middleware(['auth', 'verified'])
     ->group(function () {
         Route::post('/order', 'create')->name('addToCart');
+        Route::get('/cart', 'cart')->name('cart');
     });
 
 Route::middleware('auth')->group(function () {
