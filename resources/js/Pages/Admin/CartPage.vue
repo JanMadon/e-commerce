@@ -3,7 +3,7 @@
     <AdminLayout>
 
         <div class="flex flex-col items-center mt-3 mx-auto ">
-            <div class="flex w-2/3 border p-2">
+            <div class="flex w-2/3 p-2">
                 <h2 class="text-2xl font-bold text-left">Your Catr Items</h2>
             </div>
             <div v-for="(product, index) in products" class="flex justify-between  w-2/3 h-2/3 mx-5 p-5
@@ -19,7 +19,7 @@
                         <p class="text-xs">Price per item: {{ product.price }} PLN</p>
                         <div class="flex items-end">
                             <label for="quantityfor" class="mr-1 text-sm text-gray-600">Quantity:</label>
-                            <input :value="product.quantity" @input="updateTotalPrice(index)" type="number" min="1"
+                            <input :value="product.quantity" @input="event => updateTotalPrice(event, index)" type="number" min="1"
                                 class="text-center w-16 border rounded-sm h-7">
                         </div>
                     </div>
@@ -29,7 +29,7 @@
                     <p class="text-lg font-bold "> {{ product.quantity * product.price }} PLN</p>
                     <div>
                     </div>
-                    <DangerButton class="px-0">
+                    <DangerButton @click.prevent="deleteProduct(product)" class="px-0">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-5 h-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -49,20 +49,19 @@
             </div>
             <div class="flex justify-between  w-2/3 h-2/3  p-2
             bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
-                <p v-if="showError" class="text-red-600">Please provide correct quantyti!</p>
-                <PrimaryButton class=" flex justify-center w-full bg-orange-400 hover:bg-orange-600">
+                <p v-if="showError" class="text-center w-full text-red-600">Please provide correct quantyti!</p>
+                <PrimaryButton v-else class=" flex justify-center w-full bg-orange-400 hover:bg-orange-600 focus:bg-orange-600">
                     Proceed to Checkout
                 </PrimaryButton>
             </div>
         </div>
-        <!-- {{ product }} -->
     </AdminLayout>
 </template>
 
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import ProductCard from '@/Components/App/ProductCard.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 import { ref } from 'vue';
@@ -74,47 +73,32 @@ import { computed } from 'vue';
 const props = defineProps({
     products: Object,
 })
-
-const quantityfor = ref()
-const setQuantity = ref(11);
 const tatalPrice = ref(0);
 const showError = ref(false);
 
-// const priceItem = computed(() => (index)=>{
-//     const result = props.products[index].price * setQuantity.value[0][index].quantity
-//     console.log(index)
-//     return result
-// })
-
-// function priceItem(index) {
-//     return index
-// }
-
 function calculate() {
     tatalPrice.value = 0
-
     for (const product of props.products) {
         if (product.quantity <= 0) {
             showError.value = true;
-            break;
+            break
+        } else {
+            showError.value = false;
         }
         tatalPrice.value += (product.quantity * product.price)
     }
 }
-
 calculate()
 
-// function setQuantityLoop() {
-//     setQuantity.value.push(props.products)
-// }
-// setQuantityLoop();
-
-function updateTotalPrice(index) {
-    props.products[index].quantity = event.target.value
-    // totalPriceForItem.value.index = props.products[index].price * setQuantity.value[0][index].quantity
+function updateTotalPrice(event, index) {
+    props.products[index].quantity = parseInt(event.target.value)
     calculate()
 }
 
+function deleteProduct(product) {
+    console.log(product.id);
+    router.delete(route('cart.deleteProduct', {productId: product.id}))
+}
 
 
 

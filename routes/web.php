@@ -51,12 +51,13 @@ Route::controller(OrderController::class)
     ->group(function () {
         Route::post('/order', 'create')->name('addToCart');
         Route::get('/cart', 'cart')->name('cart');
+        Route::delete('/cart', 'deleteProduct')->name('cart.deleteProduct');
     });
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::delete('/profile/{product}', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 

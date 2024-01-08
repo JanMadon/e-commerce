@@ -45,8 +45,6 @@ class OrderController extends Controller
         ]);
     }
 
-
-
     public function create(Request $request)
     {
         $request->validate([
@@ -90,5 +88,20 @@ class OrderController extends Controller
 
         // return redirect()->back();
         return to_route('list.products');
+    }
+
+    public function deleteProduct(Request $request) {
+
+        $order = Order::where('user_id', Auth::id())
+            ->where('status', 'active')
+            ->first();
+
+        $orderProduct = DetalsOrder::where('order_id', $order->id)
+                        ->where('product_id', $request->productId)
+                        ->first();  
+        
+        $orderProduct->delete();
+        
+        return to_route('cart');
     }
 }
