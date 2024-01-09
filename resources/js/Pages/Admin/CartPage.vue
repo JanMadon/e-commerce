@@ -51,7 +51,7 @@
             bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
                 <p v-if="showError" class="text-center w-full text-red-600">Please provide correct quantyti!</p>
                 <PrimaryButton v-else class=" flex justify-center w-full bg-orange-400 hover:bg-orange-600 focus:bg-orange-600"
-                    @click.prevent="makeOrder">
+                    @click.prevent="payOrder">
                     Proceed to Checkout
                 </PrimaryButton>
             </div>
@@ -73,6 +73,7 @@ import { computed } from 'vue';
 
 const props = defineProps({
     products: Object,
+    order: Object
 })
 const tatalPrice = ref(0);
 const showError = ref(false);
@@ -106,8 +107,9 @@ function updatCart(index) {
     router.patch(route('cart.updateOrder'),  props.products[index])
 }
 
-function makeOrder() {
-    router.post(route('cart.makeOrder'), props.products)
+function payOrder() {
+   
+    router.post(route('cart.makeOrder'), {data: props.order})
 }
 
 

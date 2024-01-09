@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
 {
@@ -15,10 +16,14 @@ class Order extends Model
         'status',
     ];
 
-    public function product(): BelongsToMany
-    {
+    // public function product(): BelongsToMany
+    // {
+    //     return $this->belongsToMany(Product::class);
+    // }
 
-        return $this->belongsToMany(Product::class);
+    public function detalsOrder(): HasMany
+    {
+        return $this->hasMany(DetalsOrder::class);
     }
 
 }

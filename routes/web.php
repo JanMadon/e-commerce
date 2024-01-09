@@ -52,8 +52,9 @@ Route::controller(OrderController::class)
         Route::post('/order', 'create')->name('addToCart');
         Route::get('/cart', 'cart')->name('cart');
         Route::delete('/cart', 'deleteProduct')->name('cart.deleteProduct');
-        Route::post('/cart', 'makeOrder')->name('cart.makeOrder');
+        Route::post('/cart', 'payOrder')->name('cart.makeOrder');
         Route::patch('/cart', 'updateOrder')->name('cart.updateOrder');
+        Route::get('/my-order', 'showMyOrders')->name('my.order');
     });
 
 Route::middleware('auth')->group(function () {

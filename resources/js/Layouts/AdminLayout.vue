@@ -34,7 +34,7 @@
                         </a>
                         <div class="flex items-center h-full hover:bg-gray-900">
                             <div>
-                                <span @click="showProfil = !showProfil" class="inline-flex rounded-md">
+                                <span @click="showProfil = !showProfil" class="inline-flex">
                                     <button type="button" name="my-account-list" class="flex items-center px-3 py-2 text-white ">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="mr-2 w-6 h-6">
@@ -60,7 +60,7 @@
                                         </svg>
                                         My Profile
                                     </NavLink>
-                                    <NavLink name="my-account-list" :href="route('logout')" class="w-full hover:bg-slate-900">
+                                    <NavLink name="my-account-list" :href="route('my.order')" class="w-full hover:bg-slate-900">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="mr-2 w-6 h-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"

@@ -15,13 +15,32 @@ use Symfony\Component\String\UnicodeString;
 
 class OrderController extends Controller
 {
+
+    public function showMyOrders() {
+
+        $orders = Order::with('detalsOrder')->where('user_id', Auth::id())->get();
+        
+
+        return Inertia::render('Admin/MyOrders', [
+            'orders' => $orders,
+        ]);
+
+    }
+
     public function cart()
-    {
-        $orders = Order::where('user_id', Auth::user()->id)
+    {   
+        $order = Order::where('user_id', Auth::user()->id)
             ->where('status', 'active')
             ->first();
 
-        $details = DetalsOrder::where('order_id', $orders->id)->get();
+            if(!$order){
+                return Inertia::render('Admin/CartPage', [
+                    'products' => [],
+                    'order' => [$order]
+                ]);
+            };
+
+        $details = DetalsOrder::where('order_id', $order->id)->get();
 
         $products = [];
         foreach ($details as $detail) {
@@ -42,6 +61,7 @@ class OrderController extends Controller
         }
         return Inertia::render('Admin/CartPage', [
             'products' => $products,
+            'order' => $order
         ]);
     }
 
@@ -53,25 +73,42 @@ class OrderController extends Controller
         ]);
 
         try {
-            if (!Order::where('user_id', Auth::user()->id)->exists()) {
+            if (!Order::where('user_id', Auth::user()->id)->where('status', 'active')->exists()) {
+               // dd('asd');
                 $order = new Order([
                     'user_id' => Auth::user()->id,
                     'status' => 'active',
                 ]);
                 $order->save();
+
+                // TODO dodaj do storzonego zamowneia produkt 
+                if (DetalsOrder::where('product_id', $request->id)->where('order_id', $order->id)->exists()) {
+                    $detalsOrder = DetalsOrder::where('product_id', $request->id)->first();
+                    $detalsOrder->quantity ++;
+                    $detalsOrder->save();
+
+               
+                } else {
+                    $detalsOrder = new DetalsOrder([
+                        'order_id' => $order->id,
+                        'product_id' => $request->id,
+                        'quantity' => $request->quantity,
+                    ]);
+                    $detalsOrder->save();
+                }// hamsko przeklejone jest
+
             } else {
                 $order = Order::where('user_id', Auth::user()->id)
                     ->where('status', 'active')
                     ->first();
 
                 // sprawdz czy istnieje już dodany produkt
-                if (DetalsOrder::where('product_id', $request->id)->exists()) {
+                if (DetalsOrder::where('product_id', $request->id)->where('order_id', $order->id)->exists()) {
                     $detalsOrder = DetalsOrder::where('product_id', $request->id)->first();
                     $detalsOrder->quantity ++;
                     $detalsOrder->save();
 
                 } else {
-
                     $detalsOrder = new DetalsOrder([
                         'order_id' => $order->id,
                         'product_id' => $request->id,
@@ -122,7 +159,12 @@ class OrderController extends Controller
         $product->save();
     }
 
-    public function makeOrder(){
-        dd('makeOrder');
+    public function payOrder(Request $request){
+        //dd($request->data->id);
+
+        $order = Order::find($request->data['id']);
+        $order->status = 'paid';
+        $order->payd_at = Carbon::now();
+        $order->save();
     }
 }
