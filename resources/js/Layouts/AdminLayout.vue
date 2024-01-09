@@ -1,33 +1,9 @@
 <template>
     <div class="flex">
         <!-- admin panel -->
-        <div v-show="showAdminPanel" class="flex flex-col items-center w-48 bg-slate-700 text-white">
-            <p class="m-5 font-bold text-xl"> Admin Panel</p>
-            <div class="flex flex-col items-center text-center w-full border">
-                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                    Dashboard
-                </NavLink>
-                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                    Shop
-                </NavLink>
-                <NavLink :href="route('list.products')" :active="route().current('list.products')">
-                    Products list
-                </NavLink>
-                <NavLink :href="route('form.add.product')" :active="route().current('form.add.product')">
-                    Add products
-                </NavLink>
-                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                    Orders
-                </NavLink>
-                <NavLink :href="route('admin.usersList')" :active="route().current('admin.usersList')">
-                    Users
-                </NavLink>
-                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                    Raporsts
-                </NavLink>
-            </div>
-
-        </div>
+       
+            <AdminBar v-show="showAdminPanel " />
+        
         <div class="w-full min-h-screen bg-gray-300 dark:bg-gray-800 ">
             <nav class="bg-gray-800 dark:bg-gray-800 border-gray-100">
 
@@ -218,6 +194,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
 import { useDark, useToggle } from '@vueuse/core'
 import Notification from '@/Components/App/Notification.vue'
+import AdminBar from '@/Components/App/AdminBar.vue';
 
 
 const showingNavigationDropdown = ref(false);
