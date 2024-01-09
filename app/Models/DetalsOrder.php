@@ -22,5 +22,10 @@ class DetalsOrder extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
-    } 
+    }
+    
+    public function product(): BelongsTo 
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

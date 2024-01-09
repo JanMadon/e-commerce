@@ -18,9 +18,21 @@ class OrderController extends Controller
 
     public function showMyOrders() {
 
-        $orders = Order::with('detalsOrder')->where('user_id', Auth::id())->get();
-        
+        //$details = DetalsOrder::with('product')->get();
 
+        
+        $orders = Order::with('detalsOrder')->where('user_id', Auth::id())->get();
+        //$orders = Order::get()->with('detalsOrder');
+        
+        foreach($orders as $order)
+        {
+            foreach($order->detalsOrder as $detal)
+            {
+                $detal->product;
+                // dump($detal); 
+            }
+        }
+        
         return Inertia::render('Admin/MyOrders', [
             'orders' => $orders,
         ]);

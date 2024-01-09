@@ -15,15 +15,8 @@ class Product extends Model
         'name', 'price', 'category', 'description', 'quantity'
     ];
 
-
-    public function product(): HasOne
-    {
-        return $this->hasOne(User::class,);
-    }
-
-    public function product1(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-    
+    // public function ordersDetal(): HasOne
+    // {
+    //     return $this->hasOne(class);
+    // }
 }
