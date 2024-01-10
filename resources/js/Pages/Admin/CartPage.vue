@@ -19,8 +19,8 @@
                         <p class="text-xs">Price per item: {{ product.price }} PLN</p>
                         <div class="flex items-end">
                             <label for="quantityfor" class="mr-1 text-sm text-gray-600">Quantity:</label>
-                            <input :value="product.quantity" @input="event => updateTotalPrice(event, index)" type="number" min="1"
-                                class="text-center w-16 border rounded-sm h-7">
+                            <input :value="product.quantity" @input="event => updateTotalPrice(event, index)" type="number"
+                                min="1" class="text-center w-16 border rounded-sm h-7">
                         </div>
                     </div>
                 </div>
@@ -43,19 +43,39 @@
             bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
                 <div>
                     <p class="font-bold">Total price:</p>
-                    <p class="text-sm">Shipping price: FREE</p>
+                    <div class="mt-5 text-sm text-center font-bold">Shipping
+                        <div class="flex text-xs gap-4 font-normal">
+                            <p>price: {{ shipingPrice[shipingMethod] ?? 'select option' }}</p>
+                            <p class="cursor-pointer text-blue-600"> detals </p>
+                        </div>
+                    </div>
                 </div>
-                <p class="font-bold text-lg">{{ tatalPrice }} PLN</p>
+                <div class="text-right">
+                    <p class="font-bold text-lg">PLN {{ tatalPrice }} </p>
+                    <select v-model="shipingMethod" name="" id="" class="py-1 text-sm rounded">
+                        <option v-if="cenSelectFreeSheping" value="lockerFree">Parcel locker - PLN {{
+                            shipingPrice.lockerFree }}</option>
+                        <option v-else value="locker">Parcel locker - PLN {{ shipingPrice.locker }}</option>
+                        <option value="curier"> Courier delivery - PLN {{ shipingPrice.curier }}</option>
+                        <option value="self"> Self pickup - PLN {{ shipingPrice.self }}</option>
+                        <option value="dsf"> Please choose a shiping option</option>
+                    </select>
+                    <div @click="() => showModal = true" class="cursor-pointer mt-3">
+                        <p class="text-xs text-green-700">You can choose free parcel locker shipping!</p>
+                    </div>
+                </div>
             </div>
             <div class="flex justify-between  w-2/3 h-2/3  p-2
             bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
                 <p v-if="showError" class="text-center w-full text-red-600">Please provide correct quantyti!</p>
-                <PrimaryButton v-else class=" flex justify-center w-full bg-orange-400 hover:bg-orange-600 focus:bg-orange-600"
+                <PrimaryButton v-else
+                    class=" flex justify-center w-full bg-orange-400 hover:bg-orange-600 focus:bg-orange-600"
                     @click.prevent="payOrder">
                     Proceed to Checkout
                 </PrimaryButton>
             </div>
         </div>
+        <WarehouseAddressModal :typeModal="shipingMethod" />
     </AdminLayout>
 </template>
 
@@ -70,6 +90,7 @@ import AddToCartBtn from '@/Components/App/AddToCartBtn.vue';
 import { watch } from 'vue';
 import { watchEffect } from 'vue';
 import { computed } from 'vue';
+import WarehouseAddressModal from '@/Components/App/WarehouseAddressModal.vue';
 
 const props = defineProps({
     products: Object,
@@ -77,6 +98,38 @@ const props = defineProps({
 })
 const tatalPrice = ref(0);
 const showError = ref(false);
+const cenSelectFreeSheping = ref(false)
+const showModalType = ref(false);
+const shipingMethod = ref('');
+const shipingPrice = ref({
+    lockerFree: 0,
+    locker: 10,
+    curier: 20,
+    self: 0,
+});
+const typeModal = ref({
+    lockerFree: 'locker',
+    locker: 'locker',
+    curier: 'address',
+    self: 'warehouse',
+})
+
+const address = ref();
+const lockerAddress = ref() 
+
+watch(shipingMethod, showModal)
+function showModal() {
+}
+
+function setLockerAddress() {
+
+}
+
+function setAddress() {
+
+}
+
+
 
 function calculate() {
     tatalPrice.value = 0
@@ -88,6 +141,7 @@ function calculate() {
             showError.value = false;
         }
         tatalPrice.value += (product.quantity * product.price)
+        cenSelectFreeSheping.value = tatalPrice.value > 500;
     }
 }
 calculate()
@@ -99,17 +153,17 @@ function updateTotalPrice(event, index) {
 }
 
 function deleteProduct(product) {
-    router.delete(route('cart.deleteProduct', {productId: product.id}))
+    router.delete(route('cart.deleteProduct', { productId: product.id }))
 }
 
 function updatCart(index) {
 
-    router.patch(route('cart.updateOrder'),  props.products[index])
+    router.patch(route('cart.updateOrder'), props.products[index])
 }
 
 function payOrder() {
-   
-    router.post(route('cart.makeOrder'), {data: props.order})
+
+    router.post(route('cart.makeOrder'), { data: props.order })
 }
 
 
