@@ -68,7 +68,6 @@ import { useAttrs } from 'vue';
 const props = defineProps({
     closeBtn: Boolean
 })
-console.log(props. closeBtn)
 
 const emit = defineEmits(['closeAction'])
 

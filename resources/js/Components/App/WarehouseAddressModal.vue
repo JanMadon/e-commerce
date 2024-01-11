@@ -7,18 +7,19 @@
                 <p>ul. Reymonta 20</p>
                 <p>30-059 Kraków</p>
                 <p>The store is open from Monday to Friday from 8 a.m. to 8 p.m</p>
-                <SecondaryButton class="mt-10">
+                <SecondaryButton @click="() => warehouseModal=false " class="mt-10">
                     Close
                 </SecondaryButton>
             </div>
         </div>
     </Modal>
     <Modal :show="addressModal"  @close="() => addressModal = false">
-        <UserAddress class="p-10" :closeBtn="true" @closeAction="() => addressModal = false"/>
+        <UserAddress :closeBtn="true" @closeAction="() => addressModal = false" class="p-10"/>
     </Modal>
     <Modal :show="false">
         modal3
     </Modal>
+    {{ showModalAgain }}
 </template>
 
 <script setup>
@@ -30,19 +31,16 @@ import UserAddress from '@/Pages/Profile/Partials/UserAddress.vue';
 
 const props = defineProps({
     typeModal: String,
+    showModalAgain: Boolean
 })
-
-const typeModalRef = ref(props.typeModal);
 
 const warehouseModal = ref(false)
 const lockerModal = ref(false)
 const addressModal = ref(false)
 
-watch(typeModalRef, () => {
+watch(() => [props.typeModal, props.showModalAgain], showMoadal);
 
-});
-
-watch(() => props.typeModal, () => {
+function showMoadal() {
     console.log(props.typeModal)
     switch (props.typeModal) {
         case "locker":
@@ -58,7 +56,6 @@ watch(() => props.typeModal, () => {
             warehouseModal.value = true
             break;
     }
-});
-
+}
 
 </script>

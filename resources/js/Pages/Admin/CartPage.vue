@@ -46,7 +46,9 @@
                     <div class="mt-5 text-sm text-center font-bold">Shipping
                         <div class="flex text-xs gap-4 font-normal">
                             <p>price: {{ shipingPrice[shipingMethod] ?? 'select option' }}</p>
-                            <p class="cursor-pointer text-blue-600"> detals </p>
+                            <p @click="() => showModalToogle = !showModalToogle"  class="cursor-pointer text-blue-600">
+                                detals delivery
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -75,21 +77,17 @@
                 </PrimaryButton>
             </div>
         </div>
-        <WarehouseAddressModal :typeModal="shipingMethod" />
+        <WarehouseAddressModal :typeModal="shipingMethod" :showModalAgain="showModalToogle"/>
     </AdminLayout>
 </template>
 
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import ProductCard from '@/Components/App/ProductCard.vue';
-import { Head, router } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import DangerButton from '@/Components/DangerButton.vue';
+import { router } from '@inertiajs/vue3';
 import { ref } from 'vue';
-import AddToCartBtn from '@/Components/App/AddToCartBtn.vue';
 import { watch } from 'vue';
-import { watchEffect } from 'vue';
-import { computed } from 'vue';
 import WarehouseAddressModal from '@/Components/App/WarehouseAddressModal.vue';
 
 const props = defineProps({
@@ -99,8 +97,8 @@ const props = defineProps({
 const tatalPrice = ref(0);
 const showError = ref(false);
 const cenSelectFreeSheping = ref(false)
-const showModalType = ref(false);
 const shipingMethod = ref('');
+const showModalToogle = ref(false);
 const shipingPrice = ref({
     lockerFree: 0,
     locker: 10,
@@ -116,10 +114,6 @@ const typeModal = ref({
 
 const address = ref();
 const lockerAddress = ref() 
-
-watch(shipingMethod, showModal)
-function showModal() {
-}
 
 function setLockerAddress() {
 
