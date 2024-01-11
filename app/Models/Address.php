@@ -11,6 +11,9 @@ class Address extends Model
 {
     use HasFactory;
 
+
+    protected $fillable =  ['id', 'phone',  'street', 'building', 'zipCode', 'city'];
+
     public function user(): HasOne
     {
         return $this->hasOne(User::class);

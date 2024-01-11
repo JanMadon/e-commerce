@@ -44,7 +44,9 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        $adress = new Address();
+        $adress = new Address([
+            'id' => $user->id,
+        ]);
         $adress->save();
 
         event(new Registered($user));

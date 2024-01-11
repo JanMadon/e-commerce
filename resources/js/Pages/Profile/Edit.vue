@@ -35,7 +35,7 @@ defineProps({
                 </div>
 
                 <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                    <UserAddress class="max-w-xl" />
+                    <UserAddress class="max-w-xl" :closeBtn="false"/>
                 </div>
 
                 <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">

@@ -1,5 +1,4 @@
 <template>
-    {{ typeModal }}
     <Modal :show="warehouseModal" @close="() => warehouseModal = false">
         <div class="h-2/3">
             <h3 class="m-10 text-2xl font-bold text-center">e-shop KRAKÓW</h3>
@@ -15,7 +14,7 @@
         </div>
     </Modal>
     <Modal :show="addressModal"  @close="() => addressModal = false">
-        modal2
+        <UserAddress class="p-10" :closeBtn="true" @closeAction="() => addressModal = false"/>
     </Modal>
     <Modal :show="false">
         modal3
@@ -27,7 +26,7 @@ import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '../SecondaryButton.vue';
 import { ref } from 'vue';
 import { watch } from 'vue';
-import { onMounted } from 'vue';
+import UserAddress from '@/Pages/Profile/Partials/UserAddress.vue';
 
 const props = defineProps({
     typeModal: String,
