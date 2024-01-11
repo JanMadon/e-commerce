@@ -58,7 +58,7 @@
                         <option v-else value="locker">Parcel locker - PLN {{ shipingPrice.locker }}</option>
                         <option value="curier"> Courier delivery - PLN {{ shipingPrice.curier }}</option>
                         <option value="self"> Self pickup - PLN {{ shipingPrice.self }}</option>
-                        <option value="dsf"> Please choose a shiping option</option>
+                        <option value=""> Please choose a shiping option</option>
                     </select>
                     <div @click="() => showModal = true" class="cursor-pointer mt-3">
                         <p class="text-xs text-green-700">You can choose free parcel locker shipping!</p>

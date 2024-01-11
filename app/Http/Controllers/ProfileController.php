@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,6 +14,21 @@ use Inertia\Response;
 
 class ProfileController extends Controller
 {
+
+    public function setAddress(Request $request)
+    {
+
+        $address = Auth::user()->address;
+
+        // $request->validate([
+        //     'phone' => ['required', 'integer','digits:9'],
+        //     'street' => ['required', 'string', 'min:3', 'max:20'],
+        //     'building' => ['required', 'integer',],
+        //     'zmipCode' => ['required', 'regex:/^[0-9]{2}-[0-9]{3}$/'],
+        //     'city' => ['required', 'string', 'min:3', 'max:20']
+        // ]);
+        dd($address);
+    }
     /**
      * Display the user's profile form.
      */
