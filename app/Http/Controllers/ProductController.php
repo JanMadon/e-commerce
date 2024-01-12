@@ -19,11 +19,9 @@ class ProductController extends Controller
      */
     public function list()
     {
+
         $products = Product::get();
         $photosData = [];
-
-        // All files name
-
 
         foreach($products as $product) {
             $productId = $product->id;

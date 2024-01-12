@@ -101,14 +101,13 @@
             </nav>
             {{ $page.auth }}
             <CategoryBar />
-
             <main class="">
                 <slot />
             </main>
         </div>
     </div>
+    {{ $page.props.flash.view }}
     <Notification />
-    {{ data = $page.props.auth }}
 </template>
 
 <script setup>
@@ -125,8 +124,6 @@ import { onMounted } from 'vue';
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 const showProfil = ref(false);
-const data = ref()
-console.log(data.value)
 
 
 onMounted(() => {
@@ -139,5 +136,8 @@ const handleClickOutside = (event) => {
         showProfil.value = false
     }
 };
+
+
+
 
 </script>

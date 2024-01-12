@@ -29,7 +29,6 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        //dd($request->user()->address);
         return [
             ...parent::share($request),
             'auth' => [
@@ -37,8 +36,11 @@ class HandleInertiaRequests extends Middleware
                 'address'=> $request->user()->address ?? [],
             ],
             'flash' => [
+                'view' => $request->session()->get('view'), // dowiedz się po co w sumie jest ten callback??
                 'payment' => fn () => $request->session()->get('payment'),
             ],
+            'category' => $request->category
+            
         ];
     }
 }

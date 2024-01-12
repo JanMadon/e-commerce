@@ -1,10 +1,10 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\StripeController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -40,7 +40,8 @@ Route::get('/', function () {
 
 Route::get('/', [ProductController::class, 'list'])->name('home');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('show.product');
-
+Route::post('/', [CategoryController::class, 'getCategory'])->name('category.get');
+// /////
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
