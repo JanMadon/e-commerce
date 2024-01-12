@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StripeController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -52,10 +53,21 @@ Route::controller(OrderController::class)
         Route::post('/order', 'create')->name('addToCart');
         Route::get('/cart', 'cart')->name('cart');
         Route::delete('/cart', 'deleteProduct')->name('cart.deleteProduct');
-        Route::post('/cart', 'payOrder')->name('cart.makeOrder');
+        Route::post('/cart', 'payOrder')->name('cart.payOrder');
         Route::patch('/cart', 'updateOrder')->name('cart.updateOrder');
         Route::get('/my-order', 'showMyOrders')->name('my.order');
+        Route::post('/my-order', 'showMyOrdersPost')->name('my.order.post');
     });
+
+Route::controller(StripeController::class)
+     ->middleware(['auth', 'verified'])
+    ->group(function () {
+        Route::get('/test', 'index')->name('home');
+        Route::post('/checkout', 'checkout')->name('checkout');
+        Route::get('/success', 'success')->name('success');
+    });
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])

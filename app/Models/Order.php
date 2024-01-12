@@ -26,4 +26,22 @@ class Order extends Model
         return $this->hasMany(DetalsOrder::class);
     }
 
+    public function amount()
+    {
+        $detals = $this->detalsOrder;
+
+        $sum = 0;
+
+        foreach($detals as $detal)
+        { 
+            $sum += ($detal->product->price * $detal->quantity);
+           
+
+        }
+        dd($sum  );
+
+
+        return 2;
+    }
+
 }

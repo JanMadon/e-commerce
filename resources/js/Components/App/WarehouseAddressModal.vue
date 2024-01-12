@@ -19,7 +19,6 @@
     <Modal :show="false">
         modal3
     </Modal>
-    {{ showModalAgain }}
 </template>
 
 <script setup>
@@ -41,7 +40,6 @@ const addressModal = ref(false)
 watch(() => [props.typeModal, props.showModalAgain], showMoadal);
 
 function showMoadal() {
-    console.log(props.typeModal)
     switch (props.typeModal) {
         case "locker":
         case "lockerFree":

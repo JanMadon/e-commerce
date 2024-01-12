@@ -1,7 +1,6 @@
 
 <template>
     <AdminLayout>
-
         <div class="flex flex-col items-center mt-3 mx-auto ">
             <div class="flex w-2/3 p-2">
                 <h2 class="text-2xl font-bold text-left">Your Catr Items</h2>
@@ -29,7 +28,7 @@
                     <p class="text-lg font-bold "> {{ product.quantity * product.price }} PLN</p>
                     <div>
                     </div>
-                    <DangerButton @click.prevent="deleteProduct(product)" class="px-0">
+                    <DangerButton @click.prevent="deleteProduct(product, index)" class="px-0">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-5 h-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -37,7 +36,6 @@
                         </svg>
                     </DangerButton>
                 </div>
-
             </div>
             <div class="flex justify-between  w-2/3 h-2/3 mx-5 p-5
             bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
@@ -46,21 +44,21 @@
                     <div class="mt-5 text-sm text-center font-bold">Shipping
                         <div class="flex text-xs gap-4 font-normal">
                             <p>price: {{ shipingPrice[shipingMethod] ?? 'select option' }}</p>
-                            <p @click="() => showModalToogle = !showModalToogle"  class="cursor-pointer text-blue-600">
+                            <p @click="() => showModalToogle = !showModalToogle" class="cursor-pointer text-blue-600">
                                 detals delivery
                             </p>
                         </div>
                     </div>
                 </div>
                 <div class="text-right">
-                    <p class="font-bold text-lg">PLN {{ tatalPrice }} </p>
+                    <p class="font-bold text-lg">PLN {{ parseInt(tatalPrice) }} </p>
                     <select v-model="shipingMethod" name="" id="" class="py-1 text-sm rounded">
                         <option v-if="cenSelectFreeSheping" value="lockerFree">Parcel locker - PLN {{
                             shipingPrice.lockerFree }}</option>
                         <option v-else value="locker">Parcel locker - PLN {{ shipingPrice.locker }}</option>
                         <option value="curier"> Courier delivery - PLN {{ shipingPrice.curier }}</option>
                         <option value="self"> Self pickup - PLN {{ shipingPrice.self }}</option>
-                        <option value=""> Please choose a shiping option</option>
+                        <option value="-"> Please choose a shiping option</option>
                     </select>
                     <div @click="() => showModal = true" class="cursor-pointer mt-3">
                         <p class="text-xs text-green-700">You can choose free parcel locker shipping!</p>
@@ -72,12 +70,29 @@
                 <p v-if="showError" class="text-center w-full text-red-600">Please provide correct quantyti!</p>
                 <PrimaryButton v-else
                     class=" flex justify-center w-full bg-orange-400 hover:bg-orange-600 focus:bg-orange-600"
-                    @click.prevent="payOrder">
+                    @click.prevent="pay">
                     Proceed to Checkout
                 </PrimaryButton>
             </div>
         </div>
-        <WarehouseAddressModal :typeModal="shipingMethod" :showModalAgain="showModalToogle"/>
+        <WarehouseAddressModal :typeModal="shipingMethod" :showModalAgain="showModalToogle" />
+        <Modal :show="payModal">
+            <div class="bg-white p-10 rounded-md shadow-md">
+                <div class="flex items-center justify-center mb-4">
+                    <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
+                </div>
+                <p class="m-10 text-center">You will be redirected to the payment page...</p>
+            </div>
+        </Modal>
+        <Modal :show="errModal" @close="() => errModal = false">
+            <div class="bg-white p-10 rounded-md shadow-md">
+                <div class="flex items-center justify-center mb-4">
+                    <div class="error ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
+                </div>
+                <p class="m-10 text-center">Something went wrong, please try again later.</p>
+            </div>
+        </Modal>
+
     </AdminLayout>
 </template>
 
@@ -87,45 +102,84 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 import { router } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import Modal from '@/Components/Modal.vue';
 import { watch } from 'vue';
 import WarehouseAddressModal from '@/Components/App/WarehouseAddressModal.vue';
+import { onMounted } from 'vue';
+import axios from 'axios';
 
 const props = defineProps({
     products: Object,
-    order: Object
+    order: Object,
+    myMessage: String,
 })
 const tatalPrice = ref(0);
 const showError = ref(false);
 const cenSelectFreeSheping = ref(false)
-const shipingMethod = ref('');
+const shipingMethod = ref('-');
 const showModalToogle = ref(false);
+const payModal = ref(false);
+const errModal = ref(false);
+
 const shipingPrice = ref({
     lockerFree: 0,
     locker: 10,
     curier: 20,
     self: 0,
-});
-const typeModal = ref({
-    lockerFree: 'locker',
-    locker: 'locker',
-    curier: 'address',
-    self: 'warehouse',
+    '-': 0
 })
 
-const address = ref();
-const lockerAddress = ref() 
+
+function pay() {
+    if (shipingMethod.value === '-') {
+        console.log('wyberz rodzaj wysyłki!')
+        return
+    }
+    payModal.value = true;
+    axios.post(route('cart.payOrder'), { data: props.order })
+        .then(response => window.location.href = response.data.myVariable)
+        .catch(error => {
+            payModal.value = false;
+            errModal.value = true
+            console.log(error)
+        });
+}
 
 function setLockerAddress() {
 
 }
 
-function setAddress() {
+watch(() => { shipingMethod, props.products }, () => {
+    updatCart();
+    calculate();
+})
 
+function updateTotalPrice(event, index) {
+    props.products[index].quantity = parseInt(event.target.value)
+    updatCart(index)
+    calculate()
 }
 
+function deleteProduct(product, index) {
+    console.log(product, index)
+    axios.delete(route('cart.deleteProduct', { productId: product.id }))
+        .then(response => {
+            if (response.data == product.id) {
+                props.products.splice(index, 1)
+            }
+            calculate()
+        })
+        .catch(error => console.log(error))
+}
 
+function updatCart(index) {
+    router.patch(route('cart.updateOrder'), {
+        data: props.products[index],
+        shipingMethod: shipingMethod.value
+    })
+}
 
-function calculate() {
+const calculate = () => {
     tatalPrice.value = 0
     for (const product of props.products) {
         if (product.quantity <= 0) {
@@ -137,31 +191,38 @@ function calculate() {
         tatalPrice.value += (product.quantity * product.price)
         cenSelectFreeSheping.value = tatalPrice.value > 500;
     }
-}
-calculate()
+    if (typeof parseInt(shipingPrice.value[shipingMethod.value]) === "number") {
 
-function updateTotalPrice(event, index) {
-    props.products[index].quantity = parseInt(event.target.value)
+        tatalPrice.value += parseInt(shipingPrice.value[shipingMethod.value])
+    }
+    console.log(tatalPrice.value)
+}
+
+onMounted(() => {
     calculate()
-    updatCart(index)
-}
-
-function deleteProduct(product) {
-    router.delete(route('cart.deleteProduct', { productId: product.id }))
-}
-
-function updatCart(index) {
-
-    router.patch(route('cart.updateOrder'), props.products[index])
-}
-
-function payOrder() {
-
-    router.post(route('cart.makeOrder'), { data: props.order })
-}
-
-
-
-
+})
 
 </script>
+
+<style>
+/* Animacja ładowania */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loader {
+    border-top-color: #3498db;
+    animation: spin 1s infinite linear;
+}
+
+.error {
+    border-top-color: #d43128;
+    animation: spin-reverse 1s infinite linear;
+}
+</style>

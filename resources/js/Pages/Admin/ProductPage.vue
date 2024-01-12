@@ -20,7 +20,6 @@
                     </ul>
                 </div>
             </div>
-
             <div class="flex flex-col justify-between w-60 right-column p-4 bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
                 <div>
                     <p class="text-gray-700 text-sm border-b border-gray-400">{{ product.category }}</p>
@@ -33,7 +32,6 @@
                         <p class="text-xl font-bold"> {{ product.price }} PLN</p>
                     </div>
                 </div>
-
                 <div class="flex flex-col">
                     <div class="flex items-center mb-10">
                         <label for="quantity" class="mr-10 font-bold text-gray-600">Quantity:</label>
@@ -41,8 +39,6 @@
                     </div>
                     <AddToCartBtn  :product="product" :quantity="setQuantity" />
                 </div>
-
-
             </div>
         </div>
         <!-- {{ product }} -->

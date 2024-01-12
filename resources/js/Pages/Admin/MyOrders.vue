@@ -22,7 +22,7 @@
                             Final price
                         </th>
                         <th class="text-gray-900 px-6 py-4 text-left">
-                            Payment
+                            Shiping Method
                         </th>
                         <th class="text-gray-900 px-6 py-4 text-left">
                             Status
@@ -52,7 +52,7 @@
                             {{ calculatePrice(order.detals_order) }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center ">
-                            method
+                            {{ order.shiping_method }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center ">
                             {{ order.status }}
@@ -112,9 +112,15 @@
                 </table>
                 <div class="flex flex-col items-end mt-5 ml-5 font-bold">
                     <div class="w-full flex  justify-between text-center">
-                        <p>Final price: <p>{{ calculatePrice(selectedOrder.detals_order) }}</p> </p>
-                        <p>Shipment: <p> WYBRANA DOSTAWA</p> </p>
-                        <p>To address <p> ADRESS OSOBY ZAMAIWAJĄCEJ</p></p>
+                        <p>Final price:
+                        <p>{{ calculatePrice(selectedOrder.detals_order) }}</p>
+                        </p>
+                        <p>Shipment:
+                        <p> WYBRANA DOSTAWA</p>
+                        </p>
+                        <p>To address
+                        <p> ADRESS OSOBY ZAMAIWAJĄCEJ</p>
+                        </p>
                     </div>
 
                 </div>
@@ -122,6 +128,10 @@
                 </div>
             </div>
         </Modal>
+
+        <PaymentModal :modalCase="props.payment" />
+
+       
 
     </AdminLayout>
 </template>
@@ -133,14 +143,17 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { router } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
+import PaymentModal from '@/Components/App/PaymentModal.vue'
 
 const props = defineProps({
     orders: Object,
+    payment: String
 })
 
 const showDetals = ref(false)
 const selectedOrder = ref()
 const selectedOrderFinalPrice = ref();
+const modal = ref('rejected')
 
 function select(event, order) {
 

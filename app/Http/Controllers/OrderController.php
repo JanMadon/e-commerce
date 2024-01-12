@@ -11,19 +11,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Stripe\Checkout\Session;
+use Stripe\Stripe;
 use Symfony\Component\String\UnicodeString;
 
 class OrderController extends Controller
 {
 
-    public function showMyOrders() {
-
-        //$details = DetalsOrder::with('product')->get();
+    public function showMyOrders(Request $request) {
 
         
         $orders = Order::with('detalsOrder')->where('user_id', Auth::id())->get();
-        //$orders = Order::get()->with('detalsOrder');
-        
         foreach($orders as $order)
         {
             foreach($order->detalsOrder as $detal)
@@ -35,8 +33,8 @@ class OrderController extends Controller
         
         return Inertia::render('Admin/MyOrders', [
             'orders' => $orders,
+            'payment' => $request->payment
         ]);
-
     }
 
     public function cart()
@@ -143,40 +141,83 @@ class OrderController extends Controller
         $order = Order::where('user_id', Auth::id())
             ->where('status', 'active')
             ->first();
-
         $orderProduct = DetalsOrder::where('order_id', $order->id)
                         ->where('product_id', $request->productId)
                         ->first();  
-        
         $orderProduct->delete();
-        
-        return to_route('cart');
+        return response()->json($request->productId);
     }
 
     public function updateOrder(Request $request) {
-
-        $request->validate([
-            'quantity' => ['integer','min:1'],
-        ]);
         
-        $activeOrderForUser = Order::where('user_id', Auth::id())
+        $order = Order::where('user_id', Auth::id())
                                 ->where('status', 'active')
                                 ->first(); 
-
-        $product = DetalsOrder::where('order_id', $activeOrderForUser->id)
-                                ->where('product_id', $request->id)
-                                ->first();
-
-        $product->quantity = $request->quantity;
-        $product->save();
+        if($request->data) {
+    
+            $detal = DetalsOrder::where('order_id', $order->id)
+                                    ->where('product_id', $request->data['id'])
+                                    ->first();
+    
+            $detal->quantity = $request->data['quantity'];
+            $detal->save();
+        } elseif ($request->shipingMethod) {
+            $order->shiping_method = $request->shipingMethod;
+            $order->save();
+        }
+        
     }
 
     public function payOrder(Request $request){
-        //dd($request->data->id);
-
+        //validuj
         $order = Order::find($request->data['id']);
+
+        $order->amount();
+        dd("stop");
+         
+
+        $url =  $this->payByStripe($order);
+        
+
+
+        return response()->json([
+            'myVariable' => $url,
+        ]);
+// ////////////////////////////////////////////////////
+        return redirect()->back()->with(['myMessage' => 'widomość']);
+
+
+
+        dd($order);
+
+
         $order->status = 'paid';
         $order->payd_at = Carbon::now();
         $order->save();
+    }
+
+    private function payByStripe($order) 
+    {
+        Stripe::setApiKey(config('stripe.sk'));
+        
+        $session = Session::create([
+            'line_items'=>[
+                [
+                    'price_data' => [
+                        'currency'     => 'PLN',
+                        'product_data' => [
+                            'name' => implode(', ', ['asus', 'macbook']),
+                        ],
+                        'unit_amount'  => 500,
+                    ],
+                    'quantity'   => 1,
+                ],
+            ],
+            'mode'        => 'payment',
+            'success_url' => route('my.order', ['payment' => 'success']),
+            'cancel_url'  => route('my.order', ['payment' => 'rejected']),
+        ]);
+
+        return $session->url;
     }
 }
