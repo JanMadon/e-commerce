@@ -1,6 +1,6 @@
 <template>
     <div>
-        <PrimaryButton class="btn-primary" @click="addToCart()">
+        <PrimaryButton class="btn-primary bg-orange-500 hover:bg-orange-600 focus:bg-orange-600" @click="addToCart()">
             Add to Cart
         </PrimaryButton>
     </div>

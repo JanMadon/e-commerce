@@ -2,7 +2,7 @@
 <template>
     <Head title="Dashboard" />
 
-    <AdminLayout>
+    <GuestUserLayout>
 
         <div class="flex justify-center mt-8 mx-auto ">
             <div class="flex flex-col items-center w-2/3 h-2/3 mx-5 p-5
@@ -20,7 +20,8 @@
                     </ul>
                 </div>
             </div>
-            <div class="flex flex-col justify-between w-60 right-column p-4 bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
+            <div
+                class="flex flex-col justify-between w-60 right-column p-4 bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
                 <div>
                     <p class="text-gray-700 text-sm border-b border-gray-400">{{ product.category }}</p>
 
@@ -29,7 +30,7 @@
 
                     <div class="flex items-center mb-10">
                         <label for="quantity" class="mr-5 font-medium text-gray-600">Price:</label>
-                        <p class="text-xl font-bold"> {{ product.price }} PLN</p>
+                        <p class="text-xl font-bold">PLN {{ product.price }}</p>
                     </div>
                 </div>
                 <div class="flex flex-col">
@@ -37,21 +38,22 @@
                         <label for="quantity" class="mr-10 font-bold text-gray-600">Quantity:</label>
                         <input v-model="setQuantity" type="number" min="1" class="text-center w-full border rounded-md">
                     </div>
-                    <AddToCartBtn  :product="product" :quantity="setQuantity" />
+                    <AddToCartBtn v-if="$page.props.auth.user" :product="product" :quantity="setQuantity" />
+                    <PrimaryButton v-else @click.prevent="() => router.visit(route('login'))">
+                        log in to add to cart
+                    </PrimaryButton>
                 </div>
             </div>
         </div>
-        <!-- {{ product }} -->
-    </AdminLayout>
+    </GuestUserLayout>
 </template>
 
 <script setup>
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import ProductCard from '@/Components/App/ProductCard.vue';
-import { Head } from '@inertiajs/vue3';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import { ref } from 'vue';
+import GuestUserLayout from '@/Layouts/GuestUserLayout.vue'
 import AddToCartBtn from '@/Components/App/AddToCartBtn.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import { Head, router } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 const props = defineProps({
     product: Object,
@@ -65,11 +67,5 @@ const mainPhoto = ref(props.photos[0])
 function changeMainPhoto(photo) {
     mainPhoto.value = photo;
 }
-
-
-
-
-
-
 
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <AdminLayout>
+    <GuestUserLayout>
         <template #header>
             <h1 class="font-semibold text-2xl text-gray-800 leading-tight">Employees list</h1>
         </template>
@@ -70,25 +70,18 @@
                     </tr>
                 </tbody>
             </table>
-        </div>
-
-        
-
+        </div>        
         <DetailsOrderModal :showModal="showDetals" :selectedOrder="selectedOrder"/>
         <PaymentModal :modalCase="props.payment" />
 
-    </AdminLayout>
+    </GuestUserLayout>
 </template>
 
 <script setup>
-import Modal from '@/Components/Modal.vue';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
-import { router } from '@inertiajs/vue3';
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import DetailsOrderModal from '@/Components/App/DetailsOrderModal.vue';
 import PaymentModal from '@/Components/App/PaymentModal.vue'
+import GuestUserLayout from '@/Layouts/GuestUserLayout.vue';
 
 
 const props = defineProps({
@@ -106,4 +99,6 @@ function select(event, order) {
 
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

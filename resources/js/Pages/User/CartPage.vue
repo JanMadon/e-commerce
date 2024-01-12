@@ -1,6 +1,6 @@
 
 <template>
-    <AdminLayout>
+    <GuestUserLayout>
 
         <div v-if="!products.length" class="flex flex-col items-center mt-3 mx-auto ">
             <div class="flex w-2/3 p-2">
@@ -8,7 +8,7 @@
             </div>
             <div class="flex justify-between  w-2/3 h-2/3  p-2
             bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
-                <p  class="text-center w-full text-gray-900">You don't have any items in cart</p>
+                <p class="text-center w-full text-gray-900">You don't have any items in cart</p>
             </div>
         </div>
 
@@ -16,7 +16,7 @@
             <div class="flex w-2/3 p-2">
                 <h2 class="text-2xl font-bold text-left">Your Catr Items</h2>
             </div>
-            
+
             <div v-for="(product, index) in products" class="flex justify-between  w-2/3 h-2/3 mx-5 p-5
             bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
                 <div class="flex">
@@ -77,17 +77,16 @@
                     </div>
                 </div>
             </div>
-            <div class="flex justify-between  w-2/3 h-2/3  p-2
+            <div class="flex justify-center  w-2/3 h-2/3  p-2
             bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
                 <p v-if="showError" class="text-center w-full text-red-600">Please provide correct quantyti!</p>
-                <PrimaryButton v-else
-                    class=" flex justify-center w-full bg-orange-400 hover:bg-orange-600 focus:bg-orange-600"
+                <PrimaryButton v-else class=" justify-center w-1/2 bg-orange-400 hover:bg-orange-600 focus:bg-orange-600"
                     @click.prevent="pay">
                     Proceed to Checkout
                 </PrimaryButton>
             </div>
         </div>
-        
+
         <WarehouseAddressModal :typeModal="shipingMethod" :showModalAgain="showModalToogle" />
         <Modal :show="payModal">
             <div class="bg-white p-10 rounded-md shadow-md">
@@ -105,19 +104,19 @@
                 <p class="m-10 text-center">Something went wrong, please try again later.</p>
             </div>
         </Modal>
-
-    </AdminLayout>
+    </GuestUserLayout>
 </template>
 
 <script setup>
-import AdminLayout from '@/Layouts/AdminLayout.vue';
+import GuestUserLayout from '@/Layouts/GuestUserLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import DangerButton from '@/Components/DangerButton.vue';
+
+import Modal from '@/Components/Modal.vue';
+import WarehouseAddressModal from '@/Components/App/WarehouseAddressModal.vue';
 import { router } from '@inertiajs/vue3';
 import { ref } from 'vue';
-import Modal from '@/Components/Modal.vue';
 import { watch } from 'vue';
-import WarehouseAddressModal from '@/Components/App/WarehouseAddressModal.vue';
 import { onMounted } from 'vue';
 import axios from 'axios';
 

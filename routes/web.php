@@ -29,6 +29,19 @@ Route::get('/', function () {
     ]);
 });
 
+// Route::get('/', function () {
+//     return Inertia::render('Home', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//     ]);
+// });
+
+Route::get('/', [ProductController::class, 'list'])->name('home');
+Route::get('/product/{id}', [ProductController::class, 'show'])->name('show.product');
+
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -43,12 +56,12 @@ Route::controller(ProductController::class)
         Route::get('/addedProducts', 'list')->name('list.products');
         Route::get('/addProducts', 'form')->name('form.add.product');
         Route::post('/addProducts', 'create')->name('create.add.product');
-        Route::get('/product/{id}', 'show')->name('show.product');
+        //Route::get('/product/{id}', 'show')->name('show.product');
         // Route::post('/uploadFoto', 'savePhoto')->name('uplodad.photo');
     });
     
 Route::controller(OrderController::class)
-    // ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified'])
     ->group(function () {
         Route::post('/order', 'create')->name('addToCart');
         Route::get('/cart', 'cart')->name('cart');
@@ -58,16 +71,6 @@ Route::controller(OrderController::class)
         Route::get('/my-order', 'showMyOrders')->name('my.order');
         Route::post('/my-order', 'post')->name('my.order.post');
     });
-
-Route::controller(StripeController::class)
-     ->middleware(['auth', 'verified'])
-    ->group(function () {
-        Route::get('/test', 'index')->name('home');
-        Route::post('/checkout', 'checkout')->name('checkout');
-        Route::get('/success', 'success')->name('success');
-    });
-
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])

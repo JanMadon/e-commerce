@@ -4,7 +4,7 @@
                     <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                         Electronics
                     </NavLink>
-                    <ul v-if="showList" class="absolute flex flex-col text-white bg-slate-700 w-full w-min">
+                    <ul v-if="showList" class="absolute flex flex-col text-white bg-slate-700 w-full w-min z-10">
                         <NavLink :href="route('dashboard')">
                             Laptops
                         </NavLink>

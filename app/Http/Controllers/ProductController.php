@@ -37,7 +37,7 @@ class ProductController extends Controller
         }
         
         // dump($products);
-       return Inertia::render('Admin/ProductsList', [
+       return Inertia::render('ProductsList', [
         'products' => $products,
         'photos' => $photosData
        ]);
@@ -85,18 +85,6 @@ class ProductController extends Controller
         return to_route('list.products');
     }
 
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         
@@ -114,7 +102,7 @@ class ProductController extends Controller
         }
         //dd($photosData[0]);
 
-        return Inertia::render('Admin/ProductPage', [
+        return Inertia::render('ProductPage', [
             'product' => Product::find($id),
             'photos' => $photosData 
         ]);

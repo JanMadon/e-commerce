@@ -49,7 +49,7 @@ class OrderController extends Controller
             }
         }
 
-        return Inertia::render('Admin/MyOrders', [
+        return Inertia::render('User/MyOrders', [
             'orders' => $orders,
             'payment' => $request->payment
         ]);
@@ -86,7 +86,7 @@ class OrderController extends Controller
             $photo = base64_encode($photo);
             $product->photo = $photo;
         }
-        return Inertia::render('Admin/CartPage', [
+        return Inertia::render('User/CartPage', [
             'products' => $products,
             'order' => $order
         ]);
