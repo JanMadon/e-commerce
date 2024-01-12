@@ -1,10 +1,22 @@
 
 <template>
     <AdminLayout>
-        <div class="flex flex-col items-center mt-3 mx-auto ">
+
+        <div v-if="!products.length" class="flex flex-col items-center mt-3 mx-auto ">
             <div class="flex w-2/3 p-2">
                 <h2 class="text-2xl font-bold text-left">Your Catr Items</h2>
             </div>
+            <div class="flex justify-between  w-2/3 h-2/3  p-2
+            bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
+                <p  class="text-center w-full text-gray-900">You don't have any items in cart</p>
+            </div>
+        </div>
+
+        <div v-else class="flex flex-col items-center mt-3 mx-auto ">
+            <div class="flex w-2/3 p-2">
+                <h2 class="text-2xl font-bold text-left">Your Catr Items</h2>
+            </div>
+            
             <div v-for="(product, index) in products" class="flex justify-between  w-2/3 h-2/3 mx-5 p-5
             bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
                 <div class="flex">
@@ -75,6 +87,7 @@
                 </PrimaryButton>
             </div>
         </div>
+        
         <WarehouseAddressModal :typeModal="shipingMethod" :showModalAgain="showModalToogle" />
         <Modal :show="payModal">
             <div class="bg-white p-10 rounded-md shadow-md">
@@ -137,7 +150,7 @@ function pay() {
     }
     payModal.value = true;
     axios.post(route('cart.payOrder'), { data: props.order })
-        .then(response => window.location.href = response.data.myVariable)
+        .then(response => window.location.href = response.data.paymentPage)
         .catch(error => {
             payModal.value = false;
             errModal.value = true
@@ -149,7 +162,7 @@ function setLockerAddress() {
 
 }
 
-watch(() => { shipingMethod, props.products }, () => {
+watch(shipingMethod, () => {
     updatCart();
     calculate();
 })
@@ -173,6 +186,7 @@ function deleteProduct(product, index) {
 }
 
 function updatCart(index) {
+    console.log(shipingMethod.value)
     router.patch(route('cart.updateOrder'), {
         data: props.products[index],
         shipingMethod: shipingMethod.value

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->enum('shiping_method', ['lockerFree',  'locker', 'curier', 'self', '-'])->default('-')->after('payd_at');
+            $table->integer('amount_paid')->unsigned()->default(0)->after('payd_at');
         });
     }
 
@@ -23,6 +24,9 @@ return new class extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->dropColumn('shiping_method');
+            $table->dropColumn('amount_paid');
         });
+
+
     }
 };

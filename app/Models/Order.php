@@ -26,22 +26,39 @@ class Order extends Model
         return $this->hasMany(DetalsOrder::class);
     }
 
-    public function amount()
+    public function amount(): Int 
     {
-        $detals = $this->detalsOrder;
-
         $sum = 0;
-
+        $detals = $this->detalsOrder;
         foreach($detals as $detal)
         { 
             $sum += ($detal->product->price * $detal->quantity);
-           
-
         }
-        dd($sum  );
 
+        switch($this->shiping_method) {
+            case 'locker':
+                $shipmentCost = 10;
+                break;
+            case 'curier':
+                $shipmentCost = 20;
+                break;
+            default:
+                $shipmentCost = 0;       
+        }
 
-        return 2;
+        return $sum + $shipmentCost;
+    }
+
+    public function productsNameAndQuantity(): Array
+    {
+        $detals = $this->detalsOrder;
+        $products=[];
+
+        foreach($detals as $detal)
+        { 
+            array_push($products, $detal->quantity . 'pcs: ' . $detal->product->name . '. ');
+        }
+        return $products;
     }
 
 }

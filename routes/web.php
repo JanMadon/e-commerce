@@ -56,7 +56,7 @@ Route::controller(OrderController::class)
         Route::post('/cart', 'payOrder')->name('cart.payOrder');
         Route::patch('/cart', 'updateOrder')->name('cart.updateOrder');
         Route::get('/my-order', 'showMyOrders')->name('my.order');
-        Route::post('/my-order', 'showMyOrdersPost')->name('my.order.post');
+        Route::post('/my-order', 'post')->name('my.order.post');
     });
 
 Route::controller(StripeController::class)

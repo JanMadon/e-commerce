@@ -1,6 +1,6 @@
 <template>
     <Modal :show="showModal">
-        <div v-if="modalCase === 'success'" class="flex flex-col bg-white p-10 rounded-md shadow-md">
+        <div v-if="modalCase === 'accepted'" class="flex flex-col bg-white p-10 rounded-md shadow-md">
             <div class="flex items-center justify-center mb-4 text-green-500">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-14 h-14">
@@ -9,7 +9,7 @@
             </div>
             <p class="m-10 text-center text-green-600">Your payment has been successful!</p>
             <div class="text-center">
-                <SecondaryButton @click="() => showModal = false">cancel</SecondaryButton>
+                <SecondaryButton @click="closeModal">cancel</SecondaryButton>
             </div>
         </div>
 
@@ -23,7 +23,7 @@
             </div>
             <p class="m-10 text-center text-red-600">Your payment has failed</p>
             <div class="text-center">
-                <SecondaryButton @click="() => showModal = false">cancel</SecondaryButton>
+                <SecondaryButton @click="closeModal">cancel</SecondaryButton>
             </div>
         </div>
 
@@ -41,5 +41,11 @@ const props = defineProps({
 })
 
 const showModal = ref(props.modalCase)
+
+const closeModal = () => {
+    const url = new URL(window.location.href)
+    url.search = ''
+    window.location.href = url.href 
+}
 
 </script>

@@ -18,19 +18,37 @@ use Symfony\Component\String\UnicodeString;
 class OrderController extends Controller
 {
 
-    public function showMyOrders(Request $request) {
+    public function showMyOrders(Request $request)
+    {
+        $orders = Order::with('detalsOrder')
+            ->where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-        
-        $orders = Order::with('detalsOrder')->where('user_id', Auth::id())->get();
-        foreach($orders as $order)
-        {
-            foreach($order->detalsOrder as $detal)
-            {
+        if( $orders->where('status', 'active')->first()){
+            if($request->payment === 'accepted') {
+                $order = $orders->where('status', 'active')->first();
+                $order->status = 'accepted';
+                $order->payd_at = Carbon::today()->format('Y-m-d');
+                $order->amount_paid = $order->amount();
+                $order->save();
+            }
+
+            if($request->payment === 'rejected') {
+                $order = $orders->where('status', 'active')->first();
+                $order->status = 'rejected';
+                $order->payd_at = Carbon::today()->format('Y-m-d');
+                $order->save();
+            }
+        }
+
+        foreach ($orders as $order) {
+            foreach ($order->detalsOrder as $detal) {
                 $detal->product;
                 // dump($detal); 
             }
         }
-        
+
         return Inertia::render('Admin/MyOrders', [
             'orders' => $orders,
             'payment' => $request->payment
@@ -38,17 +56,17 @@ class OrderController extends Controller
     }
 
     public function cart()
-    {   
+    {
         $order = Order::where('user_id', Auth::user()->id)
             ->where('status', 'active')
             ->first();
 
-            if(!$order){
-                return Inertia::render('Admin/CartPage', [
-                    'products' => [],
-                    'order' => [$order]
-                ]);
-            };
+        if (!$order) {
+            return Inertia::render('Admin/CartPage', [
+                'products' => [],
+                'order' => [$order]
+            ]);
+        };
 
         $details = DetalsOrder::where('order_id', $order->id)->get();
 
@@ -56,18 +74,17 @@ class OrderController extends Controller
         foreach ($details as $detail) {
             $product = Product::find($detail->product_id);
             $product->quantity = $detail->quantity;
-            $products[] = $product; 
-            
+            $products[] = $product;
         }
 
         //* Photos:
         $photos = [];
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $photosNames = Storage::files("product/$product->id");
             $photoName = basename($photosNames[0]);
             $photo = Storage::get("product/$product->id/$photoName");
             $photo = base64_encode($photo);
-            $product->photo = $photo;  
+            $product->photo = $photo;
         }
         return Inertia::render('Admin/CartPage', [
             'products' => $products,
@@ -84,7 +101,7 @@ class OrderController extends Controller
 
         try {
             if (!Order::where('user_id', Auth::user()->id)->where('status', 'active')->exists()) {
-               // dd('asd');
+                // dd('asd');
                 $order = new Order([
                     'user_id' => Auth::user()->id,
                     'status' => 'active',
@@ -94,10 +111,8 @@ class OrderController extends Controller
                 // TODO dodaj do storzonego zamowneia produkt 
                 if (DetalsOrder::where('product_id', $request->id)->where('order_id', $order->id)->exists()) {
                     $detalsOrder = DetalsOrder::where('product_id', $request->id)->first();
-                    $detalsOrder->quantity ++;
+                    $detalsOrder->quantity++;
                     $detalsOrder->save();
-
-               
                 } else {
                     $detalsOrder = new DetalsOrder([
                         'order_id' => $order->id,
@@ -105,7 +120,7 @@ class OrderController extends Controller
                         'quantity' => $request->quantity,
                     ]);
                     $detalsOrder->save();
-                }// hamsko przeklejone jest
+                } // hamsko przeklejone jest
 
             } else {
                 $order = Order::where('user_id', Auth::user()->id)
@@ -115,9 +130,8 @@ class OrderController extends Controller
                 // sprawdz czy istnieje już dodany produkt
                 if (DetalsOrder::where('product_id', $request->id)->where('order_id', $order->id)->exists()) {
                     $detalsOrder = DetalsOrder::where('product_id', $request->id)->first();
-                    $detalsOrder->quantity ++;
+                    $detalsOrder->quantity++;
                     $detalsOrder->save();
-
                 } else {
                     $detalsOrder = new DetalsOrder([
                         'order_id' => $order->id,
@@ -129,7 +143,7 @@ class OrderController extends Controller
             }
         } catch (Exception $e) {
             // return redirect()->back();  
-            dd($e);  
+            dd($e);
         }
 
 
@@ -137,87 +151,75 @@ class OrderController extends Controller
         return to_route('list.products');
     }
 
-    public function deleteProduct(Request $request) {
+    public function deleteProduct(Request $request)
+    {
         $order = Order::where('user_id', Auth::id())
             ->where('status', 'active')
             ->first();
         $orderProduct = DetalsOrder::where('order_id', $order->id)
-                        ->where('product_id', $request->productId)
-                        ->first();  
+            ->where('product_id', $request->productId)
+            ->first();
         $orderProduct->delete();
         return response()->json($request->productId);
     }
 
-    public function updateOrder(Request $request) {
-        
+    public function updateOrder(Request $request)
+    {
         $order = Order::where('user_id', Auth::id())
-                                ->where('status', 'active')
-                                ->first(); 
-        if($request->data) {
-    
+            ->where('status', 'active')
+            ->first();
+        if ($request->data) {
+
             $detal = DetalsOrder::where('order_id', $order->id)
-                                    ->where('product_id', $request->data['id'])
-                                    ->first();
-    
+                ->where('product_id', $request->data['id'])
+                ->first();
+
             $detal->quantity = $request->data['quantity'];
             $detal->save();
         } elseif ($request->shipingMethod) {
             $order->shiping_method = $request->shipingMethod;
             $order->save();
         }
-        
     }
 
-    public function payOrder(Request $request){
+    public function payOrder(Request $request)
+    {
         //validuj
         $order = Order::find($request->data['id']);
-
-        $order->amount();
-        dd("stop");
-         
-
         $url =  $this->payByStripe($order);
-        
-
 
         return response()->json([
-            'myVariable' => $url,
+            'paymentPage' => $url,
         ]);
-// ////////////////////////////////////////////////////
-        return redirect()->back()->with(['myMessage' => 'widomość']);
 
-
-
-        dd($order);
-
-
-        $order->status = 'paid';
-        $order->payd_at = Carbon::now();
-        $order->save();
     }
 
-    private function payByStripe($order) 
+    private function payByStripe($order)
     {
-        Stripe::setApiKey(config('stripe.sk'));
-        
-        $session = Session::create([
-            'line_items'=>[
-                [
-                    'price_data' => [
-                        'currency'     => 'PLN',
-                        'product_data' => [
-                            'name' => implode(', ', ['asus', 'macbook']),
+          try {
+            Stripe::setApiKey(config('stripe.sk'));
+            $paySession = Session::create([
+                'line_items' => [
+                    [
+                        'price_data' => [
+                            'currency'     => 'PLN',
+                            'product_data' => [
+                                'name' => implode(', ', $order->productsNameAndQuantity()),
+                            ],
+                            'unit_amount'  =>  ($order->amount() * 100) ,
                         ],
-                        'unit_amount'  => 500,
+                        'quantity'   => 1,
                     ],
-                    'quantity'   => 1,
                 ],
-            ],
-            'mode'        => 'payment',
-            'success_url' => route('my.order', ['payment' => 'success']),
-            'cancel_url'  => route('my.order', ['payment' => 'rejected']),
-        ]);
+                'mode'        => 'payment',
+                'success_url' => route('my.order', ['payment' => 'accepted']),
+                'cancel_url'  => route('my.order.post', ['payment' => 'rejected']),
+            ]);
 
-        return $session->url;
+            return $paySession->url;
+        } catch (Exception $e) {
+            return $e;
+            dd('error');
+        }
     }
 }
