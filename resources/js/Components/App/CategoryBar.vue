@@ -61,14 +61,14 @@ const getCategoryInertia = () => {
 
 
 onMounted(() => {
-    console.log('Funkcja po zmaontowaniu');
+    //console.log('Funkcja po zmaontowaniu');
 
 })
 
 onBeforeMount(() => {
     getCategory()
     // Ta funkcja zostanie wykonana przed zamontowaniem komponentu
-    console.log('Funkcja przedMontowaniem została wywołana');
+    //console.log('Funkcja przedMontowaniem została wywołana');
 })
 
 

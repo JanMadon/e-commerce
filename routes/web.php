@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckPrivilegesController;
 use App\Http\Controllers\OrderController;
@@ -62,9 +62,9 @@ Route::controller(OrderController::class)
     ->group(function () {
         Route::post('/order', 'create')->name('addToCart');
         Route::get('/cart', 'cart')->name('cart');
-        Route::delete('/cart', 'deleteProduct')->name('cart.deleteProduct');
+        Route::delete('/cart', 'removeDetalsOrderCart')->name('cart.deleteProduct');
         Route::post('/cart', 'payOrder')->name('cart.payOrder');
-        Route::patch('/cart', 'updateOrder')->name('cart.updateOrder');
+        Route::patch('/cart', 'updateCart')->name('cart.updateOrder');
         Route::get('/my-order', 'showMyOrders')->name('my.order');
         Route::post('/my-order', 'post')->name('my.order.post');
     });

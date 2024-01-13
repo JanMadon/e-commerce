@@ -2,7 +2,7 @@
 <template>
     <GuestUserLayout>
 
-        <div v-if="!products.length" class="flex flex-col items-center mt-3 mx-auto ">
+        <div v-if="!order.detals_order" class="flex flex-col items-center mt-3 mx-auto ">
             <div class="flex w-2/3 p-2">
                 <h2 class="text-2xl font-bold text-left">Your Catr Items</h2>
             </div>
@@ -11,36 +11,35 @@
                 <p class="text-center w-full text-gray-900">You don't have any items in cart</p>
             </div>
         </div>
-
+        
+     
         <div v-else class="flex flex-col items-center mt-3 mx-auto ">
             <div class="flex w-2/3 p-2">
                 <h2 class="text-2xl font-bold text-left">Your Catr Items</h2>
             </div>
-
-            <div v-for="(product, index) in products" class="flex justify-between  w-2/3 h-2/3 mx-5 p-5
+            <div v-for="(detalOrder, index) in order.detals_order" class="flex justify-between  w-2/3 h-2/3 mx-5 p-5
             bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
                 <div class="flex">
                     <div
                         class="w-[80px] h-[80px] mx-3 bg-gray-200 rounded-lg cursor-pointer overflow-hidden   hover:brightness-75 transition duration-300">
-                        <img :src="'data:image/pag;base64,' + product.photo" alt="next-photo"
+                        <img :src="'data:image/pag;base64,' + detalOrder.product.photo" alt="next-photo"
                             class="w-full h-full object-cover">
                     </div>
                     <div class="flex flex-col justify-between">
-                        <h3 class="text-lg font-bold">{{ product.name }}</h3>
-                        <p class="text-xs">Price per item: {{ product.price }} PLN</p>
+                        <h3 class="text-lg font-bold">{{ detalOrder.product.name }}</h3>
+                        <p class="text-xs">Price per item: PLN {{ detalOrder.product.price }} </p>
                         <div class="flex items-end">
                             <label for="quantityfor" class="mr-1 text-sm text-gray-600">Quantity:</label>
-                            <input :value="product.quantity" @input="event => updateTotalPrice(event, index)" type="number"
+                            <input :value="detalOrder.quantity" @input="event => updateTotalPrice(event, index)" type="number"
                                 min="1" class="text-center w-16 border rounded-sm h-7">
                         </div>
                     </div>
                 </div>
                 <div class="flex flex-col justify-between items-end">
-                    <!-- <p class="text-lg font-bold "> {{product.price * setQuantity[0][index].quantity}} PLN</p> -->
-                    <p class="text-lg font-bold "> {{ product.quantity * product.price }} PLN</p>
+                    <p class="text-lg font-bold "> {{ detalOrder.quantity * detalOrder.product.price }} PLN</p>
                     <div>
                     </div>
-                    <DangerButton @click.prevent="deleteProduct(product, index)" class="px-0">
+                    <DangerButton @click.prevent="deleteDetal(detalOrder.id, index)" class="px-0">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-5 h-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -121,9 +120,7 @@ import { onMounted } from 'vue';
 import axios from 'axios';
 
 const props = defineProps({
-    products: Object,
     order: Object,
-    myMessage: String,
 })
 const tatalPrice = ref(0);
 const showError = ref(false);
@@ -167,17 +164,22 @@ watch(shipingMethod, () => {
 })
 
 function updateTotalPrice(event, index) {
-    props.products[index].quantity = parseInt(event.target.value)
+    console.log(props.order.detals_order[index]);
+    props.order.detals_order[index].quantity = parseInt(event.target.value)
     updatCart(index)
-    calculate()
+    // calculate()
 }
 
-function deleteProduct(product, index) {
-    console.log(product, index)
-    axios.delete(route('cart.deleteProduct', { productId: product.id }))
+function deleteDetal(detalId, index) {
+    console.log(detalId, index)
+    axios.delete(route('cart.deleteProduct', {detalId: detalId}))
         .then(response => {
-            if (response.data == product.id) {
-                props.products.splice(index, 1)
+            console.log(response)
+            if (response.data.detalId == detalId) {
+                props.order.detals_order.splice(index, 1)
+                if(response.data.countDetal === 1){
+                    props.order.detals_order = null
+                }
             }
             calculate()
         })
@@ -185,34 +187,34 @@ function deleteProduct(product, index) {
 }
 
 function updatCart(index) {
-    console.log(shipingMethod.value)
+    //console.log(props.order.detals_order[index])
     router.patch(route('cart.updateOrder'), {
-        data: props.products[index],
+        data: props.order.detals_order[index],
         shipingMethod: shipingMethod.value
     })
 }
 
 const calculate = () => {
     tatalPrice.value = 0
-    for (const product of props.products) {
+    for (const product of props.order.detals_order) {
         if (product.quantity <= 0) {
             showError.value = true;
             break
         } else {
             showError.value = false;
         }
-        tatalPrice.value += (product.quantity * product.price)
+        tatalPrice.value += (product.quantity * product.product.price)
         cenSelectFreeSheping.value = tatalPrice.value > 500;
     }
     if (typeof parseInt(shipingPrice.value[shipingMethod.value]) === "number") {
-
         tatalPrice.value += parseInt(shipingPrice.value[shipingMethod.value])
     }
-    console.log(tatalPrice.value)
 }
 
 onMounted(() => {
-    calculate()
+    if(props.order.length){
+        calculate()
+    }
 })
 
 </script>
