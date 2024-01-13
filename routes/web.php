@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CheckPrivilegesController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -20,14 +21,7 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+
 
 // Route::get('/', function () {
 //     return Inertia::render('Home', [
@@ -37,6 +31,8 @@ Route::get('/', function () {
 //         'phpVersion' => PHP_VERSION,
 //     ]);
 // });
+
+Route::get('/checkPrivileges', [CheckPrivilegesController::class, 'index']);
 
 Route::get('/', [ProductController::class, 'list'])->name('home');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('show.product');
@@ -72,6 +68,16 @@ Route::controller(OrderController::class)
         Route::get('/my-order', 'showMyOrders')->name('my.order');
         Route::post('/my-order', 'post')->name('my.order.post');
     });
+
+Route::controller(AdminController::class)
+    ->middleware(['auth', 'admin'])
+    ->group(function() {
+    Route::get('/admin', 'dashboard')->name('admin.dashboard');
+});
+
+
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])

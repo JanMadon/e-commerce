@@ -62,7 +62,7 @@ class OrderController extends Controller
             ->first();
 
         if (!$order) {
-            return Inertia::render('Admin/CartPage', [
+            return Inertia::render('User/CartPage', [
                 'products' => [],
                 'order' => [$order]
             ]);

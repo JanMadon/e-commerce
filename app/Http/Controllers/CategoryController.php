@@ -15,8 +15,8 @@ class CategoryController extends Controller
         //dd($category);
 
 
-        return redirect()->back()->with(['view'=> $category]);
-        //return response()->json($category);
+        //return redirect()->back()->with(['view'=> $category]);
+        return response()->json($category);
     }
     
 }

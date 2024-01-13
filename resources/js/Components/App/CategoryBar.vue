@@ -3,7 +3,7 @@
         <NavLink :href="route('home')" >
                 HOME
             </NavLink>
-        <div v-for="(category, index) in $page.props.flash.view"
+        <div v-for="(category, index) in categories"
         :id="index"
         @mouseover="(event) => showSubCategories(event)" 
         @mouseleave="subCategory = 'false'"
@@ -46,7 +46,7 @@ const showSubCategories = event => {
 }
 // spróbujmy dodać zakłatki pobierając je z backendu;
 
-const getCategoryAxsios = () => {
+const getCategory = () => {
     axios.post(route('category.get'), { data: 'zapytanie o kategorie' })
         .then(response => {
             categories.value = response.data
@@ -54,13 +54,12 @@ const getCategoryAxsios = () => {
         .catch(error => console.log(error))
 }
 
-const getCategory = () => {
+const getCategoryInertia = () => {
     router.post(route('category.get'), { data: 'zapytanie o kategorie' })
 }
 
 
 
-getCategory()
 onMounted(() => {
     console.log('Funkcja po zmaontowaniu');
 

@@ -8,9 +8,17 @@ use Inertia\Inertia;
 
 class AdminController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+   
+    public function dashboard()
+    {
+        $users = User::paginate();
+       
+        return Inertia::render('Admin/UserList', [
+            'users' => $users 
+        ]);
+    }
+
+
     public function usersList()
     {
         $users = User::paginate();

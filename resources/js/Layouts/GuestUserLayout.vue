@@ -40,7 +40,7 @@
                                         </svg>
                                     </button>
                                 </span>
-                                <ul v-show="showProfil" class="absolute bg-gray-800 mt-4">
+                                <ul v-show="showProfil" class="absolute bg-gray-800 mt-4 z-10">
                                     <NavLink name="my-account-list" :href="route('profile.edit')"
                                         class="w-full hover:bg-slate-900">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -99,7 +99,6 @@
                     </div>
                 </div>
             </nav>
-            {{ $page.auth }}
             <CategoryBar />
             <main class="">
                 <slot />
