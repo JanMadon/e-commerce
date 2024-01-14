@@ -9,8 +9,7 @@
                     <div class="min-w-80">
                         <div class="mb-4">
                             <label for="name" class="block text-sm font-medium text-gray-600">Name:</label>
-                            <input type="text" v-model="form.name" class="mt-1 p-2 w-full border rounded-md" placeholder="
-Enter the name of the advertisement.">
+                            <input type="text" v-model="form.name" class="mt-1 p-2 w-full border rounded-md" placeholder="Enter the name of the advertisement.">
                             <p class="text-red-600 text-sm">{{ $page.props.errors.name }}</p>
                         </div>
                         <div class="mb-4">

@@ -14,6 +14,9 @@
             <NavLink :href="route('form.add.product')" :active="route().current('form.add.product')">
                 Add products
             </NavLink>
+            <NavLink :href="route('categories.index')" :active="route().current('categories.index')">
+                Categories & Subcategories
+            </NavLink>
             <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                 Orders
             </NavLink>

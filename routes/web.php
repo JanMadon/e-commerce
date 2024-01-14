@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\CheckPrivilegesController;
+use App\Http\Controllers\LayoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Category;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -36,7 +38,7 @@ Route::get('/checkPrivileges', [CheckPrivilegesController::class, 'index']);
 
 Route::get('/', [ProductController::class, 'list'])->name('home');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('show.product');
-Route::post('/', [CategoryController::class, 'getCategory'])->name('category.get');
+Route::post('/', [LayoutController::class, 'getCategory'])->name('category.get');
 // /////
 
 Route::get('/dashboard', function () {
@@ -56,7 +58,7 @@ Route::controller(ProductController::class)
         //Route::get('/product/{id}', 'show')->name('show.product');
         // Route::post('/uploadFoto', 'savePhoto')->name('uplodad.photo');
     });
-    
+
 Route::controller(OrderController::class)
     ->middleware(['auth', 'verified'])
     ->group(function () {
@@ -70,11 +72,17 @@ Route::controller(OrderController::class)
         Route::post('/my-order', 'post')->name('my.order.post');
     });
 
+Route::controller(CategoryController::class)
+    ->middleware(['admin', 'auth'])
+    ->group(function () {
+        Route::get('/categories', 'index')->name('categories.index');
+    });
+
 Route::controller(AdminController::class)
     ->middleware(['auth', 'admin'])
-    ->group(function() {
-    Route::get('/admin', 'dashboard')->name('admin.dashboard');
-});
+    ->group(function () {
+        Route::get('/admin', 'dashboard')->name('admin.dashboard');
+    });
 
 
 

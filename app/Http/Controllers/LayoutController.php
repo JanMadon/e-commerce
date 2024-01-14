@@ -6,9 +6,8 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class CategoryController extends Controller
+class LayoutController extends Controller
 {
-
     public function getCategory(Request $request)
     {
         $category = Category::with('subCategory')->get();
