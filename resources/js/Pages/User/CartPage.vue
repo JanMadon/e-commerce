@@ -1,7 +1,6 @@
 
 <template>
     <GuestUserLayout>
-
         <div v-if="!order.detals_order" class="flex flex-col items-center mt-3 mx-auto ">
             <div class="flex w-2/3 p-2">
                 <h2 class="text-2xl font-bold text-left">Your Catr Items</h2>
@@ -122,7 +121,7 @@ import axios from 'axios';
 const props = defineProps({
     order: Object,
 })
-const tatalPrice = ref(0);
+const tatalPrice = ref();
 const showError = ref(false);
 const cenSelectFreeSheping = ref(false)
 const shipingMethod = ref('-');
@@ -167,7 +166,6 @@ function updateTotalPrice(event, index) {
     console.log(props.order.detals_order[index]);
     props.order.detals_order[index].quantity = parseInt(event.target.value)
     updatCart(index)
-    // calculate()
 }
 
 function deleteDetal(detalId, index) {
@@ -187,11 +185,18 @@ function deleteDetal(detalId, index) {
 }
 
 function updatCart(index) {
-    //console.log(props.order.detals_order[index])
-    router.patch(route('cart.updateOrder'), {
-        data: props.order.detals_order[index],
-        shipingMethod: shipingMethod.value
-    })
+    const detal = props.order.detals_order[index]
+    if(detal){
+        router.patch(route('cart.updateOrder'), {
+            productId: detal.product.id,
+            quantity: detal.quantity,
+            shipingMethod: shipingMethod.value
+        })
+    } else {
+        router.patch(route('cart.setShipmentMethod'), {
+            shipingMethod: shipingMethod.value
+        })
+    }
 }
 
 const calculate = () => {
@@ -212,9 +217,8 @@ const calculate = () => {
 }
 
 onMounted(() => {
-    if(props.order.length){
+    if(props.order.hasOwnProperty('detals_order'))
         calculate()
-    }
 })
 
 </script>

@@ -65,6 +65,7 @@ Route::controller(OrderController::class)
         Route::delete('/cart', 'removeDetalsOrderCart')->name('cart.deleteProduct');
         Route::post('/cart', 'payOrder')->name('cart.payOrder');
         Route::patch('/cart', 'updateCart')->name('cart.updateOrder');
+        Route::patch('/cart/shipment', 'setShipmentMethod')->name('cart.setShipmentMethod');
         Route::get('/my-order', 'showMyOrders')->name('my.order');
         Route::post('/my-order', 'post')->name('my.order.post');
     });

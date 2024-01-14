@@ -18,16 +18,19 @@ const props = defineProps({
 
 
 function addToCart() {
-   
    router.post(route('addToCart'), 
        { //data
-           id: props.product.id,
+           productId: props.product.id,
            quantity: props.quantity
        },
        { // optins
            onSuccess: ()=> {
                showSuccessNotification(`The product:  <strong> ${props.product.name} </strong> has been added to the cart`)    
-           } 
+           },
+           onError: ()=> {
+            showSuccessNotification(`DUPA DUPA`) 
+           }
+
        }
    );
 }

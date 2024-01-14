@@ -2,28 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DetalsOrder;
+use App\Http\Requests\OrderRequest;
 use App\Models\Order;
-use App\Models\Product;
 use App\Services\OrderService;
-use Carbon\Carbon;
-use Exception;
+use App\Services\PayService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
-use Stripe\Checkout\Session;
-use Stripe\Stripe;
 
 class OrderController extends Controller
 {
+    private $orderService;
+    private $payService;
 
-    public function showMyOrders(Request $request, OrderService $orderService)
+    public function __construct(OrderService $orderService, PayService $payService)
     {
-        $userId = Auth::id();
-        $orders = $orderService->getUserOrders($userId);
+        $this->orderService = $orderService;
+        $this->payService = $payService;
+    }
 
-        $orderService->updateOrderStatus($userId, $request->payment);
+    public function showMyOrders(Request $request)
+    {
+
+        $userId = Auth::id();
+        $orders = $this->orderService->getUserOrders($userId);
+
+        $this->orderService->updateOrderStatus($userId, $request->payment);
 
         return Inertia::render('User/MyOrders', [
             'orders' => $orders,
@@ -31,38 +35,35 @@ class OrderController extends Controller
         ]);
     }
 
-    public function create(Request $request, OrderService $orderService)
+    public function create(OrderRequest $request)
     {
-        $request->validate([
-            'id' => ['required', 'exists:products,id'],
-            'quantity' => ['required', 'min:1']
-        ]);
+        $request->validated();
 
         $userId = Auth::id();
 
-        $order = $orderService->getUserActiveOrder($userId);
+        $order = $this->orderService->getUserActiveOrder($userId);
         if ($order) {
-            $orderService->updateOrderQuantity($order, $request->id, $request->quantity);
+            $this->orderService->updateOrderQuantity($order, $request->productId, $request->quantity);
         } else {
-            $orderService->createOrder($userId, $request->id, $request->quantity);
+            $this->orderService->createOrder($userId, $request->productId, $request->quantity);
         }
         return to_route('list.products');
     }
 
-    public function cart(OrderService $orderService)
+    public function cart()
     {
         $userId = Auth::id();
-        $order = $orderService->getUserActiveOrder($userId) ?? [];
-        $dataDoCart = $orderService->getDataToCart($order);
+        $order = $this->orderService->getUserActiveOrder($userId) ?? [];
+        $dataDoCart = $this->orderService->getDataToCart($order);
 
         return Inertia::render('User/CartPage', [
             'order' => $dataDoCart
         ]);
     }
 
-    public function removeDetalsOrderCart(Request $request, OrderService $orderService)
+    public function removeDetalsOrderCart(Request $request)
     {
-        $order = $orderService->getUserActiveOrder(Auth::id());
+        $order = $this->orderService->getUserActiveOrder(Auth::id());
         $detalsOrder = $order->detalsOrder->where('id', $request->detalId)->first();
         $detalsOrder->delete();
 
@@ -76,15 +77,16 @@ class OrderController extends Controller
         ]);
     }
 
-    public function updateCart(Request $request, OrderService $orderService)
+    public function updateCart(OrderRequest $request)
     {
+        $request->validated();
         $userId = Auth::id();
-        $order = $orderService->getUserActiveOrder($userId);
+        $order = $this->orderService->getUserActiveOrder($userId);
 
-        if ($request->data) {
+        if ($request->productId) {
             $detal = $order->detalsOrder
-                ->where('product_id', $request->data['product']['id'])->first();
-            $detal->quantity = $request->data['quantity'];
+                ->where('product_id', $request->productId)->first();
+            $detal->quantity = $request->quantity;
             $detal->save();
         } elseif ($request->shipingMethod) {
             $order->shiping_method = $request->shipingMethod;
@@ -92,43 +94,23 @@ class OrderController extends Controller
         }
     }
 
+    public function setShipmentMethod(Request $request)
+    {
+        $userId = Auth::id();
+        $order = $this->orderService->getUserActiveOrder($userId);
+
+        $order->shiping_method = $request->shipingMethod;
+        $order->save();
+    }
+
     public function payOrder(Request $request)
     {
         //validuj
         $order = Order::find($request->data['id']);
-        $url =  $this->payByStripe($order);
+        $url =  $this->payService->payByStripe($order);
 
         return response()->json([
             'paymentPage' => $url,
         ]);
-    }
-
-    private function payByStripe($order)
-    {
-        try {
-            Stripe::setApiKey(config('stripe.sk'));
-            $paySession = Session::create([
-                'line_items' => [
-                    [
-                        'price_data' => [
-                            'currency'     => 'PLN',
-                            'product_data' => [
-                                'name' => implode(', ', $order->productsNameAndQuantity()),
-                            ],
-                            'unit_amount'  => ($order->amount() * 100),
-                        ],
-                        'quantity'   => 1,
-                    ],
-                ],
-                'mode'        => 'payment',
-                'success_url' => route('my.order', ['payment' => 'accepted']),
-                'cancel_url'  => route('my.order.post', ['payment' => 'rejected']),
-            ]);
-
-            return $paySession->url;
-        } catch (Exception $e) {
-            return $e;
-            dd('error');
-        }
     }
 }
