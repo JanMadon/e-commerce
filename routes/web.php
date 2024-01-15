@@ -76,6 +76,7 @@ Route::controller(CategoryController::class)
     ->middleware(['admin', 'auth'])
     ->group(function () {
         Route::get('/categories', 'index')->name('categories.index');
+        Route::post('/categories', 'create')->name('categories.create');
     });
 
 Route::controller(AdminController::class)

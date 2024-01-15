@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -14,7 +13,6 @@ class CategoryController extends Controller
     {
 
         $categories = Category::with('subCategory')->get();
-        $subcategories = SubCategory::get();
 
         return Inertia::render('Admin/Categories', [
             'categories' => $categories,
@@ -24,9 +22,10 @@ class CategoryController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $requets )
     {
-        //
+        dd($requets->all());
+
     }
 
     /**

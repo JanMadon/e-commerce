@@ -5,6 +5,9 @@ const props = defineProps({
     active: {
         type: Boolean,
     },
+    show: {
+        type: Boolean
+    }
 });
 
 const classes = computed(() =>
@@ -15,7 +18,7 @@ const classes = computed(() =>
 </script>
 
 <template>
-    <span :class="classes">
+    <span v-show="show" :class="classes">
         <slot />
     </span>
 </template>
