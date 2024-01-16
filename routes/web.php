@@ -77,6 +77,8 @@ Route::controller(CategoryController::class)
     ->group(function () {
         Route::get('/categories', 'index')->name('categories.index');
         Route::post('/categories', 'create')->name('categories.create');
+        Route::put('/categories/{id?}', 'edit')->name('categories.edit');
+        Route::delete('/categories/{id}/{parentId?}', [CategoryController::class, 'delete'])->name('categories.delete');
     });
 
 Route::controller(AdminController::class)

@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 
-class CreateCategoryRequest extends FormRequest
+class UpdateCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,18 +23,23 @@ class CreateCategoryRequest extends FormRequest
     public function rules(Request $request): array
     {
 
-        if($request->parentId) {
-            return [
-                'parentId' => ['required', 'integer', 'exists:categories,id'],
-                'name' => ['required','string','unique:sub_categories' ,' min:3', 'max:20', ],
-                'description' => ['nullable', 'string', 'max:150']
-            ];
-        }
-
-        return [
-            'name' => ['required','string','unique:categories' ,' min:3', 'max:20', ],
+        $rules = [
+            'type' => ['required', 'in:category'],
+            'id' => ['required', 'exists:categories,id'],
+            'name' => ['required','string','unique:categories' ,' min:3', 'max:20'],
             'description' => ['nullable', 'string', 'max:150']
         ];
+
+        if($request->query('parentId')) {
+            $rules = [
+                'parentId' => ['exists:categories,id'], 
+                'type' => ['required', 'in:subcategory'],
+                'id' => ['required', 'exists:sub_categories,id'],
+                'name' => ['required','string','unique:sub_categories' ,' min:3', 'max:20'],
+                'description' => ['nullable', 'string', 'max:150']
+            ];    
+        };
+        return $rules;
     }
 
     public function messages() :array

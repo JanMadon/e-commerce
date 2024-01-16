@@ -15,7 +15,7 @@
                                 class="mt-2 mx-3 text-sm text-blue-600 cursor-pointer">
                                 edit
                             </span>
-                            <span @click.prevent="() => removeCategory(category.id)"
+                            <span @click.prevent="() => remove(category.id)"
                                 class="mt-2 text-sm text-red-600 cursor-pointer">
                                 remove
                             </span>
@@ -31,18 +31,18 @@
                         class="mx-5 p-5 text-center bg-gray-200 border rounded-xl shadow-md">
                         {{ categories[selectedIndex].description }}
                     </div>
-                    <form v-show="showCategoryForm" @submit.prevent="() => addCategory('category')" class="m-4">
+                    <form v-show="showCategoryForm" @submit.prevent="() => create('category')" class="m-4">
                         <label for="name" class="block text-sm font-medium text-gray-600">Category name:</label>
-                        <input type="text" v-model="addCategoryForm.name" class="mt-1 p-2 w-2/3 border rounded-md"
+                        <input type="text" v-model="createForm.name" class="mt-1 p-2 w-2/3 border rounded-md"
                             placeholder="Enter the name of the category" required>
                         <p class="text-red-600 text-xs">{{ $page.props.errors.name }}</p>
                         <label for="description" class="block text-sm font-medium text-gray-600">Description</label>
-                        <textarea rows="3" v-model="addCategoryForm.description" class="mt-1 p-2 w-full border rounded-md"
+                        <textarea rows="3" v-model="createForm.description" class="mt-1 p-2 w-full border rounded-md"
                             placeholder="Enter destription of the category"></textarea>
-                        <p class="text-red-600 text-xs">{{ }}</p>
+                        <p class="text-red-600 text-xs">{{ $page.props.errors.description }}</p>
                         <div class="text-right">
                             <SecondaryButton class="mx-5" @click.prevent="closeInputs">cancel</SecondaryButton>
-                            <PrimaryButton>ADD</PrimaryButton>
+                            <PrimaryButton>create</PrimaryButton>
                         </div>
                     </form>
                 </div>
@@ -64,7 +64,7 @@
                                     class="mr-2 text-sm text-blue-600 cursor-pointer">
                                     edit
                                 </span>
-                                <span @click.prevent="() => removeSubcategory(subcategory.id)"
+                                <span @click.prevent="() => remove(subcategory.id, selectedCategory.id)"
                                     class="text-sm text-red-600 cursor-pointer">
                                     remove
                                 </span>
@@ -80,19 +80,19 @@
                         class="mx-5 p-5 text-center bg-gray-200 border rounded-xl shadow-md">
                         {{ selectedSubcategory.description }}
                     </div>
-                    <form v-show="showSubcategoryForm" class="m-4">
+                    <form v-show="showSubcategoryForm" @submit.prevent="() => create('subcategory')" class="m-4">
                         <label for="name" class="block text-sm font-medium text-gray-600">Subcategory name:</label>
-                        <input type="text" v-model="addSubcategoryForm.name" class="mt-1 p-2 w-2/3 border rounded-md"
+                        <input type="text" v-model="createForm.name" class="mt-1 p-2 w-2/3 border rounded-md"
                             placeholder="Enter the name of the subcategory" required>
-                        <p class="text-red-600 text-xs">{{ }}</p>
+                        <p class="text-red-600 text-xs">{{$page.props.errors.name }}</p>
                         <label for="description" class="block text-sm font-medium text-gray-600">Description</label>
-                        <textarea rows="3" v-model="addSubcategoryForm.description"
+                        <textarea rows="3" v-model="createForm.description"
                             class="mt-1 p-2 w-full border rounded-md"
                             placeholder="Enter destription of the subcategory"></textarea>
-                        <p class="text-red-600 text-xs"></p>
+                        <p class="text-red-600 text-xs"> {{ $page.props.errors.description }} </p>
                         <div class="text-right">
                             <SecondaryButton class="mx-5" @click.prevent="closeInputs">cancel</SecondaryButton>
-                            <PrimaryButton @click.prevent="addSubcategory">ADD</PrimaryButton>
+                            <PrimaryButton>create</PrimaryButton>
                         </div>
                     </form>
                 </div>
@@ -103,11 +103,11 @@
                 <h3 class="text-xl font-bold">Edit {{ type }}</h3>
                 <label for="name" class="block text-sm font-medium text-gray-600">Name:</label>
                 <input type="text" v-model="editContentNameInput" class="mt-1 p-2 w-2/3 border rounded-md" required>
-                <p class="text-red-600 text-xs">{{ }}</p>
+                <p class="text-red-600 text-xs">{{ $page.props.errors.name }}</p>
                 <label for="description" class="block text-sm font-medium text-gray-600">Description</label>
                 <textarea rows="3" v-model="editContentDescriptionInput" class="mt-1 p-2 w-full border rounded-md"
                     placeholder="Enter destription of the category"></textarea>
-                <p class="text-red-600 text-xs">{{ }}</p>
+                <p class="text-red-600 text-xs">{{ $page.props.errors.description }}</p>
                 <div class="text-right">
                     <SecondaryButton @click="close" class="mx-5">close</SecondaryButton>
                     <PrimaryButton @click="edit">edit</PrimaryButton>
@@ -133,6 +133,7 @@ const props = defineProps({
     subcategories: Object
 })
 
+const selectedCategory = ref()
 const selectedSubcategories = ref();
 const selectedSubcategory = ref();
 const selectedIndex = ref();
@@ -144,36 +145,27 @@ const showModalEdit = ref(false)
 const editContentId = ref()
 const editContentNameInput = ref()
 const editContentDescriptionInput = ref()
-const type = ref('')
+const type = ref()
 
-const addCategoryForm = useForm({
+const createForm = useForm({
+    parentId: null,
     type: '',
     name: '',
     description: '',
 })
 
-const addSubcategoryForm = useForm({
-    name: '',
-    description: '',
-})
-
-const showSubcategory = subcategory => {
-
-}
-
 
 const showSubcategories = index => {
     selectedIndex.value = index
-    selectedSubcategories.value = props.categories[index].sub_category
+    selectedCategory.value = props.categories[index];
+    selectedSubcategories.value = props.categories[index].sub_category // no tej powielenie USUŃ 
 }
 
 const closeInputs = () => {
     showCategoryForm.value = false
     showSubcategoryForm.value = false
-    addCategoryForm.name = ''
-    addCategoryForm.description = ''
-    addSubcategoryForm.name = ''
-    addSubcategoryForm.description = ''
+    createForm.name = ''
+    createForm.description = ''
 }
 
 const modalEditCategory = (id, name, description, typeel) => {
@@ -195,65 +187,56 @@ const close = () => {
 
 
 const edit = () => {
-    // przydał by się id z typem 
-    console.log(type.value)
-    console.log(editContentId.value)
-    console.log(editContentNameInput.value)
-    console.log(editContentDescriptionInput.value)
-    // edytuj w DB sprawdz czy jest to category czy sub cztegory
-    close();
-}
+    let parentId = null;
 
-
-const removeCategory = (categoryId) => {
-    for (const index in props.categories) {
-        if (props.categories[index].id === categoryId) {
-            props.categories.splice(index, 1)
-        }
+    if(type.value === 'subcategory') {
+        parentId = selectedCategory.value.id
     }
-    // usuń z DB
-}
-
-const removeSubcategory = (subcategoryId) => {
-    for (const index in selectedSubcategories.value) {
-        if (selectedSubcategories.value[index].id === subcategoryId) {
-            selectedSubcategories.value.splice(index, 1)
+   
+    router.put(route('categories.edit', {parentId}), {
+        type: type.value,
+        id: editContentId.value, 
+        name: editContentNameInput.value,
+        description: editContentDescriptionInput.value
+    }, {
+        onSuccess: ()=> {
+            close();
         }
-    }
-    // usuń z DB
+    })
+
+
 }
 
-const addCategory = (typeEl) => {
-    const lastIndex = props.categories.length
-    addCategoryForm.type = typeEl
-    console.log(addCategoryForm);
-    addCategoryForm.post(route('categories.create'), {
+
+const remove = (id, parentId) => {
+    console.log(id, parentId)
+    router.delete(route('categories.delete', {'id': id, 'parentId': parentId}), {
+        onSuccess: () => {
+            showSuccessNotification('udało się usunąć wybraną kategorię!')
+        }
+    })
+    
+// usuń z DB
+}
+
+const create = (typeEl) => {
+    createForm.type = typeEl
+    
+    if(typeEl === 'subcategory') {
+        console.log(selectedCategory.value.id);
+        createForm.parentId = selectedCategory.value.id
+    }
+    
+    createForm.post(route('categories.create'), {
         onSuccess: () => { 
-            props.categories.push({
-                name: addCategoryForm.name,
-                description: addCategoryForm.description,
-                sub_category: []
-            })
-            showSubcategories(lastIndex)
             closeInputs()
-
+            
             showSuccessNotification('udało się!')
         },
         onError: () => {
-
+            
         }
     })
-    // daodań do DB
 }
-
-const addSubcategory = () => {
-    selectedSubcategories.value.push({
-        name: addSubcategoryForm.name,
-        description: addSubcategoryForm.description,
-    })
-    closeInputs()
-    console.log('add subcategory')
-}
-
 
 </script>

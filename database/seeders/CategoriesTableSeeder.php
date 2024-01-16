@@ -13,6 +13,7 @@ class CategoriesTableSeeder extends Seeder
      */
     public function run(): void
     {
+
         DB::table('categories')->truncate();
         $categories = [
             ['name' => 'Electronics', 'description' => 'Electronic devices and gadgets'],

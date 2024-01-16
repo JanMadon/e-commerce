@@ -11,8 +11,14 @@ class SubcategoriesTableSeeder extends Seeder
     /**
      * Run the database seeds.
      */
+
+
     public function run(): void
     {
+
+        DB::table('sub_categories')->truncate();
+
+
         $subcategories = [
             // Electronics
             ['category_id' => 1, 'name' => 'Smartphones', 'description' => 'Smartphones and mobile devices'],

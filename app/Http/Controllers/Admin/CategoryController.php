@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -13,58 +16,77 @@ class CategoryController extends Controller
     {
 
         $categories = Category::with('subCategory')->get();
-
         return Inertia::render('Admin/Categories', [
             'categories' => $categories,
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(Request $requets )
+    public function create(CreateCategoryRequest $request)
     {
-        dd($requets->all());
+        $data = $request->validated();
 
+        if ($request->input('parentId')) {
+            SubCategory::create([
+                'category_id' => $data['parentId'],
+                'name' => $data['name'],
+                'description' => $data['description'], 
+            ]);
+        } else {
+            Category::create($data);
+        }
+      
+        return redirect()->back();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function edit(UpdateCategoryRequest $request)
     {
-        //
-    }
+        $data = $request->validated();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+        if ($request->query('parentId')) {
+            $category = Category::find($data['parentId']);
+            $subCategory = $category->subCategory->find($data['id']);
+            $subCategory->update([
+                'name' => $data['name'],
+                'description' => $data['description']
+            ]);
+        } else {
+            $category = Category::find($data['id']);
+            $category->update([
+                'name' => $data['name'],
+                'description' => $data['description']
+            ]);
+        }
+        return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function delete($id, $parentId = null)
     {
-        //
+        
+        if(!$parentId){
+            $categories = Category::with('subCategory')
+                ->find($id);
+    
+            if ($categories) {
+                $categories->subCategory
+                    ->each(function ($subCategory) {
+                        $subCategory->delete();
+                    });
+            }
+            $categories->delete();
+
+        } else {
+            Category::with('subCategory')
+                ->find($parentId)
+                ->subCategory
+                ->find($id)
+                ->delete();
+            
+        }
+
+
+        return redirect()->back();
     }
 }
