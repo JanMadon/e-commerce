@@ -8,7 +8,7 @@
             <ProductCard v-for="(photo, index) in photos" :key="index" :photo="photo" :product="products[index-1]"
            ></ProductCard>
         </div>
-        <!-- {{ p }} -->
+       ADMIN
     </GuestUserLayout>
 </template>
 

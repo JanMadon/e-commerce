@@ -47,7 +47,7 @@ class OrderController extends Controller
         } else {
             $this->orderService->createOrder($userId, $request->productId, $request->quantity);
         }
-        return to_route('list.products');
+        return redirect()->back();
     }
 
     public function cart()

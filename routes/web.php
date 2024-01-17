@@ -25,19 +25,10 @@ use Inertia\Inertia;
 
 
 
-// Route::get('/', function () {
-//     return Inertia::render('Home', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//         'laravelVersion' => Application::VERSION,
-//         'phpVersion' => PHP_VERSION,
-//     ]);
-// });
-
 Route::get('/checkPrivileges', [CheckPrivilegesController::class, 'index']);
 
-Route::get('/', [ProductController::class, 'list'])->name('home');
-Route::get('/product/{id}', [ProductController::class, 'show'])->name('show.product');
+Route::get('/', [LayoutController::class, 'showProdyctBoard'])->name('home');
+Route::get('/item/{id}', [LayoutController::class, 'show'])->name('show.product');
 Route::post('/', [LayoutController::class, 'getCategory'])->name('category.get');
 // /////
 
@@ -52,9 +43,12 @@ Route::controller(AdminController::class)
 
 Route::controller(ProductController::class)
     ->middleware(['auth', 'verified'])->group(function () {
-        Route::get('/addedProducts', 'list')->name('list.products');
-        Route::get('/addProducts', 'form')->name('form.add.product');
-        Route::post('/addProducts', 'create')->name('create.add.product');
+        Route::get('/products', 'list')->name('products');
+        Route::get('/products/create', 'create')->name('product.create');
+        Route::post('/products', 'store')->name('product.store');
+        Route::patch('/products/{id}', 'update')->name('product.update');
+
+
         //Route::get('/product/{id}', 'show')->name('show.product');
         // Route::post('/uploadFoto', 'savePhoto')->name('uplodad.photo');
     });

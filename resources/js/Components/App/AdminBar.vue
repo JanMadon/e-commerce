@@ -8,10 +8,10 @@
             <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                 Shop
             </NavLink>
-            <NavLink :href="route('list.products')" :active="route().current('list.products')">
+            <NavLink :href="route('products')" :active="route().current('products')">
                 Products list
             </NavLink>
-            <NavLink :href="route('form.add.product')" :active="route().current('form.add.product')">
+            <NavLink :href="route('product.create')" :active="route().current('product.create')">
                 Add products
             </NavLink>
             <NavLink :href="route('categories.index')" :active="route().current('categories.index')">

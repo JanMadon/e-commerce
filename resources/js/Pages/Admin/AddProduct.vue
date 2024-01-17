@@ -153,12 +153,7 @@
                     <PrimaryButton>add product</PrimaryButton>
                 </div>
             </form>
-
         </div>
-
-
-
-
     </AdminLayout>
 </template>
 <script setup>
@@ -208,7 +203,7 @@ function cancel() {
 
 function addProduct() {
     if (confirm('Are you sure to add new product?')) {
-        form.post(route('create.add.product'));
+        form.post(route('product.store'));
     }
 }
 
