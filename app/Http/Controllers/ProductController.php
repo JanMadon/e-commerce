@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AddProductRequest;
+use App\Models\Category;
 use App\Models\Product;
+use App\Services\CategoryService;
 use App\Services\ProductService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -29,10 +31,13 @@ class ProductController extends Controller
         ]);
     }
 
-    public function create(Request $request)
+    public function create(CategoryService $categoryService)
     {
+        //dd($request->message);
+        $category =  $categoryService->getCategoriesWithSubcategories();
+
         return Inertia::render('Admin/AddProduct', [
-            'message' => $request->message
+            'categories' => $category
         ]);
     }
 
@@ -42,15 +47,17 @@ class ProductController extends Controller
 
         $data = [
             'name' => $request['name'],
-            'category' => $request['category'],
+            'subcategory_id' => $request['subcategory_id'],
             'description' => $request['description'],
             'price' => $request['price'],
             'quantity' => $request['quantity'],
         ];
 
         $this->productService->saveProduct($data, $request['photos']);
+        $response = "Product " . $data['name'] . " has been added to the product list, now you can activate it.";
 
-        return to_route('products');
+        return to_route('products')
+        ->withViewData(['mate'=> $response]);
     }
 
     public function update(Request $request, string $id)

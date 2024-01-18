@@ -14,14 +14,21 @@
                         </div>
                         <div class="mb-4">
                             <label for="category" class="block text-sm font-medium text-gray-600">Category:</label>
-                            <select v-model="form.category" class="mt-1 p-2 w-full border rounded-md">
+                            <select v-model="selectedCategory" class="mt-1 p-2 w-full border rounded-md">
                                 <option disabled value="">Please select category</option>
-                                <option>PC</option>
-                                <option>Laptops</option>
-                                <option>Smartphones</option>
-                                <option>Tablets</option>
-                                <option>Watchs</option>
-                                <option>Others</option>
+                                <option v-for="(category, index) in categories" :key="index" :value="category" >
+                                    {{ category.name }}
+                                </option>
+                            </select>
+                            <p class="text-red-600 text-sm">{{ $page.props.errors.category }}</p>
+                        </div>
+                        <div v-if="selectedCategory" class="mb-4">
+                            <label for="category" class="block text-sm font-medium text-gray-600">Subategory:</label>
+                            <select v-model="selectedSubcategory" class="mt-1 p-2 w-full border rounded-md">
+                                <option disabled value="">Please select subcategory</option>
+                                <option v-for="(subcategory, index) in selectedCategory.sub_category" :key="index" :value="subcategory">
+                                    {{ subcategory.name }}
+                                </option>
                             </select>
                             <p class="text-red-600 text-sm">{{ $page.props.errors.category }}</p>
                         </div>
@@ -149,7 +156,6 @@
                 </div>
                 <div class="flex justify-between">
                     <DangerButton @click.prevent="cancel">cancel</DangerButton>
-                    <!-- <DangerButton @click.prevent="">test API</DangerButton> -->
                     <PrimaryButton>add product</PrimaryButton>
                 </div>
             </form>
@@ -160,26 +166,19 @@
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import DangerButton from '@/Components/DangerButton.vue';
-import { router, useForm } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import { watchEffect } from 'vue';
 import { watch } from 'vue';
-import { useAttrs } from 'vue';
+import { showSuccessNotification } from '@/event-bus';
+
 
 const props = defineProps({
-
+    categories: Object
 })
 
-const form = useForm({
-    name: '',
-    category: '',
-    quantity: '',
-    price: '',
-    description: '',
-    photos: [],
-})
-
+const selectedCategory = ref('')
+const selectedSubcategory = ref('')
 let isCorectPrice = ref(true);
 let isCorectQuantity = ref(true);
 const imgSrc = ref({
@@ -191,19 +190,34 @@ const imgSrc = ref({
     photo6: ''
 })
 
-function showPicture(e) {
-    console.log(e.target)
-}
+watch([selectedCategory, selectedSubcategory], ()=> {
+    console.log(selectedCategory.value)
+    console.log(selectedSubcategory.value)
+    form.category_id = selectedCategory.value.id
+    form.subcategory_id = selectedSubcategory.value.id
+})
+
+const form = useForm({
+    name: '',
+    category_id: 0,
+    subcategory_id: 0,
+    quantity: '',
+    price: '',
+    description: '',
+    photos: [],
+})
 
 
 function cancel() {
     console.log('wyczyść form i cofij');
-    //router.get(route('do dodania'));
 }
 
 function addProduct() {
     if (confirm('Are you sure to add new product?')) {
-        form.post(route('product.store'));
+        form.post(route('product.store'), {
+            onSuccess: () => {
+                showSuccessNotification(`Product ${form.name} has been added to the product list, now you can activate it.`)}
+        });
     }
 }
 
@@ -213,9 +227,7 @@ function onFileChnge(ev) {
         const reader = new FileReader()
 
         reader.onload = function (e) {
-
             imgSrc.value[ev.srcElement.id] = e.target.result
-
         }
         reader.readAsDataURL(ev.target.files[0]);
     }
@@ -229,7 +241,6 @@ watchEffect(() => {
     } else {
         isCorectPrice.value = true
     }
-
     isCorectQuantity.value = form.quantity < 0 ? false : true
 })
 

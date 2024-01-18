@@ -42,7 +42,7 @@ Route::controller(AdminController::class)
     });
 
 Route::controller(ProductController::class)
-    ->middleware(['auth', 'verified'])->group(function () {
+    ->middleware(['auth','admin', 'verified'])->group(function () {
         Route::get('/products', 'list')->name('products');
         Route::get('/products/create', 'create')->name('product.create');
         Route::post('/products', 'store')->name('product.store');

@@ -12,7 +12,7 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'price', 'category', 'description', 'quantity'
+        'name', 'price', 'subcategory_id', 'description', 'quantity'
     ];
 
     // public function ordersDetal(): HasOne

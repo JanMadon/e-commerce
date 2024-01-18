@@ -26,6 +26,7 @@ class ProductService {
 
     public function saveProduct(array $data, array $photos)
     {
+        //dd($data);
         $product = Product::create($data);
         $productId = $product->id;
         $product->id;
@@ -45,15 +46,11 @@ class ProductService {
                 $product->update(['quantity' => $value]);
              } elseif($type === 'status') {
                 $product->update(['status' => $value]);
-             } else {
-                
+             } else {         
              }
         } catch(Exception $e) {
              dd($e);
         }
-
     }
-
-
 
 }
