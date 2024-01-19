@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Storage;
 
 class OrderService
 {
+    public function getAllOredrs()
+    {
+        return Order::with('detalsOrder.product')
+        ->orderBy('created_at', 'desc')
+        ->get();
+    }
+
     public function getUserOrders($userId)
     {
         return Order::with('detalsOrder.product')

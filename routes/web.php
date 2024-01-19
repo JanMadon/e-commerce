@@ -1,16 +1,14 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\CheckPrivilegesController;
 use App\Http\Controllers\LayoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-use App\Models\Category;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,25 +30,24 @@ Route::get('/item/{id}', [LayoutController::class, 'show'])->name('show.product'
 Route::post('/', [LayoutController::class, 'getCategory'])->name('category.get');
 // /////
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::controller(AdminController::class)
-    ->middleware(['auth', 'verified'])->group(function () {
+    ->middleware(['auth', 'admin', 'verified'])->group(function () {
+        Route::get('/admin', 'dashboard')->name('dashboard');
         Route::get('/admin/user-list', 'usersList')->name('admin.usersList');
     });
 
 Route::controller(ProductController::class)
-    ->middleware(['auth','admin', 'verified'])->group(function () {
+    ->middleware(['auth', 'admin', 'verified'])->group(function () {
         Route::get('/products', 'list')->name('products');
         Route::get('/products/create', 'create')->name('product.create');
         Route::post('/products', 'store')->name('product.store');
         Route::patch('/products/{id}', 'update')->name('product.update');
+    });
 
-
-        //Route::get('/product/{id}', 'show')->name('show.product');
-        // Route::post('/uploadFoto', 'savePhoto')->name('uplodad.photo');
+Route::controller(AdminOrderController::class)
+    ->middleware(['auth', 'admin','verified'])
+    ->group(function () {
+        Route::get('/orders', 'list')->name('orders');
     });
 
 Route::controller(OrderController::class)
@@ -74,16 +71,6 @@ Route::controller(CategoryController::class)
         Route::put('/categories/{id?}', 'edit')->name('categories.edit');
         Route::delete('/categories/{id}/{parentId?}', [CategoryController::class, 'delete'])->name('categories.delete');
     });
-
-Route::controller(AdminController::class)
-    ->middleware(['auth', 'admin'])
-    ->group(function () {
-        Route::get('/admin', 'dashboard')->name('admin.dashboard');
-    });
-
-
-
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])

@@ -17,7 +17,7 @@
                             </svg>
                         </button>
                         <div class="px-5 py-2">
-                            <Link :href="route('dashboard')" class="flex flex-col">
+                            <Link :href="route('home')" class="flex flex-col">
                             <ApplicationLogo class="block h-9 w-auto   dark:text-gray-200" />
                             <p class="text-white">e-shop</p>
                             </Link>

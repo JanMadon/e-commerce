@@ -3,13 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AddProductRequest;
-use App\Models\Category;
-use App\Models\Product;
 use App\Services\CategoryService;
 use App\Services\ProductService;
-use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -54,28 +51,27 @@ class ProductController extends Controller
         ];
 
         $this->productService->saveProduct($data, $request['photos']);
-        $response = "Product " . $data['name'] . " has been added to the product list, now you can activate it.";
 
-        return to_route('products')
-        ->withViewData(['mate'=> $response]);
+        return to_route('products');
     }
 
     public function update(Request $request, string $id)
     {
-        $request = $request->validate([
-            'idd' => ['required']
-        ]);
-        if(Product::find($id)){
+        try{
             $this->productService->updateValue(
-             $id,
-             $request['type'],
-             $request['newValue']
-             );
-        } else {
-            //exception
+                    $id,
+                    $request['type'],
+                    $request['newValue']
+                );
+        }catch(Exception $e){
+            dd($e); //to nie działą / Sprawdż jak zgłaszać błędy!!!!
+           return response()->json('error with update', 505);
         }
-        
-        return redirect()->back();
+
+        return response()
+            ->json(
+                "Successfully updated the $request->type field to $request->newValue",
+                 200);
     }
     
 }

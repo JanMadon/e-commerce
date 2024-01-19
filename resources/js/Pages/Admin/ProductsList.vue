@@ -25,14 +25,14 @@
                 </div>
                 <div class="flex flex-col-reverse justify-between items-end">
 
-                    <div>
+                    <div class="flex">
                         <PrimaryButton @click="() => stock(product)">
                             stock
                         </PrimaryButton>
-                        <SecondaryButton @click="() => hide(product.id)" class="mx-2">
+                        <SecondaryButton @click="() => status(product, 'hidden')" class="mx-2">
                             hide
                         </SecondaryButton>
-                        <DangerButton @click="() => remove(product)" class=" px-5 py-2">
+                        <DangerButton @click="() => status(product, 'deleted')" class=" px-5 py-2">
                             delete
                         </DangerButton>
                     </div>
@@ -83,13 +83,13 @@
             </div>
             <label class="ml-28"  for="">Change quantity in stock</label>
             <div class="flex">
-                <input v-model="quantityInStock" product min="1" class="ml-16 h-8 text-center">
+                <input v-model="toUpdate" product min="1" class="ml-16 h-8 text-center">
                 <div class="flex justify-between mb-4 px-5 w-full ">
                     <PrimaryButton @click="updateStock('quantity')">
                         change
                     </PrimaryButton>
                     <SecondaryButton @click="closeModal">
-                        Close
+                        close
                     </SecondaryButton>
                 </div>
             </div>
@@ -106,6 +106,9 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import Modal from '@/Components/Modal.vue';
 import { ref } from 'vue';
+import axios from 'axios';
+import { showSuccessNotification } from '@/event-bus';
+
 
 const props = defineProps({
     products: Object,
@@ -113,34 +116,55 @@ const props = defineProps({
 
 const showModal = ref(false)
 const selectedProduct = ref()
-const quantityInStock = ref()
+const toUpdate = ref()
+
+const status = (product, toValue) => {
+    selectedProduct.value = product
+    toUpdate.value = toValue
+    updateStock('status')
+}
 
 const stock = product => {
     selectedProduct.value = product
-    quantityInStock.value = product.quantity
+    toUpdate.value = product.quantity
     showModal.value = true
 }
 
 const closeModal = () => {
     showModal.value = false
     selectedProduct.value = null
-    quantityInStock.value = 0
+    toUpdate.value = 0
 }
 
 const updateStock = (type) => {
-    router.patch(route('product.update', selectedProduct.value.id), {
+    axios.patch(route('product.update', selectedProduct.value.id), 
+    {
         'type': type,
-        'newValue': quantityInStock.value,
-    },{
-        onSuccess: () => {
-            closeModal()
-            console.log('success')
-        },
-        onError: (e)=> {
-            console.log(e)
-        }
-        
+        'newValue': toUpdate.value
+    }).then((respone)=>{
+        console.log(respone)
+        closeModal()
+        showSuccessNotification();
+        //location.reload()
+    }).catch((error)=>{
+        console.log(error)
     })
 }
+
+// const updateStock = (type) => {
+//     router.patch(route('product.update', selectedProduct.value.id), {
+//         'type': type,
+//         'newValue': toUpdate.value,
+//     },{
+//         onSuccess: () => {
+//             closeModal()
+//             console.log('success')
+//         },
+//         onError: (e)=> {
+//             console.log(e)
+//         }
+        
+//     })
+// }
 
 </script>

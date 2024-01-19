@@ -12,7 +12,7 @@ class ProductService {
 
     public function getAllProductsWithMainPhotos(int $display = 10)
     {
-        $products = Product::paginate($display);
+        $products = Product::whereNot('status', 'deleted')->paginate($display);
         foreach ($products as $product) {
             $photoNames = Storage::files("product/$product->id");
             $photoName = basename($photoNames[0]);
@@ -40,17 +40,15 @@ class ProductService {
 
     public function updateValue(int $productId, string $type, $value)
     {
-        try{
             $product = Product::find($productId);
             if($type === 'quantity') {
                 $product->update(['quantity' => $value]);
              } elseif($type === 'status') {
                 $product->update(['status' => $value]);
+                $product->save();
              } else {         
              }
-        } catch(Exception $e) {
-             dd($e);
-        }
+       
     }
 
 }
