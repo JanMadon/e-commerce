@@ -10,7 +10,7 @@ class CheckPrivilegesController extends Controller
     public function index() {
         
         if(Auth::user()->level === 'admin') {
-            return to_route('admin.dashboard');
+            return to_route('dashboard');
         } else {
             return to_route('home');
         }

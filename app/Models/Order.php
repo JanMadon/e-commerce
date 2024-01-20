@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -16,15 +17,31 @@ class Order extends Model
         'status',
     ];
 
-    // public function product(): BelongsToMany
-    // {
-    //     return $this->belongsToMany(Product::class);
-    // }
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function detalsOrder(): HasMany
     {
         return $this->hasMany(DetalsOrder::class);
     }
+
+    public static function userLastOrder($userId): ?Order
+    {
+        return Order::where('user_id', $userId)
+            ->where('status', 'accepted')
+            ->orderBy('created_at', 'desc')
+            ->first();
+    }
+
+    public static function userNumOfOrders($userId): int
+    {
+        return Order::where('user_id', $userId)
+            ->where('status', 'accepted')
+            ->count();
+    }
+
 
     public function amount(): Int 
     {

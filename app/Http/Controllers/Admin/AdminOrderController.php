@@ -24,12 +24,10 @@ class AdminOrderController extends Controller
 
     public function list(Request $request)
     {
+        dd($request->input('search'));
 
         $orders = $this->orderService->getAllOredrs();
-
-        $this->orderService->updateOrderStatus($userId, $request->payment);
-
-        return Inertia::render('User/MyOrders', [
+        return Inertia::render('Admin/Orders',[
             'orders' => $orders,
             'payment' => $request->payment
         ]);

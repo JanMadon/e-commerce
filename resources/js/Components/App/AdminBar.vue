@@ -17,7 +17,7 @@
             <NavLink :href="route('categories.index')" :active="route().current('categories.index')">
                 Categories & Subcategories
             </NavLink>
-            <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
+            <NavLink :href="route('orders')" :active="route().current('orders')">
                 Orders
             </NavLink>
             <NavLink :href="route('admin.usersList')" :active="route().current('admin.usersList')">

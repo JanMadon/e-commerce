@@ -55,7 +55,7 @@
                         </p>
                         <div class="font-bold">
                             <p>To address:</p>
-                        <a class="font-normal text-blue-600 cursor-pointer" :href="route('profile.edit')"> Address set in profile</a>
+                        <a class="font-normal text-blue-600 cursor-pointer" :href="route('admin.userInfo', selectedOrder.user.id)"> Address </a>
                         </div>
                     </div>
                 </div>

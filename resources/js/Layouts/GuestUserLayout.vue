@@ -13,7 +13,7 @@
                         </div>
                     </div>
                     <div class="flex ">
-                        <a v-if="$page.props.auth.user.level === 'admin'"
+                        <a v-if="$page.props.auth.user && $page.props.auth.user.level === 'admin'"
                          :href="(route('dashboard'))"
                           class="flex items-center text-white px-10 hover:bg-gray-900">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">

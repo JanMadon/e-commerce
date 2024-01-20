@@ -11,9 +11,11 @@ class OrderService
 {
     public function getAllOredrs()
     {
-        return Order::with('detalsOrder.product')
-        ->orderBy('created_at', 'desc')
-        ->get();
+        return Order::with('user')
+            ->with('detalsOrder.product')
+            ->orderBy('created_at', 'desc')
+            ->search()
+            ->get();
     }
 
     public function getUserOrders($userId)
