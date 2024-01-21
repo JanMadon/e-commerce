@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
+use function Laravel\Prompts\search;
+
 class AdminOrderController extends Controller
 {
     private $orderService;
@@ -24,9 +26,15 @@ class AdminOrderController extends Controller
 
     public function list(Request $request)
     {
-        dd($request->input('search'));
+        $request->validate([
+            'perPage' => [ 'integer']
+        ]);
+        
+        $search = $request->get('search');
+        $perPage = $request->get('perPage');
 
-        $orders = $this->orderService->getAllOredrs();
+        $orders = $this->orderService->getAllOredrs($search, $perPage);
+
         return Inertia::render('Admin/Orders',[
             'orders' => $orders,
             'payment' => $request->payment

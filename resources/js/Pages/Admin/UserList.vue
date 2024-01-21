@@ -1,10 +1,12 @@
 <template>
     <AdminLayout>
-        <template #header>
-            <h1 class="font-semibold text-2xl text-gray-800 leading-tight">Employees list</h1>
-        </template>
-        <nav class="flex items-center justify-between p-1 bm-3">
-            
+        <nav class="flex items-center justify-between bg-slate-100 mb-3 text-gray-600">
+            <SearchFrom />
+            <PaginateSelector/>
+            <div class="px-10">
+                <input type="checkbox" v-model="showOnlyActive">
+                Only active
+            </div>
         </nav>
         <div class="flex justify-center overflow-auto">
             <table class="bg-gray-200 rounded-xl overflow-hidden">
@@ -72,6 +74,8 @@
 
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import SearchFrom from '@/Components/App/SearchFrom.vue';
+import PaginateSelector from '@/Components/App/PaginateSelector.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { router } from '@inertiajs/vue3';
@@ -81,7 +85,9 @@ const props = defineProps({
     users: Object,
 })
 
-const onlyActive = ref(true)
+
+const showOnlyActive = ref(true)
+
 
 function redirectToUserBill(id) {
     router.visit(route('user.bill', id));

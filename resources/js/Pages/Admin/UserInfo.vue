@@ -31,6 +31,10 @@
                         <p>Phone: </p>
                         <p> {{ user.address.phone }}</p>
                     </div>
+                    <div class="flex justify-between">
+                        <p>Additional: </p>
+                        <p> {{ }}</p>
+                    </div>
                 </div>
             </div>
             <div>

@@ -5,17 +5,26 @@ namespace App\Services;
 use App\Models\DetalsOrder;
 use App\Models\Order;
 use Carbon\Carbon;
+use GuzzleHttp\Psr7\Query;
 use Illuminate\Support\Facades\Storage;
 
 class OrderService
 {
-    public function getAllOredrs()
+    public function getAllOredrs($search, $perPage = 15)
     {
-        return Order::with('user')
-            ->with('detalsOrder.product')
-            ->orderBy('created_at', 'desc')
-            ->search()
-            ->get();
+        $query = Order::with('user')
+        ->with('detalsOrder.product')
+        ->orderBy('created_at', 'desc');
+        
+        if($search){
+            $query->whereHas('user', function ($query) use ($search) {
+                $query->where('name', 'like', "$search%");
+            });
+    
+        }
+        $query = $query->paginate($perPage);
+
+        return $query;
     }
 
     public function getUserOrders($userId)

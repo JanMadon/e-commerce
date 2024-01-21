@@ -1,7 +1,7 @@
-const num = 1254.123
-const afterDot = num.toString().split('.');
-console.log();
-if(afterDot.length > 1 && afterDot[1].length > 2) {
-        console.log('nie prawidłowe');
-} 
-console.log(afterDot[1]);
+
+
+const array = [1, 'a', 'b', 8]
+const newArray = array.filter((_, index) => index !== 2) // [ 1, 'a', 8 ]
+const newArray2 = array.filter((el, index) => el * 2 ) // [ 1, 'b', 8 ]
+
+console.log(newArray2)
