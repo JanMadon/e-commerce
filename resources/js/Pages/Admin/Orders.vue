@@ -1,7 +1,7 @@
 <template>
     <AdminLayout>
         <nav class="flex items-center justify-between bg-slate-100 mb-3 text-gray-600">
-            <SearchFrom />
+            <SearchFrom :placeholder="'Search user by login'"/>
             <PaginateSelector/>
             <div class="px-10">
                 <input type="checkbox" v-model="showOnlyAccepted">

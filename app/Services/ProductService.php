@@ -12,7 +12,7 @@ class ProductService {
 
     public function getAllProductsWithMainPhotos(int $display = 10)
     {
-        $products = Product::whereNot('status', 'deleted')->paginate($display);
+        $products = Product::paginate($display);
         foreach ($products as $product) {
             $photoNames = Storage::files("product/$product->id");
             $photoName = basename($photoNames[0]);

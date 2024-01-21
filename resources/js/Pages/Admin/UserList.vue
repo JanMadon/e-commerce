@@ -1,7 +1,7 @@
 <template>
     <AdminLayout>
         <nav class="flex items-center justify-between bg-slate-100 mb-3 text-gray-600">
-            <SearchFrom />
+            <SearchFrom :placeholder="'Search user by login or email'"/>
             <PaginateSelector/>
             <div class="px-10">
                 <input type="checkbox" v-model="showOnlyActive">
@@ -27,17 +27,17 @@
                         <th class="text-gray-900 px-6 py-4 text-left">
                             Email
                         </th>
-                        <th class="text-gray-900 px-6 py-4 text-left">
-                            Phone
+                        <th class="text-gray-900 px-6 py-4 text-center">
+                            Level
                         </th>
                         <th class="text-gray-900 px-6 py-4 text-center">
-                            Address
+                            Status
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(user, index) of users.data" 
-                        @dblclick="showUserLogs(user.id)"
+                    <tr v-for="(user, index) of showActive" 
+                        @click="userInfo(user.id)"
                         class="bg-white border-b transition duration-300 ease-in-out hover:bg-blue-100 cursor-pointer">
 
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
@@ -56,19 +56,15 @@
                             {{ user.email }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ">
-                            {{ user.phone }}
+                            {{ user.level }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ">
-                           {{  }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ">
-                            
+                            {{ user.status }}
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <!-- {{users.data}} -->
     </AdminLayout>
 </template>
 
@@ -80,36 +76,30 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { router } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
+import { computed } from 'vue';
 
 const props = defineProps({
     users: Object,
 })
 
-
 const showOnlyActive = ref(true)
 
+const showActive = computed(() => {
+    if (showOnlyActive.value) {
+        return props.users.data.filter(order => order.status === 'active');
+    } else {
+        return props.users.data;
+    }
+})
 
-function redirectToUserBill(id) {
-    router.visit(route('user.bill', id));
+const userInfo = (id) => {
+    router.get(route('admin.userInfo', id));
 }
 
-function redirectToUserEdit(id) {
-    router.visit(route('user.edit', id));
-}
 
-function showUserLogs(id) {
-    router.get(route('user.logs', id));
-}
 
-function createNewUser() {
-    console.log('create new user')
-    router.get(route('user.create'));
-}
 
 
 </script>
-
-
-
 
 <style scoped></style>

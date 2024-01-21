@@ -5,7 +5,7 @@
                     v-model="search" 
                     autocomplete 
                     @keyup.enter.prevent="onSearch"
-                    placeholder="Search user" />
+                    :placeholder="placeholder" />
     </div>
 </template>
 
@@ -15,6 +15,9 @@ import { router } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
 import { ref } from 'vue';
 
+const props = defineProps({
+    placeholder: String
+})
 // Uses:
 let params = ''
 

@@ -88,7 +88,6 @@ import DangerButton from '@/Components/DangerButton.vue';
 import { ref } from 'vue';
 import { computed } from 'vue';
 
-
 const props = defineProps({
     user: Object,
 })
