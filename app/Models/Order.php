@@ -15,6 +15,7 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'status',
+        'payment'
     ];
 
     public function user(): BelongsTo
@@ -30,7 +31,7 @@ class Order extends Model
     public static function userLastOrder($userId): ?Order
     {
         return Order::where('user_id', $userId)
-            ->where('status', 'accepted')
+            ->where('payment', 'accepted')
             ->orderBy('created_at', 'desc')
             ->first();
     }
@@ -38,7 +39,7 @@ class Order extends Model
     public static function userNumOfOrders($userId): int
     {
         return Order::where('user_id', $userId)
-            ->where('status', 'accepted')
+            ->where('payment', 'accepted')
             ->count();
     }
 

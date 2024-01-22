@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderRequest;
+use App\Http\Requests\OrderUpdateFieldRequest;
+use App\Http\Requests\UserUpdateFieldRequest;
 use App\Models\Order;
 use App\Services\OrderService;
 use App\Services\PayService;
@@ -40,7 +42,7 @@ class AdminOrderController extends Controller
             'payment' => $request->payment
         ]);
     }
-
+    
     public function create(OrderRequest $request)
     {
         $request->validated();
@@ -53,6 +55,14 @@ class AdminOrderController extends Controller
         } else {
             $this->orderService->createOrder($userId, $request->productId, $request->quantity);
         }
+        return redirect()->back();
+    }
+
+    public function updateStatus(OrderUpdateFieldRequest $request, int $id)
+    {
+        $data = $request->validated();
+        $this->orderService->updateField($id, $data['field'], $data['newValue']);
+        
         return redirect()->back();
     }
 

@@ -37,21 +37,22 @@ class OrderService
 
     public function getUserActiveOrder($userId)
     {
-        return $this->getUserOrders($userId)->where('status', 'active')->first();
+        return $this->getUserOrders($userId)->where('payment', 'active')->first();
     }
 
-    public function updateOrderStatus($userId, $paymetStatus)
+    public function updateOrderPayment($userId, $paymetStatus)
     {
         $order = $this->getUserActiveOrder($userId);
 
         if ($order) {
             if ($paymetStatus === 'accepted') {
-                $order->status = 'accepted';
+                $order->payment = 'accepted';
+                $order->status = 'waiting';
                 $order->payd_at = Carbon::today()->format('Y-m-d');
                 $order->amount_paid = $order->amount();
             }
             if ($paymetStatus === 'rejected') {
-                $order->status = 'rejected';
+                $order->payment = 'rejected';
                 $order->payd_at = Carbon::today()->format('Y-m-d');
             }
             $order->save();
@@ -62,7 +63,7 @@ class OrderService
     {
         $order = new Order([
             'user_id' => $userId,
-            'status' => 'active',
+            'payment' => 'active',
         ]);
         $order->save();
 
@@ -96,6 +97,11 @@ class OrderService
             ]);
             $detalsOrder->save();
         }
+    }
+
+    public function updateField(int $userId, string $field, string $newValue)
+    {
+        Order::find($userId)->update([$field => $newValue]);
     }
 
     public function getDataToCart($order)

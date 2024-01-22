@@ -50,6 +50,7 @@ Route::controller(AdminOrderController::class)
     ->middleware(['auth', 'admin','verified'])
     ->group(function () {
         Route::get('/orders', 'list')->name('orders');
+        Route::patch('/orders/{id}', 'updateStatus')->name('orders.update.status');
     });
 
 Route::controller(OrderController::class)

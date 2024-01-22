@@ -27,7 +27,7 @@ class OrderController extends Controller
         $userId = Auth::id();
         $orders = $this->orderService->getUserOrders($userId);
 
-        $this->orderService->updateOrderStatus($userId, $request->payment);
+        $this->orderService->updateOrderPayment($userId, $request->payment);
 
         return Inertia::render('User/MyOrders', [
             'orders' => $orders,
