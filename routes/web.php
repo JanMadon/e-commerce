@@ -35,6 +35,7 @@ Route::controller(AdminController::class)
         Route::get('/admin', 'dashboard')->name('dashboard');
         Route::get('/admin/users', 'usersList')->name('admin.usersList');
         Route::get('/admin/users/{id}', 'userInfo')->name('admin.userInfo');
+        Route::patch('/admin/users/{id}', 'userEdit')->name('admin.userEdit');
     });
 
 Route::controller(ProductController::class)

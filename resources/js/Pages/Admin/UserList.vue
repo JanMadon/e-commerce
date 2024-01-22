@@ -33,11 +33,14 @@
                         <th class="text-gray-900 px-6 py-4 text-center">
                             Status
                         </th>
+                        <th class="text-gray-900 px-6 py-4 text-center">
+                            Options
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(user, index) of showActive" 
-                        @click="userInfo(user.id)"
+                        @dbclick="userInfo(user.id)"
                         class="bg-white border-b transition duration-300 ease-in-out hover:bg-blue-100 cursor-pointer">
 
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
@@ -61,6 +64,15 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ">
                             {{ user.status }}
                         </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ">
+                            <SecondaryButton v-if="user.status === 'active'" 
+                                @click="changeStatus(user.id, 'status', 'notActive')" class="scale-75">
+                                deactivate
+                            </SecondaryButton>
+                            <SecondaryButton v-else @click="changeStatus(user.id, 'status', 'active')" class="scale-75">
+                                activist
+                            </SecondaryButton>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -77,6 +89,8 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { router } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
 import { computed } from 'vue';
+import { showSuccessNotification } from '@/event-bus';
+
 
 const props = defineProps({
     users: Object,
@@ -94,6 +108,20 @@ const showActive = computed(() => {
 
 const userInfo = (id) => {
     router.get(route('admin.userInfo', id));
+}
+
+const changeStatus = (userID, field, newValue) => {
+    router.patch(route('admin.userInfo', userID), {
+        'field': field,
+        'newValue': newValue
+    },{
+        onSuccess: () => {
+            showSuccessNotification('The user status change was successful')
+        },
+        onError: () => {
+            showSuccessNotification('user status change failed')
+        }
+    })
 }
 
 

@@ -31,4 +31,10 @@ class UserService {
 
         return $query;
     }
+
+    public function updateField(int $userId, string $field, string $newValue)
+    {
+        User::find($userId)->update([$field => $newValue]);
+
+    }
 }

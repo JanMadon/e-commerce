@@ -3,14 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Order;
+use App\Http\Requests\UserUpdateFieldRequest;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Symfony\Component\Console\Input\Input;
-
-use function Laravel\Prompts\search;
 
 class AdminController extends Controller
 {
@@ -53,5 +50,13 @@ class AdminController extends Controller
         return Inertia::render('Admin/UserInfo', [
             'user' => $this->userService->getUserWithInfo($id),
         ]);
+    }
+
+    public function userEdit(UserUpdateFieldRequest $request, int $id)
+    {
+        $data = $request->validated();
+        $this->userService->updateField($id, $data['field'], $data['newValue']);
+        
+        return redirect()->back();
     }
 }
