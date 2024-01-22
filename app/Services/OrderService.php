@@ -30,9 +30,10 @@ class OrderService
     public function getUserOrders($userId)
     {
         return Order::with('detalsOrder.product')
+            ->with('user')
             ->where('user_id', $userId)
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate();
     }
 
     public function getUserActiveOrder($userId)

@@ -40,7 +40,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="(user, index) of showActive" 
-                        @dbclick="userInfo(user.id)"
+                        @dblclick="userInfo(user.id)"
                         class="bg-white border-b transition duration-300 ease-in-out hover:bg-blue-100 cursor-pointer">
 
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
@@ -107,6 +107,7 @@ const showActive = computed(() => {
 })
 
 const userInfo = (id) => {
+    console.log('id')
     router.get(route('admin.userInfo', id));
 }
 

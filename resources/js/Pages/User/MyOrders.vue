@@ -9,7 +9,7 @@
 
         <div class="flex justify-center overflow-auto">
 
-            <table class="bg-gray-200 rounded overflow-hidden">
+            <table class="bg-gray-200 rounded-xl overflow-hidden">
                 <thead class="bg-gray-200 font-bold">
                     <tr>
                         <th class="text-gray-900 px-6 py-4 text-left">
@@ -25,10 +25,10 @@
                             Shiping Method
                         </th>
                         <th class="text-gray-900 px-6 py-4 text-left">
-                            Status
+                            Payment
                         </th>
                         <th class="text-gray-900 px-6 py-4 text-left">
-                            Invoice
+                            Status
                         </th>
                         <th class="text-gray-900 px-6 py-4 text-center">
                             Options
@@ -36,7 +36,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(order, index) in orders" :id=index
+                    <tr v-for="(order, index) in orders.data" :id=index
                         class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">
                             {{ order.id }}
@@ -56,13 +56,12 @@
                             {{ order.shiping_method }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium  text-center"
-                            :class="order.status == 'accepted' ? 'text-green-600': 'text-gray-900',
-                            order.status == 'rejected' ? 'text-red-600': 'text-gray-900'">
-                            {{ order.status }}
+                            :class="order.payment == 'accepted' ? 'text-green-600': 'text-gray-900',
+                            order.payment == 'rejected' ? 'text-red-600': 'text-gray-900'">
+                            {{ order.payment }}
                         </td>
-
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center ">
-                            ---------
+                            {{order.status}}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 text-center ">
                             <a class="text-blue-500" @click="(event) => select(event, order)" >datails</a>

@@ -29,11 +29,11 @@
                     </div>
                     <div class="flex justify-between">
                         <p>Phone: </p>
-                        <p> {{ user.address.phone }}</p>
+                        <p> {{ user.address ? user.address.phone : 'unknow'}}</p>
                     </div>
                     <div class="flex justify-between">
                         <p>Additional: </p>
-                        <p> {{ }}</p>
+                        <p> {{ 'unknow' }}</p>
                     </div>
                 </div>
             </div>
@@ -42,19 +42,19 @@
                     <h3 class="text-lg font-bold">Address</h3>
                     <div class="flex justify-between">
                         <p>Building: </p>
-                        <p> {{ user.address.building }}</p>
+                        <p> {{user.address ? user.address.building : 'unknow' }}</p>
                     </div>
                     <div class="flex justify-between">
                         <p>Street: </p>
-                        <p> {{ user.address.street }}</p>
+                        <p> {{user.address ? user.address.street : 'unknow' }}</p>
                     </div>
                     <div class="flex justify-between">
                         <p>Zip-code: </p>
-                        <p> {{ user.address.zipCode }}</p>
+                        <p> {{user.address ? user.address.zipCode : 'unknow' }}</p>
                     </div>
                     <div class="flex justify-between">
                         <p>City: </p>
-                        <p> {{ user.address.city }}</p>
+                        <p> {{user.address ? user.address.city : 'unknow' }}</p>
                     </div>
                 </div>
 
@@ -66,7 +66,7 @@
                     </div>
                     <div class="flex justify-between">
                         <p>Last order: </p>
-                        <p> {{ user.lastOrder.payd_at }}</p>
+                        <p> {{ user.lastOrder ? user.lastOrder.payd_at : 'unknow' }}</p>
                     </div>
                     <div class="flex justify-between">
                         <p>Joined: </p>

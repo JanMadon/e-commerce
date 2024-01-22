@@ -1,10 +1,19 @@
 <template>
     <Modal :show="showModal" @close="() => showModal = false">
             <div class="min-h-[70vh] flex flex-col justify-between ">
-                <div class="mt-5 ml-5 font-bold ">
-                    <p>Order by: {{ $page.props.auth.user.name }}</p>
-                    <p>Date payed: {{ selectedOrder.payd_at }} </p>
-                    <p>Order Id number: {{ selectedOrder.id }} </p>
+                <div class="flex mt-5 ml-5">
+                    <div class="mx-5">
+                        <p>Order by: </p>
+                        <p>Date payed:  </p>
+                        <p>Order Id number:  </p>
+                        <p>Status: </p>
+                    </div>
+                    <div class="font-bold">
+                        <p>{{ selectedOrder.user.name }}</p>
+                        <p>{{ selectedOrder.payd_at }} </p>
+                        <p>{{ selectedOrder.id }} </p>
+                        <p>{{ selectedOrder.status }}</p>
+                    </div>
                 </div>
                 <table class="w-full border bg-gray-100 rounded overflow-hidden">
                     <thead class="bg-gray-100 font-bold">
@@ -51,11 +60,18 @@
                             </p>
                         </div>
                         <p class="font-bold">Final price:
-                            <p>{{ selectedOrder.amount_paid }}</p>
+                            <p>PLN {{ selectedOrder.amount_paid }}</p>
                         </p>
                         <div class="font-bold">
                             <p>To address:</p>
-                        <a class="font-normal text-blue-600 cursor-pointer" :href="route('admin.userInfo', selectedOrder.user.id)"> Address </a>
+                        <a v-if="$page.props.auth.user.level === 'admin'"
+                            class="font-normal text-blue-600 cursor-pointer" :href="route('admin.userInfo', selectedOrder.user.id)">
+                            Address 
+                        </a>
+                        <a v-else
+                            class="font-normal text-blue-600 cursor-pointer" :href="route('profile.edit')">
+                            Address 
+                        </a>
                         </div>
                     </div>
                 </div>
