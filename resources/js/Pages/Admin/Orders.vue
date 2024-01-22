@@ -103,9 +103,9 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 import SearchFrom from '@/Components/App/SearchFrom.vue';
 import PaginateSelector from '@/Components/App/PaginateSelector.vue';
-import { ref } from 'vue';
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import { router } from '@inertiajs/vue3';
+import {showSuccessNotification, showErrorNotification} from '@/event-bus'
 
 
 const props = defineProps({
@@ -149,7 +149,7 @@ const changeStatus = (orderId, field, newValue) => {
             showSuccessNotification('The order status change was successful')
         },
         onError: () => {
-            showSuccessNotification('Order status change failed')
+            showErrorNotification('Order status change failed')
         }
     })
 }

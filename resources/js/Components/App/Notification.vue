@@ -22,9 +22,6 @@ import { onMounted } from 'vue';
 import { ref } from 'vue';
 import { SHOW_NOTIFICATION, emitter} from '@/event-bus' ;
 
-
-
-
 //Ref
 const show = ref(false);
 const type = ref('success');
@@ -35,9 +32,6 @@ function close() {
     type.value = '';
     message.value = ''; 
 }
-
-
-
 
 onMounted(()=>{
     let timeout;

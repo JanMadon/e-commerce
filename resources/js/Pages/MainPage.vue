@@ -8,15 +8,13 @@
             <ProductCard v-for="(photo, index) in photos" :key="index" :photo="photo" :product="products[index-1]"
            ></ProductCard>
         </div>
-       ADMIN
     </GuestUserLayout>
 </template>
 
 <script setup>
-import { Head } from '@inertiajs/vue3';
-import ProductCard from '@/Components/App/ProductCard.vue';
 import GuestUserLayout from '@/Layouts/GuestUserLayout.vue';
-import { useAttrs } from 'vue';
+import ProductCard from '@/Components/App/ProductCard.vue';
+import { Head } from '@inertiajs/vue3';
 
 const props = defineProps({
     products: Object,

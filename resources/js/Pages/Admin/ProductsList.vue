@@ -134,9 +134,8 @@ import Modal from '@/Components/Modal.vue';
 import SearchFrom from '@/Components/App/SearchFrom.vue';
 import PaginateSelector from '@/Components/App/PaginateSelector.vue';
 import axios from 'axios';
-import { ref } from 'vue';
-import { showSuccessNotification } from '@/event-bus';
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
+import { showSuccessNotification, showErrorNotification } from '@/event-bus';
 
 const props = defineProps({
     products: Object,
@@ -193,7 +192,7 @@ const updateStock = (type) => {
         showSuccessNotification(`The ${selectedProduct.value.name} product, field ${type} has been updated to ${toUpdate.value}`);
         closeModal()
     }).catch((error)=>{
-        console.log(error)
+        showErrorNotification(`Something went wrong, please try again later.`)
     })
 }
 

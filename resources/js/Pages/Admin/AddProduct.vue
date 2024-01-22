@@ -154,8 +154,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex justify-between">
-                    <DangerButton @click.prevent="cancel">cancel</DangerButton>
+                <div class="flex justify-end">
+                   
                     <PrimaryButton>add product</PrimaryButton>
                 </div>
             </form>
@@ -165,12 +165,9 @@
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import DangerButton from '@/Components/DangerButton.vue';
 import { useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
-import { watchEffect } from 'vue';
-import { watch } from 'vue';
-import { showSuccessNotification } from '@/event-bus';
+import { ref, watchEffect, watch } from 'vue';
+import { showSuccessNotification, showErrorNotification } from '@/event-bus';
 
 
 const props = defineProps({
@@ -207,18 +204,13 @@ const form = useForm({
     photos: [],
 })
 
-
-function cancel() {
-    console.log('wyczyść form i cofij');
-}
-
 function addProduct() {
     if (confirm('Are you sure to add new product?')) {
         form.post(route('product.store'), {
             onSuccess: () => {
                 showSuccessNotification(`Product ${form.name} has been added to the product list, now you can activate it.`)},
             onError: () => {
-                
+                showErrorNotification(`Something went wrong, please try again later.`)
             }
         });
     }
@@ -228,7 +220,6 @@ function onFileChnge(ev) {
     form.photos.push(ev.target.files)
     if (ev.target.files[0]) {
         const reader = new FileReader()
-
         reader.onload = function (e) {
             imgSrc.value[ev.srcElement.id] = e.target.result
         }

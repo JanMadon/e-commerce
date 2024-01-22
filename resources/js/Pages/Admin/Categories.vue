@@ -126,7 +126,7 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import Modal from '@/Components/Modal.vue';
 import { ref } from 'vue';
 import { router, useForm } from '@inertiajs/vue3';
-import { showSuccessNotification } from '@/event-bus';
+import { showSuccessNotification, showErrorNotification } from '@/event-bus';
 
 const props = defineProps({
     categories: Object,
@@ -220,7 +220,7 @@ const remove = (id, parentId) => {
             close();
         },
         onError: () => {
-            showSuccessNotification(`The category removal failed`)
+            showErrorNotification(`The category removal failed`)
         } 
     })
     
@@ -240,7 +240,7 @@ const create = (typeEl) => {
             closeInputs()
         },
         onError: () => {
-            showSuccessNotification(`Creating a new  ${typeEl} failed`)
+            showErrorNotification(`Creating a new  ${typeEl} failed`)
         }
     })
 }

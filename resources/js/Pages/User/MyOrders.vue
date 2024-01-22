@@ -77,10 +77,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import GuestUserLayout from '@/Layouts/GuestUserLayout.vue';
 import DetailsOrderModal from '@/Components/App/DetailsOrderModal.vue';
 import PaymentModal from '@/Components/App/PaymentModal.vue'
-import GuestUserLayout from '@/Layouts/GuestUserLayout.vue';
+import { ref } from 'vue';
 
 
 const props = defineProps({

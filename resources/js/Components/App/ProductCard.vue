@@ -1,12 +1,12 @@
 <template>
     <div class="border border-1 border-gray-200 rounded-md hover:border-purple-600 transition-colors bg-white relative">
         <a :href="route('show.product', product.id)"
-            class="flex justify-center p-3 aspect-w-3 aspect-h-2 block overflow-hidden">
+            class="flex justify-center p-3 aspect-w-3 aspect-h-2 overflow-hidden">
             <img alt="product" class=" object-cover rounded-lg hover:scale-105 hover:rotate-1 transition-transform"
                 :src="'data:image/jpeg;base64,' + photo">
         </a>
 
-        <div class="p-4">
+        <div class="px-4 py-10">
             <h3 class="text-lg">
                 <a :href="route('show.product', product.id)">
                     {{ product.name }}
@@ -17,7 +17,7 @@
             </p>
             <h5 class="text-xl font-bold">PLN {{ product.price }}</h5>
         </div>
-        <div class="flex justify-between items-end py-3 px-4 absolute bottom-0">
+        <div class="flex justify-between items-end py-1 px-4 absolute bottom-0">
             <AddToCartBtn v-if="$page.props.auth.user" :product="product" :quantity="1" />
             <PrimaryButton v-else @click.prevent="() => router.visit(route('login'))">
                 log in to add to cart
@@ -30,7 +30,6 @@
 <script setup>
 import PrimaryButton from '../PrimaryButton.vue';
 import { router } from '@inertiajs/vue3';
-import { showSuccessNotification } from '@/event-bus.js';
 import AddToCartBtn from './AddToCartBtn.vue';
 
 

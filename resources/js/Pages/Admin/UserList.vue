@@ -84,12 +84,10 @@
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import SearchFrom from '@/Components/App/SearchFrom.vue';
 import PaginateSelector from '@/Components/App/PaginateSelector.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { router } from '@inertiajs/vue3';
-import { ref, watch } from 'vue';
-import { computed } from 'vue';
-import { showSuccessNotification } from '@/event-bus';
+import { ref, computed } from 'vue';
+import { showSuccessNotification, showErrorNotification} from '@/event-bus';
 
 
 const props = defineProps({
@@ -120,7 +118,7 @@ const changeStatus = (userID, field, newValue) => {
             showSuccessNotification('The user status change was successful')
         },
         onError: () => {
-            showSuccessNotification('user status change failed')
+            showErrorNotification('user status change failed')
         }
     })
 }

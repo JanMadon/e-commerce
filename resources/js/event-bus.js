@@ -10,6 +10,10 @@ export const SHOW_NOTIFICATION = 'SHOW_NOTIFICATION'
 
 
 
- export function showSuccessNotification(message){
+export function showSuccessNotification(message){
      emitter.emit(SHOW_NOTIFICATION, {type: 'success', message});
+}
+
+export function showErrorNotification(message){
+    emitter.emit(SHOW_NOTIFICATION, {type: 'error', message});
 }

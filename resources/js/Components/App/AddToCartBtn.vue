@@ -9,11 +9,11 @@
 <script setup>
 import PrimaryButton from '../PrimaryButton.vue';
 import { router } from '@inertiajs/vue3';
-import {showSuccessNotification} from '@/event-bus.js';
+import {showSuccessNotification, showErrorNotification} from '@/event-bus.js';
 
 const props = defineProps({
     product: Object,
-    quantity: Number
+    quantity: Number,
 })
 
 
@@ -25,10 +25,10 @@ function addToCart() {
        },
        { // optins
            onSuccess: ()=> {
-               showSuccessNotification(`The product:  <strong> ${props.product.name} </strong> has been added to the cart`)    
+               showSuccessNotification(`Product: ${props.product.name} has been added to the cart.`)    
            },
            onError: ()=> {
-            showSuccessNotification(`DUPA DUPA`) 
+            showErrorNotification(`Failed to add product to cart, try again later.`) 
            }
 
        }

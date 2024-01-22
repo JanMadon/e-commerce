@@ -109,14 +109,14 @@
 import GuestUserLayout from '@/Layouts/GuestUserLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import DangerButton from '@/Components/DangerButton.vue';
-
 import Modal from '@/Components/Modal.vue';
 import WarehouseAddressModal from '@/Components/App/WarehouseAddressModal.vue';
-import { router } from '@inertiajs/vue3';
-import { ref } from 'vue';
-import { watch } from 'vue';
-import { onMounted } from 'vue';
 import axios from 'axios';
+import { router } from '@inertiajs/vue3';
+import { ref, watch, onMounted} from 'vue';
+import {showSuccessNotification, showErrorNotification} from '@/event-bus'
+
+
 
 const props = defineProps({
     order: Object,
@@ -140,7 +140,7 @@ const shipingPrice = ref({
 
 function pay() {
     if (shipingMethod.value === '-') {
-        console.log('wyberz rodzaj wysyłki!')
+            showErrorNotification(`Please select your shipping method.`)
         return
     }
     payModal.value = true;
@@ -163,9 +163,9 @@ watch(shipingMethod, () => {
 })
 
 function updateTotalPrice(event, index) {
-    console.log(props.order.detals_order[index]);
     props.order.detals_order[index].quantity = parseInt(event.target.value)
     updatCart(index)
+    calculate()
 }
 
 function deleteDetal(detalId, index) {
@@ -179,22 +179,39 @@ function deleteDetal(detalId, index) {
                     props.order.detals_order = null
                 }
             }
+            showSuccessNotification(`Product removed from cart.`)
             calculate()
         })
-        .catch(error => console.log(error))
-}
-
-function updatCart(index) {
-    const detal = props.order.detals_order[index]
-    if(detal){
-        router.patch(route('cart.updateOrder'), {
-            productId: detal.product.id,
-            quantity: detal.quantity,
-            shipingMethod: shipingMethod.value
+        .catch(error => {
+            showErrorNotification(`Something went wrong, please try again.`)
         })
+    }
+    
+    function updatCart(index) {
+        const detal = props.order.detals_order[index]
+        if(detal){
+            router.patch(route('cart.updateOrder'), {
+                productId: detal.product.id,
+                quantity: detal.quantity,
+                shipingMethod: shipingMethod.value
+            },{
+                onSuccess: () => {
+                    showSuccessNotification(`The number of products in the cart has been increased.`)   
+                },
+                onError: () => {
+                    showErrorNotification(`Something went wrong, please try again later.`)
+                }
+            })
     } else {
         router.patch(route('cart.setShipmentMethod'), {
             shipingMethod: shipingMethod.value
+        },{
+            onSuccess: () => {
+                    showSuccessNotification(`Selected shipping method: ${shipingMethod.value}`)   
+                },
+            onError: () => {
+                showErrorNotification(`Something went wrong, please try again later.`)
+            }
         })
     }
 }
