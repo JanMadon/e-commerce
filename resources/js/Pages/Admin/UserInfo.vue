@@ -81,12 +81,7 @@
 
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import DetailsOrderModal from '@/Components/App/DetailsOrderModal.vue';
-import PaymentModal from '@/Components/App/PaymentModal.vue'
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import DangerButton from '@/Components/DangerButton.vue';
 import { ref } from 'vue';
-import { computed } from 'vue';
 
 const props = defineProps({
     user: Object,

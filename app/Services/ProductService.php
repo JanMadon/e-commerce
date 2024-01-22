@@ -10,23 +10,27 @@ use Illuminate\Support\Facades\Storage;
 class ProductService {
 
 
-    public function getAllProductsWithMainPhotos(int $display = 10)
+    public function getAllProductsWithMainPhotos(?string $search, ?int $perPage = 15)
     {
-        $products = Product::paginate($display);
+        if($search){
+            $products = Product::where('name', 'like', "%$search%")
+                ->paginate($perPage);
+        } else {
+            $products = Product::paginate($perPage);
+        }
+
         foreach ($products as $product) {
             $photoNames = Storage::files("product/$product->id");
             $photoName = basename($photoNames[0]);
             $photo = Storage::get("product/$product->id/$photoName");
             $base64Image = base64_encode($photo);
             $product->photo = $base64Image;;
-
         }
         return $products;
     }
 
     public function saveProduct(array $data, array $photos)
     {
-        //dd($data);
         $product = Product::create($data);
         $productId = $product->id;
         $product->id;

@@ -19,9 +19,12 @@ class ProductController extends Controller
         $this->productService = $productService;
     }
 
-    public function list()
+    public function list(Request $request)
     {
-        $products = $this->productService->getAllProductsWithMainPhotos();
+        $search = $request->get('search');
+        $perPage = $request->get('perPage');
+
+        $products = $this->productService->getAllProductsWithMainPhotos($search, $perPage);
 
         return Inertia::render('Admin/ProductsList', [
             'products' => $products,

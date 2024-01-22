@@ -137,8 +137,6 @@ import axios from 'axios';
 import { ref } from 'vue';
 import { showSuccessNotification } from '@/event-bus';
 import { computed } from 'vue';
-import { router } from '@inertiajs/vue3';
-
 
 const props = defineProps({
     products: Object,
@@ -191,29 +189,21 @@ const updateStock = (type) => {
         'type': type,
         'newValue': toUpdate.value
     }).then((respone)=>{
-        console.log(respone)
+        updateProps(selectedProduct.value.id, type, toUpdate.value)
+        showSuccessNotification(`The ${selectedProduct.value.name} product, field ${type} has been updated to ${toUpdate.value}`);
         closeModal()
-        router.get(route('products'));
-        showSuccessNotification();
     }).catch((error)=>{
         console.log(error)
     })
 }
 
-// const updateStock = (type) => {
-//     router.patch(route('product.update', selectedProduct.value.id), {
-//         'type': type,
-//         'newValue': toUpdate.value,
-//     },{
-//         onSuccess: () => {
-//             closeModal()
-//             console.log('success')
-//         },
-//         onError: (e)=> {
-//             console.log(e)
-//         }
-        
-//     })
-// }
+const updateProps = (productId, type, newValue) => {
+    for(const product of props.products.data){
+        if(product.id == productId) {
+            product[type] = newValue
+            console.log(product[type])
+        }
+    }
+}
 
 </script>

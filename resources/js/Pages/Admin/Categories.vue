@@ -192,15 +192,19 @@ const edit = () => {
     if(type.value === 'subcategory') {
         parentId = selectedCategory.value.id
     }
-   
+
     router.put(route('categories.edit', {parentId}), {
         type: type.value,
         id: editContentId.value, 
         name: editContentNameInput.value,
         description: editContentDescriptionInput.value
     }, {
-        onSuccess: ()=> {
+        onSuccess: () => {
+            showSuccessNotification(`The ${editContentNameInput.value} ${type.value} edition was a success`)
             close();
+        },
+        onError: () => {
+            showSuccessNotification(`The ${editContentNameInput.value} ${type.value} editing failed`)
         }
     })
 
@@ -212,8 +216,12 @@ const remove = (id, parentId) => {
     console.log(id, parentId)
     router.delete(route('categories.delete', {'id': id, 'parentId': parentId}), {
         onSuccess: () => {
-            showSuccessNotification('udało się usunąć wybraną kategorię!')
-        }
+            showSuccessNotification(`Removing category was successful`)
+            close();
+        },
+        onError: () => {
+            showSuccessNotification(`The category removal failed`)
+        } 
     })
     
 // usuń z DB
@@ -223,18 +231,16 @@ const create = (typeEl) => {
     createForm.type = typeEl
     
     if(typeEl === 'subcategory') {
-        console.log(selectedCategory.value.id);
         createForm.parentId = selectedCategory.value.id
     }
     
     createForm.post(route('categories.create'), {
         onSuccess: () => { 
+            showSuccessNotification(`The creation of a new ${typeEl} was successful`)
             closeInputs()
-            
-            showSuccessNotification('udało się!')
         },
         onError: () => {
-            
+            showSuccessNotification(`Creating a new  ${typeEl} failed`)
         }
     })
 }

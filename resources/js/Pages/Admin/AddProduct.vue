@@ -216,7 +216,10 @@ function addProduct() {
     if (confirm('Are you sure to add new product?')) {
         form.post(route('product.store'), {
             onSuccess: () => {
-                showSuccessNotification(`Product ${form.name} has been added to the product list, now you can activate it.`)}
+                showSuccessNotification(`Product ${form.name} has been added to the product list, now you can activate it.`)},
+            onError: () => {
+                
+            }
         });
     }
 }
