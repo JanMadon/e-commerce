@@ -1,109 +1,128 @@
 <template>
     <AdminLayout>
-        <nav class="flex items-center justify-between p-1 bm-3">
-            
+        <nav class="flex items-center justify-end p-1 bm-3">
+            <SecondaryButton v-if="showUsersRaport" @click="showUsersRaport = false">
+                User raport
+            </SecondaryButton>
+            <SecondaryButton v-else @click="showUsersRaport = true">
+                Order raport
+            </SecondaryButton>
         </nav>
-       
-        <div class="mx-8  ">
-            <h2 class="text-2xl font-bold">Dashboard</h2>
-            <div class="grid grid-cols-5 gap-5 h-32">
-                <div class=" flex flex-col justify-center items-center bg-gray-100 rounded-xl">
-                    <h4 class="font-bold">Logged in users now</h4>
-                    <p class="m-3 text-2xl font-bold">{{loggedInUsers}}</p>
-                </div>
-                <div class=" flex flex-col justify-center items-center bg-gray-100 rounded-xl">
-                    <h4 class="font-bold">Registered users</h4>
-                    <p class="m-3 text-2xl font-bold">{{registeredUsers}}</p>
-                </div>
-                <div class=" flex flex-col justify-center items-center bg-gray-100 rounded-xl">
-                    <h4 class="font-bold">Active products</h4>
-                    <p class="m-3 text-2xl font-bold">{{activeProducts}}</p>
-                </div>
-                <div class=" flex flex-col justify-center items-center bg-gray-100 rounded-xl">
-                    <h4 class="font-bold">Paid orders</h4>
-                    <p class="m-3 text-2xl font-bold">{{paidOrders}}</p>
-                </div>
-                <div class=" flex flex-col justify-center items-center bg-gray-100 rounded-xl">
-                    <h4 class="font-bold">Total Income</h4>
-                    <p class="m-3 text-2xl font-bold">PLN {{ totalIncome }}</p>
-                </div>
+        <h3 class="ml-14 text-2xl font-bold">{{ showUsersRaport ? 'Order raport' : 'User raport' }} </h3>
+        <div class="flex justify-center w-full">
+            <div class="mt-3 w-[90%] ">
+                <BarChart v-if="showUsersRaport" :chartData="dataOrders" :chartOptions="optionsOrders"
+                    class=" p-10 bg-gray-100" />
+                <BarChart v-else="showUsersRaport" :chartData="dataUsers" :chartOptions="optionsUsers" class=" p-10 bg-gray-100" />
             </div>
-            <div class="grid grid-cols-3 gap-5 h-fit my-5">
-                <div class="col-span-2 row-span-2 p-5 rounded-xl bg-gray-100">
-                    <h4 class="text-lg font-bold">Latest orders</h4>
-                    <div v-for="order of latestOrders" class="p-3 border-b">
-                        <div class="flex">
-                            <p class=" mr-2 font-bold text-blue-700">Order #{{ order.id }} </p> 
-                            <p>{{order.latest}}, {{order.detals_order.length}} items</p>
-                        </div>
-                        <div class="flex justify-between">
-                            <p>{{ order.user.firstname }} {{ order.user.lastname }}</p>
-                            <p>PLN {{ order.amount_paid }}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-col items-center p-2 pt-5 bg-gray-100 rounded-xl">
-                    <h4 class="text-lg font-bold">Orders by categories</h4>
-                    <BarChart :chartData="data"/>
-                </div>
-                <div class="flex flex-col items-center p-2 pt-5 bg-gray-100 rounded-xl">
-                    <h4 class="text-lg font-bold">Latest Customers</h4>
-                   <div v-for="user of latestUsers" class="flex justify-between w-full">
-                    <p>{{ user.firstname }} {{ user.lastname }}</p>
-                    <p>{{user.lastTime}}</p>
-                   </div>
-                </div>
-                
-            </div>
-            
         </div>
-        <div >
-            
-        </div>
-
 
     </AdminLayout>
 </template>
 
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import BarChart from '@/Components/App/BarChart.vue'
+import BarChart from '@/Components/App/BarChart.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { ref } from 'vue';
 
-import { onBeforeMount } from 'vue';
-
 const props = defineProps({
-    loggedInUsers: Number,
-    registeredUsers: Number,
-    activeProducts: Number,
-    paidOrders: Number,
-    totalIncome: Number,
-    mostPopularCategory: Object,
-    latestUsers: Object,
-    latestOrders: Object
+    ordersDates: Object,
+    usersData: Object
 })
 
-const data = ref({})
+const showUsersRaport = ref(false);
+const dataToOrders = [];
+const dataToUsers = [];
+const dataOrders = ref({});
+const optionsOrders = ref({})
+const dataUsers = ref({});
+const optionsUsers = ref({})
 
-const setdata = () => {
-    const category = []
-    const categoryCount = []
-    
-    for(const key in props.mostPopularCategory){
-        const value = props.mostPopularCategory[key]
-        category.push(key)
-        categoryCount.push(value)
+const getDates = (count) => {
+    const dates = []
+    const today = new Date();
+    for (let i = count; i >= 0; i--) {
+        let pastDate = new Date();
+        pastDate.setDate(today.getDate() - i)
+        pastDate = pastDate.toISOString().slice(0, 10)
+        dates.push(pastDate)
+
+        if (props.ordersDates.hasOwnProperty(pastDate)) {
+            dataToOrders.push(props.ordersDates[pastDate])
+        } else {
+            dataToOrders.push(0)
+        }
+
+        if (props.usersData.hasOwnProperty(pastDate)) {
+            dataToUsers.push(props.usersData[pastDate])
+        } else {
+            dataToUsers.push(0)
+        }
     }
+    return dates
+}
 
-    data.value = {
-    labels: category, 
-    datasets: [ { data: categoryCount }]
+// Orders raport
+dataOrders.value = {
+    labels: getDates(30),
+    datasets: [{
+
+        label: 'Number of orders',
+        data: dataToOrders
+    }]
+}
+
+optionsOrders.value = {
+    responsive: true,
+    backgroundColor: ['rgb(60, 120, 50)'],
+    scales: {
+        y: {
+            suggestedMin: 0,
+            suggestedMax: Math.max(...dataToOrders) + 1,
+            ticks: { stepSize: 1 }
+        }
+    },
+    plugins: {
+        title: {
+            display: true,
+            text: 'Number of orders completed in the last 30 days.',
+            padding: { bottom: 5 },
+        }
     }
 }
 
-onBeforeMount(() => {
-    setdata();
-})
+// Users raport
+dataUsers.value = {
+    labels: getDates(30),
+    datasets: [{
+
+        label: 'Number of users',
+        data: dataToUsers
+    }]
+}
+
+optionsUsers.value = {
+    responsive: true,
+    backgroundColor: ['rgb(255, 99, 132)'],
+    scales: {
+        y: {
+            suggestedMin: 0,
+            suggestedMax: Math.max(...dataToUsers) + 1,
+            ticks: { stepSize: 1 }
+        }
+    },
+    plugins: {
+        title: {
+            display: true,
+            text: 'Number of registered users in the last 30 days.',
+            padding: { bottom: 5 },
+        }
+    }
+}
+
+
+
 
 </script>
 

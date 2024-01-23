@@ -36,20 +36,25 @@ class OrderService
             ->paginate();
     }
 
-    public function getLatestOrders()
+    public function getLatestOrders( int $limit = 0, bool $forHuman = false)
     {
         $latestOrders = Order::with('user')
             ->with('detalsOrder')
             ->where('payment', 'accepted')
-            ->orderBy('payd_at')
-            ->limit(10)
-            ->get();
-            
+            ->orderBy('payd_at', 'desc');
 
-        foreach($latestOrders as $order){
-            $time = Carbon::parse($order->payd_at)->diffForHumans();
-            $order->latest = $time; 
+        if($limit){
+            $latestOrders->limit($limit);
         }
+        $latestOrders = $latestOrders->get();            
+
+        if($forHuman) {
+            foreach($latestOrders as $order){
+                $time = Carbon::parse($order->payd_at)->diffForHumans();
+                $order->latest = $time; 
+            }
+        }
+        
         return $latestOrders;
     }
 

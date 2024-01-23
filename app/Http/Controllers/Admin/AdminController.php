@@ -46,7 +46,7 @@ class AdminController extends Controller
             'activeProducts' => Product::whereNot('status', 'deleted')->count(),         
             'paidOrders' => Order::where('payment', 'accepted')->count(),
             'totalIncome' => $this->bookkeepingService->getTotalIncome(),
-            'latestOrders' => $this->orderService->getLatestOrders(), 
+            'latestOrders' => $this->orderService->getLatestOrders(5, true), 
             'mostPopularCategory' => $this->categoryService->getMostPopularCategory(),
             'latestUsers' => $this->userService->getLatestUsers(),
         ]);
@@ -54,7 +54,34 @@ class AdminController extends Controller
 
     public function raports()
     {
-        dd('raports');
+        $data = [];
+        $orders = $this->orderService->getLatestOrders();
+        foreach($orders as $order) {
+            if(array_key_exists($order->payd_at, $data)){
+                $data[$order->payd_at] += 1;
+            } else {
+                $data[$order->payd_at] = 1;
+            }
+        }
+
+        //number registered Users
+
+        $userData = [];
+        $users = User::get();
+        foreach($users as $user){
+            $registered = $user->created_at->format('Y-m-d');
+            if(array_key_exists($registered, $userData)){
+                $userData[$registered] += 1;
+            } else {
+                $userData[$registered] = 1;
+            }
+        }
+      
+
+        return Inertia::render('Admin/Raports', [
+            'ordersDates' => $data,
+            'usersData' => $userData
+        ]);
     }
 
 
