@@ -7,6 +7,7 @@ use App\Http\Requests\UserUpdateFieldRequest;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
 class AdminController extends Controller
@@ -21,10 +22,16 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        $users = User::paginate();
+        $usersActive = User::where(
+            'last_activity',
+            '>',
+            now()->subMinutes(5)->getTimestamp()
+        )
+        ->get();
 
-        return Inertia::render('Admin/UserList', [
-            'users' => $users
+
+        return Inertia::render('Admin/Dashboard', [
+            
         ]);
     }
 

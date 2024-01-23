@@ -12,7 +12,7 @@
             <NavLink :href="route('home')" :active="category.name == $page.props.category">
                 {{ category.name }}
             </NavLink>
-            <ul v-if="subCategory == index" class="absolute flex flex-col text-white bg-slate-700 w-full w-min z-10">
+            <ul v-if="subCategory == index" class="absolute flex flex-col text-white bg-slate-700 w-fit z-10">
                 <NavLink v-for="(subCategory, index) in category.sub_category" :href="route('home')">
                     {{subCategory.name}}
                 </NavLink>

@@ -1,72 +1,61 @@
 <template>
     <AdminLayout>
-        <template #header>
-            <h1 class="font-semibold text-2xl text-gray-800 leading-tight">Employees list</h1>
-        </template>
         <nav class="flex items-center justify-between p-1 bm-3">
             
         </nav>
-        <div class="flex justify-center overflow-auto">
-            <table class="bg-gray-200 rounded-xl overflow-hidden">
-                <thead class="bg-gray-200 font-bold">
-                    <tr>
-                        <th class="text-gray-900 px-6 py-4 text-left">
-                            ID
-                        </th>
-                        <th class="text-gray-900 px-6 py-4 text-left">
-                            Login
-                        </th>
-                        <th class="text-gray-900 px-6 py-4 text-left">
-                            Firstname
-                        </th>
-                        <th class="text-gray-900 px-6 py-4 text-left">
-                            Lastname
-                        </th>
-                        <th class="text-gray-900 px-6 py-4 text-left">
-                            Email
-                        </th>
-                        <th class="text-gray-900 px-6 py-4 text-left">
-                            Phone
-                        </th>
-                        <th class="text-gray-900 px-6 py-4 text-center">
-                            Address
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(user, index) of users.data" 
-                        @dblclick="showUserLogs(user.id)"
-                        class="bg-white border-b transition duration-300 ease-in-out hover:bg-blue-100 cursor-pointer">
-
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                            {{ user.id }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ">
-                            {{ user.name }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ">
-                            {{ user.firstname }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ">
-                            {{ user.lastname }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ">
-                            {{ user.email }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ">
-                            {{ user.phone }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ">
-                           {{  }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ">
-                            
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+       
+        <div class="mx-8 border ">
+            <h2 class="text-2xl font-bold">Dashboard</h2>
+            <div class="grid grid-cols-5 gap-5 h-32">
+                <div class=" flex flex-col justify-center items-center bg-gray-100 rounded-xl">
+                    <h4 class="font-bold">Logged in users now</h4>
+                    <p class="m-3 text-2xl font-bold">2</p>
+                </div>
+                <div class=" flex flex-col justify-center items-center bg-gray-100 rounded-xl">
+                    <h4 class="font-bold">Registered users</h4>
+                    <p class="m-3 text-2xl font-bold">10</p>
+                </div>
+                <div class=" flex flex-col justify-center items-center bg-gray-100 rounded-xl">
+                    <h4 class="font-bold">Active products</h4>
+                    <p class="m-3 text-2xl font-bold">15</p>
+                </div>
+                <div class=" flex flex-col justify-center items-center bg-gray-100 rounded-xl">
+                    <h4 class="font-bold">Paid orders</h4>
+                    <p class="m-3 text-2xl font-bold">3</p>
+                </div>
+                <div class=" flex flex-col justify-center items-center bg-gray-100 rounded-xl">
+                    <h4 class="font-bold">Total Income</h4>
+                    <p class="m-3 text-2xl font-bold">PLN 158,33</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-3 gap-5 h-80 mt-5">
+                <div class="col-span-2 row-span-2 p-5 rounded-xl bg-gray-100">
+                    <h4 class="text-lg font-bold">Latest orders</h4>
+                    <div class="p-3 border-b">
+                        <div class="flex">
+                            <p class=" mr-2 font-bold text-blue-700">Order #1 </p> 
+                            <p>created 2 weeks ago, 3 items</p>
+                        </div>
+                        <div class="flex justify-between">
+                            <p>Marian Kowalski</p>
+                            <p>PLN 350,37</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center pt-8 bg-gray-100 rounded-xl">
+                    <h4 class="text-lg font-bold">Orders by categories</h4>
+                    jakiś koło
+                </div>
+                <div class="flex flex-col items-center pt-8 bg-gray-100 rounded-xl">
+                    <h4 class="text-lg font-bold">Latest Customers</h4>
+                   info
+                </div>
+                
+            </div>
+            
         </div>
-        <!-- {{users.data}} -->
+
+
     </AdminLayout>
 </template>
 
@@ -83,22 +72,7 @@ const props = defineProps({
 
 const onlyActive = ref(true)
 
-function redirectToUserBill(id) {
-    router.visit(route('user.bill', id));
-}
 
-function redirectToUserEdit(id) {
-    router.visit(route('user.edit', id));
-}
-
-function showUserLogs(id) {
-    router.get(route('user.logs', id));
-}
-
-function createNewUser() {
-    console.log('create new user')
-    router.get(route('user.create'));
-}
 
 
 </script>
