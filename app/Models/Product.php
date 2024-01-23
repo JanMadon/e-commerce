@@ -15,8 +15,8 @@ class Product extends Model
         'name', 'price', 'status', 'subcategory_id', 'description', 'quantity'
     ];
 
-    // public function ordersDetal(): HasOne
-    // {
-    //     return $this->hasOne(class);
-    // }
+    public function subcategory(): BelongsTo
+    {
+        return $this->belongsTo(SubCategory::class);
+    }
 }

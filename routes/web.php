@@ -33,6 +33,7 @@ Route::post('/', [LayoutController::class, 'getCategory'])->name('category.get')
 Route::controller(AdminController::class)
     ->middleware(['auth', 'admin', 'verified'])->group(function () {
         Route::get('/admin', 'dashboard')->name('dashboard');
+        Route::get('/raports', 'raports')->name('admin.raports');
         Route::get('/admin/users', 'usersList')->name('admin.usersList');
         Route::get('/admin/users/{id}', 'userInfo')->name('admin.userInfo');
         Route::patch('/admin/users/{id}', 'userEdit')->name('admin.userEdit');

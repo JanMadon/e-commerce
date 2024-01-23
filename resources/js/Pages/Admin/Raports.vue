@@ -44,7 +44,7 @@
                 </div>
                 <div class="flex flex-col items-center p-2 pt-5 bg-gray-100 rounded-xl">
                     <h4 class="text-lg font-bold">Orders by categories</h4>
-                    <DoughnutChart :chartData="data"/>
+                    <BarChart :chartData="data"/>
                 </div>
                 <div class="flex flex-col items-center p-2 pt-5 bg-gray-100 rounded-xl">
                     <h4 class="text-lg font-bold">Latest Customers</h4>
@@ -67,7 +67,7 @@
 
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import DoughnutChart from '@/Components/App/DoughnutChart.vue'
+import BarChart from '@/Components/App/BarChart.vue'
 import { ref } from 'vue';
 
 import { onBeforeMount } from 'vue';

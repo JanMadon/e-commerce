@@ -4,11 +4,14 @@ namespace App\Services;
 
 use App\Models\Order;
 use App\Models\User;
+use Carbon\Carbon;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Stripe\Checkout\Session;
 use Stripe\Stripe;
 
-class UserService {
+class UserService
+{
 
     public function getUserWithInfo(int $id)
     {
@@ -18,14 +21,35 @@ class UserService {
         return $user;
     }
 
+    public function getLastActiveUsersNumber(): int
+    {
+        return User::where('last_activity', '>', now()->subMinutes(5)->getTimestamp())
+            ->count();
+    }
+
+    public function getLatestUsers(): Collection
+    {
+
+        $users = User::where('last_activity', '>', now()->subWeeks(2)
+            ->getTimestamp())->orderBy('last_activity', 'desc')->get();
+        
+            foreach($users as $user) {
+                $time =  Carbon::parse($user->last_activity)->diffForHumans();
+                $user->lastTime = $time; 
+            }
+
+        return $users;
+    }
+
+
     public function getAllUsers($search, $perPage = 15)
     {
         $query = User::with('address')
-        ->orderBy('created_at', 'desc');
-        
-        if($search){
+            ->orderBy('created_at', 'desc');
+
+        if ($search) {
             $query->where('name', 'like', "$search%")
-            ->orWhere('email', 'like', "%$search%");
+                ->orWhere('email', 'like', "%$search%");
         }
         $query = $query->paginate($perPage);
 
@@ -35,6 +59,5 @@ class UserService {
     public function updateField(int $userId, string $field, string $newValue)
     {
         User::find($userId)->update([$field => $newValue]);
-
     }
 }

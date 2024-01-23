@@ -36,6 +36,23 @@ class OrderService
             ->paginate();
     }
 
+    public function getLatestOrders()
+    {
+        $latestOrders = Order::with('user')
+            ->with('detalsOrder')
+            ->where('payment', 'accepted')
+            ->orderBy('payd_at')
+            ->limit(10)
+            ->get();
+            
+
+        foreach($latestOrders as $order){
+            $time = Carbon::parse($order->payd_at)->diffForHumans();
+            $order->latest = $time; 
+        }
+        return $latestOrders;
+    }
+
     public function getUserActiveOrder($userId)
     {
         return $this->getUserOrders($userId)->where('payment', 'active')->first();
