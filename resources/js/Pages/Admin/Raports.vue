@@ -1,19 +1,19 @@
 <template>
     <AdminLayout>
         <nav class="flex items-center justify-end p-1 bm-3">
-            <SecondaryButton v-if="showUsersRaport" @click="showUsersRaport = false">
+            <SecondaryButton v-if="showUsersRaport" @click.prevent="showUsersRaport = false">
                 User raport
             </SecondaryButton>
-            <SecondaryButton v-else @click="showUsersRaport = true">
+            <SecondaryButton v-else @click.prevent="showUsersRaport = true">
                 Order raport
             </SecondaryButton>
         </nav>
         <h3 class="ml-14 text-2xl font-bold">{{ showUsersRaport ? 'Order raport' : 'User raport' }} </h3>
         <div class="flex justify-center w-full">
             <div class="mt-3 w-[90%] ">
-                <BarChart v-if="showUsersRaport" :chartData="dataOrders" :chartOptions="optionsOrders"
+                <BarChart v-show="showUsersRaport" :chartData="dataOrders" :chartOptions="optionsOrders"
                     class=" p-10 bg-gray-100" />
-                <BarChart v-else="showUsersRaport" :chartData="dataUsers" :chartOptions="optionsUsers" class=" p-10 bg-gray-100" />
+                <BarChart v-show="!showUsersRaport" :chartData="dataUsers" :chartOptions="optionsUsers" class=" p-10 bg-gray-100" />
             </div>
         </div>
 

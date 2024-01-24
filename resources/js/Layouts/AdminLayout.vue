@@ -101,17 +101,20 @@
 
             <CategoryBar />
 
-            <main class="">
+            <main class="mb-60">
                 <slot />
             </main>
         </div>
     </div>
     <Notification />
+    <FooterComponets/>
+
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
+import FooterComponets from '@/Components/FooterComponets.vue'
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
