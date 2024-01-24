@@ -1,7 +1,5 @@
 
 <template>
-    <Head title="Dashboard" />
-
     <GuestUserLayout>
 
         <div class="flex justify-center mt-8 mx-auto ">
@@ -12,7 +10,7 @@
                 <!-- Przewijana lista -->
                 <div class="overflow-y-auto">
                     <ul class="flex ">
-                        <li v-for="photo in photos" @click="changeMainPhoto(photo)"
+                        <li v-for="photo in product.photos" @click="changeMainPhoto(photo)"
                             class="flex justify-center items-center w-[80px] h-[80px] mx-3 bg-gray-200 rounded-lg cursor-pointer overflow-hidden hover:brightness-75 transition duration-300">
                             <img :src="'data:image/pag;base64,' + photo" alt="next-photo"
                                 class="w-full h-full object-cover">
@@ -23,8 +21,10 @@
             <div
                 class="flex flex-col justify-between w-60 right-column p-4 bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
                 <div>
-                    <p class="text-gray-700 text-sm border-b border-gray-400">{{ product.category }}</p>
-
+                    <p class="mb-5  text-center text-gray-700 font-bold border-b border-gray-400">
+                        {{ product.subcategory.category.name }} / {{ product.subcategory.name }}
+                    </p>
+            
                     <h2 class="text-xl font-bold mb-4">{{ product.name }}</h2>
                     <p class="text-gray-700 mb-10">{{ product.description }}</p>
 
@@ -61,8 +61,7 @@ const props = defineProps({
 })
 
 const setQuantity = ref(1)
-const mainPhoto = ref(props.photos[0])
-
+const mainPhoto = ref(props.product.photos[0])
 
 function changeMainPhoto(photo) {
     mainPhoto.value = photo;

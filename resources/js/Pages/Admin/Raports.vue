@@ -11,9 +11,9 @@
         <h3 class="ml-14 text-2xl font-bold">{{ showUsersRaport ? 'Order raport' : 'User raport' }} </h3>
         <div class="flex justify-center w-full">
             <div class="mt-3 w-[90%] ">
-                <BarChart v-show="showUsersRaport" :chartData="dataOrders" :chartOptions="optionsOrders"
+                <BarChart v-if="showUsersRaport" :chartData="dataOrders" :chartOptions="optionsOrders"
                     class=" p-10 bg-gray-100" />
-                <BarChart v-show="!showUsersRaport" :chartData="dataUsers" :chartOptions="optionsUsers" class=" p-10 bg-gray-100" />
+                <BarChart v-else :chartData="dataUsers" :chartOptions="optionsUsers" class=" p-10 bg-gray-100" />
             </div>
         </div>
 

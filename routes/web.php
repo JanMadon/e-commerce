@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/checkPrivileges', [CheckPrivilegesController::class, 'index']);
 
-Route::get('/', [LayoutController::class, 'showProdyctBoard'])->name('home');
+Route::get('/home/{category?}/{subcategory?}', [LayoutController::class, 'showProdyctBoard'])->name('home');
 Route::get('/item/{id}', [LayoutController::class, 'showProduct'])->name('show.product');
 Route::post('/', [LayoutController::class, 'getCategory'])->name('category.get');
 // /////

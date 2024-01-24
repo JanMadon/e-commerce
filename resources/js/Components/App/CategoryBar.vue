@@ -1,35 +1,35 @@
 <template>
     <div class="flex text-white bg-slate-700 w-full pl-10">
         <NavLink :href="route('home')" >
-                HOME
+                Home
             </NavLink>
         <div v-for="(category, index) in categories"
         :id="index"
         @mouseover="(event) => showSubCategories(event)" 
         @mouseleave="subCategory = 'false'"
         :class="{ hover: showList }"
-        @click="() => visit(category.name)">
-            <NavLink :href="route('home')" :active="category.name == $page.props.category">
-                {{ category.name }}
+        >
+        <NavLink :href="route('home', category.name)" :active="category.name == $page.props.category">
+            {{ category.name }}
+        </NavLink>
+        <ul v-if="subCategory == index" class="absolute flex flex-col text-white bg-slate-700 w-fit z-10">
+            <NavLink v-for="(subCategory, index) in category.sub_category"
+                 :href="route('home', [category.name, subCategory.name])">
+                {{subCategory.name}}
             </NavLink>
-            <ul v-if="subCategory == index" class="absolute flex flex-col text-white bg-slate-700 w-fit z-10">
-                <NavLink v-for="(subCategory, index) in category.sub_category" :href="route('home')">
-                    {{subCategory.name}}
-                </NavLink>
-            </ul>
-        </div>
-
+        </ul>
     </div>
-    {{ $page.category }}
+</div>
+
 </template>
 
 <script setup>
-import { ref } from 'vue';
+//@click="() => visit(category.name)"
 import NavLink from '../NavLink.vue';
 import axios from 'axios';
+import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
-import { watch } from 'vue';
 import { onBeforeMount } from 'vue';
 
 const showList = ref(false)

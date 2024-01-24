@@ -4,7 +4,7 @@
         <div class="flex justify-around">
             <div class="text-center">
                 <h4 class="my-2 text-lg font-bold">The project used</h4>
-                <div class="flex justify-between mt-3 gap-5">
+                <div class="flex justify-between mt-3 gap-10">
                     <div>
                         <div class="flex">
                             <i class="fa-brands fa-php"></i>

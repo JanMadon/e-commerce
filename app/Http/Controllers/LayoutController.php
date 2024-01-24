@@ -4,62 +4,42 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class LayoutController extends Controller
 {
+    private ProductService $productService;
 
-    public function showProdyctBoard()
+    public function __construct(ProductService $productService) {
+        $this->productService = $productService;
+    }
+
+    public function showProdyctBoard(Request $rquest)
     {
-        $products = Product::get();
-        $photosData = [];
+        $category = $rquest->route('category');
+        $subcategory = $rquest->route('subcategory');
+        $search = $rquest->query('search');
 
-        foreach ($products as $product) {
-            $productId = $product->id;
-            $photoName = Storage::files("product/$productId");
-            $photoName = array_map('basename', $photoName);
-            $photo = Storage::get("product/$productId/$photoName[0]");
-
-            $base64Image = base64_encode($photo);
-            $photosData[$productId] = $base64Image;
-        }
+        $products = $this->productService->getAllProductsWithMainPhotos($search, 8, $category, $subcategory);
 
         return Inertia::render('MainPage', [
             'products' => $products,
-            'photos' => $photosData
         ]);
     }
 
     public function showProduct(string $id)
     {
-
-        $photosName = Storage::files("product/$id");
-        $photosName = array_map('basename', $photosName);
-        //dd($photosName);
-
-        $photosData = [];
-
-        foreach ($photosName as $photoName) {
-            $photo = Storage::get("product/$id/$photoName");
-            $base64Image = base64_encode($photo);
-
-            $photosData[] = $base64Image;
-        }
-        //dd($photosData[0]);
-
         return Inertia::render('ProductPage', [
-            'product' => Product::find($id),
-            'photos' => $photosData
+            'product' => $this->productService->getProduct($id)
         ]);
     }
 
-    public function getCategory(Request $request)
+    public function getCategory()
     {
         $category = Category::with('subCategory')->get();
-        
-        //return redirect()->back()->with(['view'=> $category]);
         return response()->json($category);
     }
 

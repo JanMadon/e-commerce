@@ -3,7 +3,7 @@
         <a :href="route('show.product', product.id)"
             class="flex justify-center p-3 aspect-w-3 aspect-h-2 overflow-hidden">
             <img alt="product" class=" object-cover rounded-lg hover:scale-105 hover:rotate-1 transition-transform"
-                :src="'data:image/jpeg;base64,' + photo">
+                :src="'data:image/jpeg;base64,' + product.photo">
         </a>
 
         <div class="px-4 py-10">
@@ -36,7 +36,6 @@ import AddToCartBtn from './AddToCartBtn.vue';
 const emit = defineEmits('addToCart');
 
 const props = defineProps({
-    photo: String,
     product: Object
 })
 

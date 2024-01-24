@@ -1,12 +1,22 @@
 
 <template>
-    <Head title="Dashboard" />
-
     <GuestUserLayout>
-        <div class="grid gap-4 grig-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-3">
-            <!-- Product Item -->
-            <ProductCard v-for="(photo, index) in photos" :key="index" :photo="photo" :product="products[index-1]"
-           ></ProductCard>
+        <nav class="flex items-center justify-between bg-slate-100 mb-3 text-gray-600">
+            <SearchFrom :placeholder="'Search product by name'" />
+            <div v-show="category" class="flex pr-10 ">
+                <a :href="route('home', category)">
+                    {{ category }}
+                </a>
+                <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-6 h-6 mx-2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                </svg>
+                {{ subcategory ? subcategory : 'all'}}
+            </div>
+        </nav>
+
+        <div class="grid gap-4 grig-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 px-5 ">
+            <ProductCard v-for="(product, index) in products.data" :key="index" :product="product"></ProductCard>
         </div>
     </GuestUserLayout>
 </template>
@@ -14,11 +24,30 @@
 <script setup>
 import GuestUserLayout from '@/Layouts/GuestUserLayout.vue';
 import ProductCard from '@/Components/App/ProductCard.vue';
-import { Head } from '@inertiajs/vue3';
+import SearchFrom from '@/Components/App/SearchFrom.vue';
+import { onMounted } from 'vue';
+import { ref } from 'vue';
 
 const props = defineProps({
     products: Object,
-    photos: Object
 })
+
+const category = ref()
+const subcategory = ref()
+
+
+onMounted(() => {
+    const baseUrl = 'http://localhost/home';
+    const currentUrl = window.location.href
+    const categoryPath = currentUrl.replace(baseUrl, '').slice(1);
+    const segments = categoryPath.split('/');
+
+    category.value = segments[0] ? decodeURIComponent(segments[0]) : '';
+    subcategory.value = segments[1] ? decodeURIComponent(segments[1]) : '';
+
+})
+
+
+
 
 </script>
