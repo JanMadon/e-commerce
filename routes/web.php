@@ -25,10 +25,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/checkPrivileges', [CheckPrivilegesController::class, 'index']);
 
-Route::get('/home/{category?}/{subcategory?}', [LayoutController::class, 'showProdyctBoard'])->name('home');
+Route::get('/', function() {
+   return to_route('home');
+});
+Route::get('/shop/{category?}/{subcategory?}', [LayoutController::class, 'showProdyctBoard'])->name('home');
 Route::get('/item/{id}', [LayoutController::class, 'showProduct'])->name('show.product');
 Route::post('/', [LayoutController::class, 'getCategory'])->name('category.get');
-// /////
+
 
 Route::controller(AdminController::class)
     ->middleware(['auth', 'admin', 'verified'])->group(function () {

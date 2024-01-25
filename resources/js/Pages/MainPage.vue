@@ -37,7 +37,7 @@ const subcategory = ref()
 
 
 onMounted(() => {
-    const baseUrl = 'http://localhost/home';
+    const baseUrl = 'http://localhost/shop';
     const currentUrl = window.location.href
     const categoryPath = currentUrl.replace(baseUrl, '').slice(1);
     const segments = categoryPath.split('/');

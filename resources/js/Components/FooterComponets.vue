@@ -2,9 +2,9 @@
     <div class=" bg-slate-800 text-gray-100 h-50 pt-10">
 
         <div class="flex justify-around">
-            <div class="text-center">
+            <div class="w-[20%] text-center">
                 <h4 class="my-2 text-lg font-bold">The project used</h4>
-                <div class="flex justify-between mt-3 gap-10">
+                <div class="flex justify-between mt-3">
                     <div>
                         <div class="flex">
                             <i class="fa-brands fa-php"></i>
@@ -67,7 +67,7 @@
                 <p><i class="fa-solid fa-location-dot m-1"></i> Kraków</p>
 
             </div>
-            <div class="text-center ">
+            <div class="w-[20%] text-center ">
                 <h4 class="m-2 text-lg font-bold">Check also </h4>
                 
                 <a href="https://github.com/JanMadon/e-commerce"><p>my gitchab account</p><i class="fa-brands fa-github fa-3x"> </i></a>

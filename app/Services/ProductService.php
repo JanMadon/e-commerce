@@ -34,10 +34,14 @@ class ProductService
 
         foreach ($products as $product) {
             $photoNames = Storage::files("product/$product->id");
-            $photoName = basename($photoNames[0]);
-            $photo = Storage::get("product/$product->id/$photoName");
-            $base64Image = base64_encode($photo);
-            $product->photo = $base64Image;;
+            if($photoNames) {
+                $photoName = basename($photoNames[0]);
+                $photo = Storage::get("product/$product->id/$photoName");
+                $base64Image = base64_encode($photo);
+                $product->photo = $base64Image;;
+            } else {
+              
+            }
         }
         return $products;
     }
