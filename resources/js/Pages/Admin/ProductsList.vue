@@ -27,7 +27,7 @@
                         <p>Price PLN: {{ product.price }}</p>
                     </div>
                     <div class="flex flex-col ml-10">
-                        <p>created at: {{ product.created_at.slice(0, 10) }}</p>
+                        <p>created at: {{ product.created_at ? product.created_at.slice(0, 10) : '' }}</p>
                         <p>In stock: {{ product.quantity }}</p>
                         <p>Pieces sold:</p>
                     </div>
@@ -63,9 +63,10 @@
                             re-trash
                     </DangerButton>
                 </div>
-
             </div>
         </div>
+
+        <Paginator v-if="products.last_page > 1" :items="products.links"/>
 
         <Modal :show="showModal">
             <div class="flex text-xl">
@@ -90,13 +91,13 @@
                 <div class="flex flex-col ml-16">
                     <div class="my-2">
                         <p class="font-bold">Created at: </p>
-                        <p>{{ selectedProduct.created_at.slice(0,10) }}</p>
-                        <p>{{ selectedProduct.created_at.slice(11,19) }}</p>
+                        <p>{{selectedProduct.created_at ? selectedProduct.created_at.slice(0,10) : 'unknow'}}</p>
+                        <p>{{selectedProduct.created_at ? selectedProduct.created_at.slice(11,19) : 'unknow'}}</p>
                     </div>
                     <div class="my-2">
                         <p class="font-bold">Updated at: </p>
-                        <p>{{ selectedProduct.updated_at.slice(0,10) }}</p>
-                        <p>{{ selectedProduct.updated_at.slice(11,19) }}</p>
+                        <p>{{selectedProduct.updated_at ? selectedProduct.updated_at.slice(0,10)  : 'unknow'}}</p>
+                        <p>{{selectedProduct.updated_at ? selectedProduct.updated_at.slice(11,19) : 'unknow' }}</p>
                     </div>
                     <div class="my-2">
                         <p class="font-bold">Pieces sold: </p>
@@ -127,6 +128,7 @@
 
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import Paginator from '@/Components/App/Paginator.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';

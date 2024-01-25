@@ -11,10 +11,11 @@ class ProductService
 
     public function getAllProductsWithMainPhotos(
         ?string $search = null,
-        ?int $perPage = 15,
+        ?int $perPage = 10,
         ?string $category = null,
         ?string $subcategory = null,
     ) {
+        !$perPage ? $perPage=10:'';
 
         if ($search) {
             $query = Product::where('name', 'like', "%$search%");

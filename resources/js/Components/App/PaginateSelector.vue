@@ -19,7 +19,7 @@ import { ref } from 'vue';
 
 let params = ''
 
-const perPage = ref(15);
+const perPage = ref(10);
 
 
 function onSearch(event) {

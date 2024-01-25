@@ -77,11 +77,13 @@
                 </tbody>
             </table>
         </div>
+        <Paginator v-if="users.last_page > 1" :items="users.links"/>
     </AdminLayout>
 </template>
 
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import Paginator from '@/Components/App/Paginator.vue';
 import SearchFrom from '@/Components/App/SearchFrom.vue';
 import PaginateSelector from '@/Components/App/PaginateSelector.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';

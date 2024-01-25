@@ -91,12 +91,13 @@
             </table>
         </div>
         <DetailsOrderModal :showModal="showDetals" :selectedOrder="selectedOrder" />
-        <!-- {{ orders }} -->
+        <Paginator v-if="orders.last_page > 1" :items="orders.links"/>
     </AdminLayout>
 </template>
 
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import Paginator from '@/Components/App/Paginator.vue';
 import DetailsOrderModal from '@/Components/App/DetailsOrderModal.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
