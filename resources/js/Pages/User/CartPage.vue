@@ -1,23 +1,23 @@
 
 <template>
     <GuestUserLayout>
-        <div v-if="!order.detals_order" class="flex flex-col items-center mt-3 mx-auto ">
+        <div v-if="!order.detals_order" class="flex flex-col items-center mt-3 mx-auto text-gray-800 dark:text-gray-100">
             <div class="flex w-2/3 p-2">
-                <h2 class="text-2xl font-bold text-left">Your Catr Items</h2>
+                <h2 class="text-2xl font-bold text-left ">Your Catr Items</h2>
             </div>
             <div class="flex justify-between  w-2/3 h-2/3  p-2
-            bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
-                <p class="text-center w-full text-gray-900">You don't have any items in cart</p>
+            border bg-gray-100  border-gray-300 dark:bg-slate-600  rounded-xl shadow-2xl">
+                <p class="text-center w-full ">You don't have any items in cart</p>
             </div>
         </div>
         
      
-        <div v-else class="flex flex-col items-center mt-3 mx-auto ">
+        <div v-else class="flex flex-col items-center mt-3 mx-auto text-gray-800 dark:text-gray-100">
             <div class="flex w-2/3 p-2">
                 <h2 class="text-2xl font-bold text-left">Your Catr Items</h2>
             </div>
             <div v-for="(detalOrder, index) in order.detals_order" class="flex justify-between  w-2/3 h-2/3 mx-5 p-5
-            bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
+            bg-gray-100 border border-gray-300 dark:bg-slate-600 rounded-xl shadow-2xl">
                 <div class="flex">
                     <div
                         class="w-[80px] h-[80px] mx-3 bg-gray-200 rounded-lg cursor-pointer overflow-hidden   hover:brightness-75 transition duration-300">
@@ -28,13 +28,13 @@
                         <h3 class="text-lg font-bold">{{ detalOrder.product.name }}</h3>
                         <p class="text-xs">Price per item: PLN {{ detalOrder.product.price }} </p>
                         <div class="flex items-end">
-                            <label for="quantityfor" class="mr-1 text-sm text-gray-600">Quantity:</label>
+                            <label for="quantityfor" class="mr-1 text-sm">Quantity:</label>
                             <input :value="detalOrder.quantity" @input="event => updateTotalPrice(event, index)" type="number"
-                                min="1" class="text-center w-16 border rounded-sm h-7">
+                                min="1" class="text-center w-16 h-7 border rounded dark:bg-slate-800">
                         </div>
                     </div>
                 </div>
-                <div class="flex flex-col justify-between items-end">
+                <div class="flex flex-col justify-between items-end ">
                     <p class="text-lg font-bold "> {{ detalOrder.quantity * detalOrder.product.price }} PLN</p>
                     <div>
                     </div>
@@ -47,8 +47,7 @@
                     </DangerButton>
                 </div>
             </div>
-            <div class="flex justify-between  w-2/3 h-2/3 mx-5 p-5
-            bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
+            <div class="flex justify-between  w-2/3 h-2/3 mx-5 p-5 rounded-xl shadow-2xl border bg-gray-100  border-gray-300  text-gray-800 dark:text-gray-100 dark:bg-slate-600">
                 <div>
                     <p class="font-bold">Total price:</p>
                     <div class="mt-5 text-sm text-center font-bold">Shipping
@@ -62,7 +61,7 @@
                 </div>
                 <div class="text-right">
                     <p class="font-bold text-lg">PLN {{ parseInt(tatalPrice) }} </p>
-                    <select v-model="shipingMethod" name="" id="" class="py-1 text-sm rounded">
+                    <select v-model="shipingMethod" name="" id="" class="py-1 text-sm rounded dark:bg-slate-800">
                         <option v-if="cenSelectFreeSheping" value="lockerFree">Parcel locker - PLN {{
                             shipingPrice.lockerFree }}</option>
                         <option v-else value="locker">Parcel locker - PLN {{ shipingPrice.locker }}</option>
@@ -76,7 +75,7 @@
                 </div>
             </div>
             <div class="flex justify-center  w-2/3 h-2/3  p-2
-            bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
+            bg-gray-100 border border-gray-300 dark:bg-slate-600 rounded-xl shadow-2xl">
                 <p v-if="showError" class="text-center w-full text-red-600">Please provide correct quantyti!</p>
                 <PrimaryButton v-else class=" justify-center w-1/2 bg-orange-400 hover:bg-orange-600 focus:bg-orange-600"
                     @click.prevent="pay">

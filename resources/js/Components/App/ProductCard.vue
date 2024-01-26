@@ -1,5 +1,6 @@
 <template>
-    <div class="border border-1 border-gray-200 rounded-md hover:border-purple-600 transition-colors bg-white relative">
+    <div class="relative border border-1 border-gray-200 rounded-md hover:border-purple-600 transition-colors 
+    bg-slate-50 text-gray-800 dark:bg-slate-600 dark:text-gray-100">
         <a :href="route('show.product', product.id)"
             class="flex justify-center p-3 aspect-w-3 aspect-h-2 overflow-hidden">
             <img alt="product" class=" object-cover rounded-lg hover:scale-105 hover:rotate-1 transition-transform"

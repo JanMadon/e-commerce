@@ -3,8 +3,9 @@
     <GuestUserLayout>
 
         <div class="flex justify-center mt-8 mx-auto ">
-            <div class="flex flex-col items-center w-2/3 h-2/3 mx-5 p-5
-            bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
+            <div
+                class="flex flex-col items-center w-2/3 h-2/3 mx-5 p-5
+             rounded-xl shadow-2xl bg-gray-100 border border-gray-300 text-gray-800 dark:bg-slate-600 dark:text-gray-100">
                 <!-- Zdjęcie -->
                 <img :src="'data:image/pag;base64,' + mainPhoto" alt="Product Image" class="w-2/3   h-96 m-10 object-cover">
                 <!-- Przewijana lista -->
@@ -19,23 +20,21 @@
                 </div>
             </div>
             <div
-                class="flex flex-col justify-between w-60 right-column p-4 bg-gray-100 border border-gray-300 rounded-xl shadow-2xl">
+                class="flex flex-col justify-between w-60 right-column p-4 rounded-xl shadow-2xl bg-gray-100 border border-gray-300 text-gray-800 dark:bg-slate-600 dark:text-gray-100">
                 <div>
-                    <p class="mb-5  text-center text-gray-700 font-bold border-b border-gray-400">
+                    <p class="mb-5  text-center  font-bold border-b border-gray-400">
                         {{ product.subcategory.category.name }} / {{ product.subcategory.name }}
                     </p>
-            
                     <h2 class="text-xl font-bold mb-4">{{ product.name }}</h2>
-                    <p class="text-gray-700 mb-10">{{ product.description }}</p>
-
+                    <p class=" mb-10">{{ product.description }}</p>
                     <div class="flex items-center mb-10">
-                        <label for="quantity" class="mr-5 font-medium text-gray-600">Price:</label>
+                        <label for="quantity" class="mr-5 font-medium">Price:</label>
                         <p class="text-xl font-bold">PLN {{ product.price }}</p>
                     </div>
                 </div>
                 <div class="flex flex-col">
                     <div class="flex items-center mb-10">
-                        <label for="quantity" class="mr-10 font-bold text-gray-600">Quantity:</label>
+                        <label for="quantity" class="mr-10 font-bold">Quantity:</label>
                         <input v-model="setQuantity" type="number" min="1" class="text-center w-full border rounded-md">
                     </div>
                     <AddToCartBtn v-if="$page.props.auth.user" :product="product" :quantity="setQuantity" />

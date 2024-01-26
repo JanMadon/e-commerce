@@ -1,6 +1,6 @@
-<template>
-    <Modal :show="warehouseModal" @close="() => warehouseModal = false">
-        <div class="h-2/3">
+<template >
+    <Modal :show="warehouseModal" @close="() => warehouseModal = false" >
+        <div class="h-2/3 dark:text-gray-100">
             <h3 class="m-10 text-2xl font-bold text-center">e-shop KRAKÓW</h3>
             <div class="m-10 text-center">
                 <p>Warehouse:</p>

@@ -1,7 +1,7 @@
 
 <template>
     <GuestUserLayout>
-        <nav class="flex items-center justify-between bg-slate-100 mb-3 text-gray-600">
+        <nav class="flex items-center justify-between mb-3 bg-slate-100  text-gray-600 dark:bg-slate-500 dark:text-gray-100">
             <SearchFrom :placeholder="'Search product by name'" />
             <div v-show="category" class="flex pr-10 ">
                 <a :href="route('home', category)">
@@ -21,7 +21,7 @@
             </div>
             <Paginator  v-if="products.last_page > 1" :items="products.links" />
         </div>
-        <p v-else class="mt-16 text-center">Sorry, we couldn't find any offers</p>
+        <p v-else class="mt-16 text-center text-gray-600 dark:text-gray-100">Sorry, we couldn't find any offers</p>
 
     </GuestUserLayout>
 </template>

@@ -11,7 +11,8 @@
                             {{ category.name }}
                         </CategorySpan>
                         <div>
-                            <span @click.prevent="() => modalEditCategory(category.id, category.name, category.description, 'category')"
+                            <span
+                                @click.prevent="() => modalEditCategory(category.id, category.name, category.description, 'category')"
                                 class="mt-2 mx-3 text-sm text-blue-600 cursor-pointer">
                                 edit
                             </span>
@@ -52,10 +53,10 @@
                         Subcategories
                     </h3>
                     <div class="pt-5 pl-5">
-                        <li v-for="(subcategory, subIndex) of selectedSubcategories"
+                        <li v-if="selectedCategory" v-for="(subcategory, subIndex) of selectedCategory.sub_category"
                             class="m-2 flex justify-between w-2/3 border-b">
-                            <p :style="(selectedSubcategory === subcategory? 'font-weight: bold' : '')" @click="() => selectedSubcategory = subcategory"
-                                class="cursor-pointer">
+                            <p :style="(selectedSubcategory === subcategory ? 'font-weight: bold' : '')"
+                                @click="() => selectedSubcategory = subcategory" class="cursor-pointer">
                                 {{ subcategory.name }}
                             </p>
                             <div>
@@ -71,8 +72,8 @@
                             </div>
                         </li>
                     </div>
-                    <CategorySpan v-show="!showCategoryForm && !showSubcategoryForm && selectedSubcategories"
-                        @click="() => {showSubcategoryForm = true; selectedIndex = flase}"
+                    <CategorySpan v-show="!showCategoryForm && !showSubcategoryForm && selectedCategory"
+                        @click="() => { showSubcategoryForm = true; selectedIndex = flase }"
                         class="w-min ml-4 text-xl rounded-2xl hover:bg-gray-200">
                         +
                     </CategorySpan>
@@ -84,10 +85,9 @@
                         <label for="name" class="block text-sm font-medium text-gray-600">Subcategory name:</label>
                         <input type="text" v-model="createForm.name" class="mt-1 p-2 w-2/3 border rounded-md"
                             placeholder="Enter the name of the subcategory" required>
-                        <p class="text-red-600 text-xs">{{$page.props.errors.name }}</p>
+                        <p class="text-red-600 text-xs">{{ $page.props.errors.name }}</p>
                         <label for="description" class="block text-sm font-medium text-gray-600">Description</label>
-                        <textarea rows="3" v-model="createForm.description"
-                            class="mt-1 p-2 w-full border rounded-md"
+                        <textarea rows="3" v-model="createForm.description" class="mt-1 p-2 w-full border rounded-md"
                             placeholder="Enter destription of the subcategory"></textarea>
                         <p class="text-red-600 text-xs"> {{ $page.props.errors.description }} </p>
                         <div class="text-right">
@@ -134,7 +134,7 @@ const props = defineProps({
 })
 
 const selectedCategory = ref()
-const selectedSubcategories = ref();
+//const selectedSubcategories = ref();
 const selectedSubcategory = ref();
 const selectedIndex = ref();
 const showCategoryForm = ref(false);
@@ -158,7 +158,7 @@ const createForm = useForm({
 const showSubcategories = index => {
     selectedIndex.value = index
     selectedCategory.value = props.categories[index];
-    selectedSubcategories.value = props.categories[index].sub_category // no tej powielenie USUŃ 
+    //selectedSubcategories.value = props.categories[index].sub_category // do wywalenia raczej
 }
 
 const closeInputs = () => {
@@ -166,6 +166,7 @@ const closeInputs = () => {
     showSubcategoryForm.value = false
     createForm.name = ''
     createForm.description = ''
+    selectedCategory.value = null
 }
 
 const modalEditCategory = (id, name, description, typeel) => {
@@ -183,19 +184,20 @@ const close = () => {
     editContentNameInput.value = null
     editContentDescriptionInput.value = null
     showModalEdit.value = false
+    selectedCategory.value = null
 }
 
 
 const edit = () => {
     let parentId = null;
 
-    if(type.value === 'subcategory') {
+    if (type.value === 'subcategory') {
         parentId = selectedCategory.value.id
     }
 
-    router.put(route('categories.edit', {parentId}), {
+    router.put(route('categories.edit', { parentId }), {
         type: type.value,
-        id: editContentId.value, 
+        id: editContentId.value,
         name: editContentNameInput.value,
         description: editContentDescriptionInput.value
     }, {
@@ -204,7 +206,7 @@ const edit = () => {
             close();
         },
         onError: () => {
-            showSuccessNotification(`The ${editContentNameInput.value} ${type.value} editing failed`)
+            showErrorNotification(`The ${editContentNameInput.value} ${type.value} editing failed`)
         }
     })
 
@@ -213,29 +215,26 @@ const edit = () => {
 
 
 const remove = (id, parentId) => {
-    console.log(id, parentId)
-    router.delete(route('categories.delete', {'id': id, 'parentId': parentId}), {
+    router.delete(route('categories.delete', { 'id': id, 'parentId': parentId }), {
         onSuccess: () => {
             showSuccessNotification(`Removing category was successful`)
             close();
         },
         onError: () => {
             showErrorNotification(`The category removal failed`)
-        } 
+        }
     })
-    
-// usuń z DB
 }
 
 const create = (typeEl) => {
     createForm.type = typeEl
-    
-    if(typeEl === 'subcategory') {
+
+    if (typeEl === 'subcategory') {
         createForm.parentId = selectedCategory.value.id
     }
-    
+
     createForm.post(route('categories.create'), {
-        onSuccess: () => { 
+        onSuccess: () => {
             showSuccessNotification(`The creation of a new ${typeEl} was successful`)
             closeInputs()
         },
