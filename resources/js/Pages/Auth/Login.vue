@@ -4,8 +4,8 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
 import GuestUserLayout from '@/Layouts/GuestUserLayout.vue';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 
 defineProps({
     canResetPassword: {
@@ -39,8 +39,24 @@ const submit = () => {
         </div>
 
         <div class="flex justify-center">
+            <div class="absolute top-24 w-fit p-1 text-sm bg-white">
+                <p class=" text-lg font-bold ">Demo accounts:</p>
+                <div class="demo font-mono px-8 py-2">
+                    <p>Email: admin@example.com</p>
+                    <p>Password: password</p>
+
+                    <p>Email: user@example.com</p>
+                    <p>Password: password</p>
+                </div>
+                <p>I recommend using the admin account,</p>
+                <p> it is more advanced. </p>
+            </div>
+        </div>
+
+
+        <div class="flex justify-center">
             <form @submit.prevent="submit"
-            class="m-14 p-10 w-1/3 gap-2  bg-gray-100 border border-gray-300 rounded-xl shadow-2xl ">
+                class="m-24 p-10 w-1/3 gap-2  bg-gray-100 border border-gray-300 rounded-xl shadow-2xl ">
                 <div>
                     <InputLabel for="email" value="Email" />
 
@@ -80,3 +96,7 @@ const submit = () => {
         </div>
     </GuestUserLayout>
 </template>
+
+<style scoped>
+
+</style>

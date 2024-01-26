@@ -1,5 +1,5 @@
 <template>
-    <div class=" bg-slate-800 text-gray-100 h-50 pt-10">
+    <div class=" bg-gray-800 text-gray-300 h-50 pt-10">
 
         <div class="flex justify-around">
             <div class="w-[20%] text-center">

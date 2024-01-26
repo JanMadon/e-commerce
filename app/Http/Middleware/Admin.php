@@ -19,7 +19,6 @@ class Admin
         if(Auth::user()->level === 'admin') {
             return $next($request);
             } 
-
-        abort(401);
+        return to_route('home');
     }
 }
