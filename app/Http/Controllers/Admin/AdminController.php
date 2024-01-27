@@ -4,32 +4,29 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserUpdateFieldRequest;
-use App\Models\DetalsOrder;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use App\Services\BookkeepingService;
 use App\Services\CategoryService;
-use App\Services\OrderService;
-use App\Services\UserService;
+use App\Services\OrderServiceInterface;
+use App\Services\UserServiceInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
 class AdminController extends Controller
 {
 
-    private UserService $userService;
+    private UserServiceInterface $userService;
     private CategoryService $categoryService;
     private BookkeepingService $bookkeepingService;
-    private OrderService $orderService;
+    private OrderServiceInterface $orderService;
 
     public function __construct(
-        UserService $userService,
+        UserServiceInterface $userService,
         CategoryService $categoryService,
         BookkeepingService $bookkeepingService,
-        OrderService $orderService
+        OrderServiceInterface $orderService
         )
     {
         $this->userService = $userService;

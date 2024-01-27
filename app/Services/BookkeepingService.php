@@ -2,10 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\DetalsOrder;
 use App\Models\Order;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Storage;
 
 class BookkeepingService
 {

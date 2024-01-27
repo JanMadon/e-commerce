@@ -5,10 +5,8 @@ namespace App\Services;
 use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 
-class ProductService
+class ProductService implements ProductServiceInterface
 {
-
-
     public function getAllProductsWithMainPhotos(
         ?string $search = null,
         ?int $perPage = 10,

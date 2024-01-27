@@ -5,10 +5,7 @@ namespace App\Services;
 use App\Models\Order;
 use App\Models\User;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Database\Eloquent\Collection;
-use Stripe\Checkout\Session;
-use Stripe\Stripe;
 
 class UserService
 {

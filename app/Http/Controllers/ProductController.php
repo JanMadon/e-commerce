@@ -4,17 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AddProductRequest;
 use App\Services\CategoryService;
-use App\Services\ProductService;
+use App\Services\ProductServiceInterface;
 use Exception;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ProductController extends Controller
 {
+    private ProductServiceInterface $productService;
 
-    private $productService;
-
-    public function __construct(ProductService $productService)
+    public function __construct(ProductServiceInterface $productService)
     {
         $this->productService = $productService;
     }
@@ -33,7 +32,6 @@ class ProductController extends Controller
 
     public function create(CategoryService $categoryService)
     {
-        //dd($request->message);
         $category =  $categoryService->getCategoriesWithSubcategories();
 
         return Inertia::render('Admin/AddProduct', [

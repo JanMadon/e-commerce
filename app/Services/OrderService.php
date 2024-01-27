@@ -5,10 +5,9 @@ namespace App\Services;
 use App\Models\DetalsOrder;
 use App\Models\Order;
 use Carbon\Carbon;
-use GuzzleHttp\Psr7\Query;
 use Illuminate\Support\Facades\Storage;
 
-class OrderService
+class OrderService implements OrderServiceInterface
 {
     public function getAllOredrs($search, $perPage = 15)
     {

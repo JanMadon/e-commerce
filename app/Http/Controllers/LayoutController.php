@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Services\ProductService;
+use App\Services\ProductServiceInterface;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class LayoutController extends Controller
 {
-    private ProductService $productService;
+    private ProductServiceInterface $productService;
 
-    public function __construct(ProductService $productService) {
+    public function __construct(ProductServiceInterface $productService) {
         $this->productService = $productService;
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\OrderRequest;
 use App\Models\Order;
 use App\Services\OrderService;
+use App\Services\OrderServiceInterface;
 use App\Services\PayService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,10 +13,10 @@ use Inertia\Inertia;
 
 class OrderController extends Controller
 {
-    private $orderService;
-    private $payService;
+    private OrderServiceInterface $orderService;
+    private PayService $payService;
 
-    public function __construct(OrderService $orderService, PayService $payService)
+    public function __construct(OrderServiceInterface $orderService, PayService $payService)
     {
         $this->orderService = $orderService;
         $this->payService = $payService;
