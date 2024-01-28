@@ -86,7 +86,7 @@ Route::middleware('auth')->group(function () {
         ->name('profile.address');
     Route::patch('/profile', [ProfileController::class, 'update'])
         ->name('profile.update');
-    Route::delete('/profile/{product}', [ProfileController::class, 'destroy'])
+    Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
 });
 

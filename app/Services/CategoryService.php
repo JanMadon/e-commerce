@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Category;
 use App\Models\DetalsOrder;
+use App\Models\SubCategory;
 use Illuminate\Support\Facades\DB;
 
 class CategoryService
@@ -30,4 +31,68 @@ class CategoryService
 
         return $data;
     }
+
+    public function createCategory($parentId, $data)
+    { 
+        if ($parentId) {
+            SubCategory::create([
+                'category_id' => $data['parentId'],
+                'name' => $data['name'],
+                'description' => $data['description'], 
+            ]);
+        } else {
+            Category::create($data);
+        }
+      
+        return redirect()->back();
+    }
+
+    public function editCategory($parentId, $data)
+    {
+        if ($parentId ) {
+            $category = Category::find($data['parentId']);
+            $subCategory = $category->subCategory->find($data['id']);
+            $subCategory->update([
+                'name' => $data['name'],
+                'description' => $data['description']
+            ]);
+        } else {
+            $category = Category::find($data['id']);
+            $category->update([
+                'name' => $data['name'],
+                'description' => $data['description']
+            ]);
+        }
+        return redirect()->back();
+    }
+
+    public function deleteCategory($id, $parentId = null)
+    {
+        
+        if(!$parentId){
+            $categories = Category::with('subCategory')
+                ->find($id);
+    
+            if ($categories) {
+                $categories->subCategory
+                    ->each(function ($subCategory) {
+                        $subCategory->delete();
+                    });
+            }
+            $categories->delete();
+
+        } else {
+            Category::with('subCategory')
+                ->find($parentId)
+                ->subCategory
+                ->find($id)
+                ->delete();   
+        }
+        
+        return redirect()->back();
+    }
+
+
+
+
 }

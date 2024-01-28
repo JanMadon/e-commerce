@@ -7,7 +7,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 
-class UserService
+class UserService implements UserServiceInterface
 {
 
     public function getUserWithInfo(int $id)
