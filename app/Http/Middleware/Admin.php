@@ -16,9 +16,11 @@ class Admin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::user()->level === 'admin') {
+       
+        if(Auth::check() && Auth::user()->level === 'admin') {
             return $next($request);
-            } 
+        } 
+       
         return to_route('home');
     }
 }

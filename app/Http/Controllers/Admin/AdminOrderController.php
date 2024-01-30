@@ -34,6 +34,8 @@ class AdminOrderController extends Controller
 
         $orders = $this->orderService->getAllOredrs($search, $perPage);
 
+      //  dd($orders);
+
         return Inertia::render('Admin/Orders',[
             'orders' => $orders,
             'payment' => $request->payment

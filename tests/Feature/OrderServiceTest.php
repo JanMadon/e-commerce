@@ -13,11 +13,11 @@ class OrderServiceTest extends TestCase
     /**
      * A basic feature test example.
      */
-    public function test_example(): void
-    {
-        $order = Order::factory()->make();
-        dump($order);
+    // public function test_example(): void
+    // {
+    //     $order = Order::factory()->make();
+    //     dump($order);
 
-        $this->assertTrue(true);
-    }
+    //     $this->assertTrue(true);
+    // }
 }

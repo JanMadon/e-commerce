@@ -7,11 +7,15 @@ use Illuminate\Support\Facades\Auth;
 class CheckPrivilegesController extends Controller
 {
     public function index() {
-        
-        if(Auth::user()->level === 'admin') {
-            return to_route('dashboard');
+
+        if(Auth::check()) {
+            if(Auth::user()->level === 'admin') {
+                return to_route('dashboard');
+            } else {
+                return to_route('home');
+            }
         } else {
-            return to_route('home');
+            return to_route('login');
         }
     }
 }

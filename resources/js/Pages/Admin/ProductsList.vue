@@ -12,8 +12,11 @@
             </div>
         </nav>
 
-        <div class="flex flex-col items-center" >
-            <div v-for="(product, index) in productsToShow" :class=" product.status == 'deleted' ? 'brightness-50' : '' "
+        <div class="flex flex-col items-center" > 
+            <div v-if="!products.data.length" class="mt-10">
+                No products available.
+            </div>
+            <div v-else v-for="(product, index) in productsToShow" :class=" product.status == 'deleted' ? 'brightness-50' : '' "
             class="flex justify-between  w-2/3 h-2/3 m-2 p-5
             bg-gray-100 border border-gray-300 shadow-2xl">
                 <div class="flex">
@@ -122,7 +125,7 @@
                 </div>
             </div>
         </Modal>
-
+        {{ $page.props.products}}
     </AdminLayout>
 </template>
 

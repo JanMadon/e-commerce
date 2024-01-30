@@ -22,6 +22,7 @@ class OrderFactory extends Factory
             'payd_at' => fake()->dateTime(),
             'amount_paid' => 0,
             'shiping_method' => fake()->randomElement(['lockerFree','locker','curier','self','-']),
+            'status' => fake()->randomElement(['waiting','sent','canceled']),
         ];
     }
 }

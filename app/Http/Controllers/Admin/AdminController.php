@@ -51,13 +51,13 @@ class AdminController extends Controller
 
     public function raports()
     {
-        $data = [];
+        $orderData = [];
         $orders = $this->orderService->getLatestOrders();
         foreach($orders as $order) {
-            if(array_key_exists($order->payd_at, $data)){
-                $data[$order->payd_at] += 1;
+            if(array_key_exists($order->payd_at, $orderData)){
+                $orderData[$order->payd_at] += 1;
             } else {
-                $data[$order->payd_at] = 1;
+                $orderData[$order->payd_at] = 1;
             }
         }
 
@@ -76,7 +76,7 @@ class AdminController extends Controller
       
 
         return Inertia::render('Admin/Raports', [
-            'ordersDates' => $data,
+            'ordersDates' => $orderData,
             'usersData' => $userData
         ]);
     }

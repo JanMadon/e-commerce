@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Product;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Storage;
 
 class ProductService implements ProductServiceInterface
@@ -12,7 +13,8 @@ class ProductService implements ProductServiceInterface
         ?int $perPage = 10,
         ?string $category = null,
         ?string $subcategory = null,
-    ) {
+    ) :LengthAwarePaginator
+     {
         !$perPage ? $perPage=10:'';
 
         if ($search) {
@@ -31,17 +33,19 @@ class ProductService implements ProductServiceInterface
 
         $products = $query->paginate($perPage);
 
-        foreach ($products as $product) {
-            $photoNames = Storage::files("product/$product->id");
-            if($photoNames) {
-                $photoName = basename($photoNames[0]);
-                $photo = Storage::get("product/$product->id/$photoName");
-                $base64Image = base64_encode($photo);
-                $product->photo = $base64Image;;
-            } else {
-              
-            }
-        }
+        // foreach ($products as $product) {
+        //     $photoNames = Storage::files("product/$product->id");
+        //     if($photoNames) {
+        //         $photoName = basename($photoNames[0]);
+        //         $photo = Storage::get("product/$product->id/$photoName");
+        //         $base64Image = base64_encode($photo);
+        //         $product->photo = $base64Image;
+        //     } else {
+        //         $photo = Storage::get("product/notFound/photo.png");
+        //         $base64Image = base64_encode($photo);
+        //         $product->photo = $base64Image;
+        //     }
+        // }
         return $products;
     }
 
