@@ -115,8 +115,6 @@ import { router } from '@inertiajs/vue3';
 import { ref, watch, onMounted} from 'vue';
 import {showSuccessNotification, showErrorNotification} from '@/event-bus'
 
-
-
 const props = defineProps({
     order: Object,
 })
@@ -143,7 +141,7 @@ function pay() {
         return
     }
     payModal.value = true;
-    axios.post(route('cart.payOrder'), { data: props.order })
+    axios.post(route('cart.payOrder'), { orderId: props.order.id })
         .then(response => window.location.href = response.data.paymentPage)
         .catch(error => {
             payModal.value = false;

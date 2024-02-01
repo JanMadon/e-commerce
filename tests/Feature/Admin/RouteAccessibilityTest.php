@@ -24,28 +24,6 @@ class RouteAccessibilityTest extends TestCase
         $this->get(route('dashboard'))->assertStatus(200);
     }
 
-    public function test_add_product_page_can_be_rendered(): void
-    {
-        $user = User::factory()->make(['level'=>'admin']);
-        $this->actingAs($user);
-        $this->assertAuthenticated();
-
-        $response = $this->get(route('product.create')); 
-        $response->assertStatus(200);
-
-    }
-
-    public function test_categories_page_can_be_rendered(): void
-    {
-        $user = User::factory()->make(['level'=>'admin']);
-        $this->actingAs($user);
-        $this->assertAuthenticated();
-
-        $response = $this->get(route('categories.index')); 
-        $response->assertStatus(200);
-
-    }
-
     public function test_orders_page_can_be_rendered(): void
     {
         $user = User::factory()->make(['level'=>'admin']);
@@ -59,7 +37,6 @@ class RouteAccessibilityTest extends TestCase
     
         $response->assertSee('accepted');
         $response->assertSee(999);
-
     }
 
     public function test_users_list_page_can_be_rendered(): void

@@ -61,8 +61,6 @@ class AdminController extends Controller
             }
         }
 
-        //number registered Users
-
         $userData = [];
         $users = User::get();
         foreach($users as $user){

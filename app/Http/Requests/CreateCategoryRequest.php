@@ -22,7 +22,7 @@ class CreateCategoryRequest extends FormRequest
      */
     public function rules(Request $request): array
     {
-
+       // dd($this);
         if($request->parentId) {
             return [
                 'parentId' => ['required', 'integer', 'exists:categories,id'],

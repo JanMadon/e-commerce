@@ -6,6 +6,7 @@ use App\Http\Requests\AddProductRequest;
 use App\Services\CategoryService;
 use App\Services\ProductServiceInterface;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -39,7 +40,7 @@ class ProductController extends Controller
         ]);
     }
 
-    public function store(AddProductRequest $request)
+    public function store(AddProductRequest $request): RedirectResponse
     {
         $request = $request->validated();
 
@@ -51,8 +52,10 @@ class ProductController extends Controller
             'quantity' => $request['quantity'],
         ];
 
+        if(!array_key_exists('photos', $request)) {
+            $request['photos'] = null;
+        }
         $this->productService->saveProduct($data, $request['photos']);
-
         return to_route('products');
     }
 

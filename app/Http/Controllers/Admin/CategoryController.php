@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
-use App\Models\Category;
-use App\Models\SubCategory;
 use App\Services\CategoryService;
 use Inertia\Inertia;
 
@@ -33,17 +31,19 @@ class CategoryController extends Controller
 
         $data = $request->validated();
         $this->categoryService->createCategory($request->input('parentId'), $data);
-
+        return redirect()->back();
     }
 
     public function edit(UpdateCategoryRequest $request)
     {
         $data = $request->validated();
         $this->categoryService->editCategory($request->input('parentId'), $data);
+        return redirect()->back();
     }
 
     public function delete($id, $parentId = null)
     {
         $this->categoryService->deleteCategory($id, $parentId);
+        return redirect()->back();
     }
 }

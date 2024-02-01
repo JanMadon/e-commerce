@@ -205,6 +205,7 @@ const form = useForm({
 })
 
 function addProduct() {
+
     if (confirm('Are you sure to add new product?')) {
         form.post(route('product.store'), {
             onSuccess: () => {

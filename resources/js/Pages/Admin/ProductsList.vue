@@ -125,7 +125,6 @@
                 </div>
             </div>
         </Modal>
-        {{ $page.props.products}}
     </AdminLayout>
 </template>
 

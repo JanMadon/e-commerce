@@ -21,7 +21,7 @@ class AddProductRequest extends FormRequest
      */
     public function rules(): array
     {
-      //  dd('stop');
+        //dd($this);
         return [
             'name'=>['required', 'string', 'min:5', 'max:50', 'unique:products'],
             'category_id'=>['required', 'integer', 'exists:categories,id', 'exists:sub_categories,category_id'],
@@ -29,7 +29,7 @@ class AddProductRequest extends FormRequest
             'quantity'=>['required'],
             'price'=>['required', 'numeric', 'min:0.01',],
             'description'=>['required', 'string', 'min:10', 'max:250'],
-            'photos'=>['required']
+            'photos.0.*'=>['image', 'mimes:jpeg,png,jpg', 'max:2048']
         ];
     }
 }

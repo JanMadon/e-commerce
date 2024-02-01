@@ -51,7 +51,7 @@
 import GuestUserLayout from '@/Layouts/GuestUserLayout.vue'
 import AddToCartBtn from '@/Components/App/AddToCartBtn.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import { Head, router } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 const props = defineProps({

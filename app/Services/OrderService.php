@@ -132,8 +132,12 @@ class OrderService implements OrderServiceInterface
             foreach ($order->detalsOrder as $detail) {
                 $product = $detail->product;
                 $photosNames = Storage::files("product/$product->id");
-                $photoName = basename($photosNames[0]);
-                $photo = Storage::get("product/$product->id/$photoName");
+                if(count($photosNames)) {
+                    $photoName = basename($photosNames[0]);
+                    $photo = Storage::get("product/$product->id/$photoName");
+                } else {
+                    $photo = Storage::get("product/notFound/photo.png");
+                }
                 $photo = base64_encode($photo);
                 $product->photo = $photo;
             }

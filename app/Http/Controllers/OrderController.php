@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\OrderRequest;
+use App\Http\Requests\PayRequest;
 use App\Models\Order;
 use App\Services\OrderServiceInterface;
 use App\Services\PayService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class OrderController extends Controller
@@ -102,12 +104,12 @@ class OrderController extends Controller
         $order->save();
     }
 
-    public function payOrder(Request $request)
+    public function payOrder(PayRequest $request)
     {
-        //validuj
-        $order = Order::find($request->data['id']);
+        $request->validated();
+        
+        $order = Order::find($request->orderId);
         $url =  $this->payService->payByStripe($order);
-
         return response()->json([
             'paymentPage' => $url,
         ]);

@@ -33,19 +33,19 @@ class ProductService implements ProductServiceInterface
 
         $products = $query->paginate($perPage);
 
-        // foreach ($products as $product) {
-        //     $photoNames = Storage::files("product/$product->id");
-        //     if($photoNames) {
-        //         $photoName = basename($photoNames[0]);
-        //         $photo = Storage::get("product/$product->id/$photoName");
-        //         $base64Image = base64_encode($photo);
-        //         $product->photo = $base64Image;
-        //     } else {
-        //         $photo = Storage::get("product/notFound/photo.png");
-        //         $base64Image = base64_encode($photo);
-        //         $product->photo = $base64Image;
-        //     }
-        // }
+        foreach ($products as $product) {
+            $photoNames = Storage::files("product/$product->id");
+            if($photoNames) {
+                $photoName = basename($photoNames[0]);
+                $photo = Storage::get("product/$product->id/$photoName");
+                $base64Image = base64_encode($photo);
+                $product->photo = $base64Image;
+            } else {
+                $photo = Storage::get("product/notFound/photo.png");
+                $base64Image = base64_encode($photo);
+                $product->photo = $base64Image;
+            }
+        }
         return $products;
     }
 
@@ -66,14 +66,16 @@ class ProductService implements ProductServiceInterface
         return $product;
     }
 
-    public function saveProduct(array $data, array $photos)
+    public function saveProduct(array $data, ?array $photos)
     {
         $product = Product::create($data);
         $productId = $product->id;
         $product->id;
 
-        foreach ($photos as $photo) {
-            Storage::put("product/$productId", $photo[0]);
+        if($photos){
+            foreach ($photos as $photo) {
+                Storage::put("product/$productId", $photo[0]);
+            }
         }
 
         return;
