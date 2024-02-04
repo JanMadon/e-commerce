@@ -33,7 +33,6 @@ class PayService {
             return $paySession->url;
         } catch (Exception $e) {
             return $e;
-            // sprawdz jak logowąć error;
         }
     }
 }

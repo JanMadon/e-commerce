@@ -116,18 +116,4 @@ class AdminOrderController extends Controller
         $order->save();
     }
 
-    // public function payOrder(Request $request)
-    // {
-    //     dd($request);
-    //     $request->validate([
-    //         'data' => ['required']
-    //     ]);
-
-    //     $order = Order::find($request->data['id']);
-    //     $url =  $this->payService->payByStripe($order);
-
-    //     return response()->json([
-    //         'paymentPage' => $url,
-    //     ]);
-    // }
 }

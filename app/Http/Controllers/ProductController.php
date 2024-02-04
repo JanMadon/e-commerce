@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AddProductRequest;
 use App\Services\CategoryService;
 use App\Services\ProductServiceInterface;
-use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Exception;
 
 class ProductController extends Controller
 {
@@ -68,7 +68,6 @@ class ProductController extends Controller
                     $request['newValue']
                 );
         }catch(Exception $e){
-            dd($e); //to nie działą / Sprawdż jak zgłaszać błędy!!!!
            return response()->json('error with update', 505);
         }
 

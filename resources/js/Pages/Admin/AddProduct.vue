@@ -207,13 +207,14 @@ const form = useForm({
 function addProduct() {
 
     if (confirm('Are you sure to add new product?')) {
-        form.post(route('product.store'), {
-            onSuccess: () => {
-                showSuccessNotification(`Product ${form.name} has been added to the product list, now you can activate it.`)},
-            onError: () => {
-                showErrorNotification(`Something went wrong, please try again later.`)
-            }
-        });
+        // form.post(route('product.store'), {
+        //     onSuccess: () => {
+        //         showSuccessNotification(`Product ${form.name} has been added to the product list, now you can activate it.`)},
+        //     onError: () => {
+        //         showErrorNotification(`Something went wrong, please try again later.`)
+        //     }
+        // });
+        showErrorNotification(`You can't add a product, you are in a test instance.`)
     }
 }
 
