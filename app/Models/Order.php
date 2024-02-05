@@ -43,16 +43,8 @@ class Order extends Model
             ->count();
     }
 
-
-    public function amount(): Int 
+    public function shipingPrice(): int
     {
-        $sum = 0;
-        $detals = $this->detalsOrder;
-        foreach($detals as $detal)
-        { 
-            $sum += ($detal->product->price * $detal->quantity);
-        }
-
         switch($this->shiping_method) {
             case 'locker':
                 $shipmentCost = 10;
@@ -63,20 +55,7 @@ class Order extends Model
             default:
                 $shipmentCost = 0;       
         }
-
-        return $sum + $shipmentCost;
-    }
-
-    public function productsNameAndQuantity(): Array
-    {
-        $detals = $this->detalsOrder;
-        $products=[];
-
-        foreach($detals as $detal)
-        { 
-            array_push($products, $detal->quantity . 'pcs: ' . $detal->product->name . '. ');
-        }
-        return $products;
+        return $shipmentCost;
     }
 
 }

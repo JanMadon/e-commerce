@@ -127,8 +127,9 @@ import { ref, onMounted } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { useDark, useToggle } from '@vueuse/core'
 
-const isDark = useDark();
+const isDark = useDark(false);
 const toggleDark = useToggle(isDark);
+toggleDark(false)
 const showProfil = ref(false);
 
 

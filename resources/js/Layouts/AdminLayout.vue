@@ -112,26 +112,21 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import FooterComponets from '@/Components/FooterComponets.vue'
-import Dropdown from '@/Components/Dropdown.vue';
-import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
-import { useDark, useToggle } from '@vueuse/core'
 import Notification from '@/Components/App/Notification.vue'
 import AdminBar from '@/Components/App/AdminBar.vue';
 import CategoryBar from '@/Components/App/CategoryBar.vue';
-import { watchEffect } from 'vue';
+import { Link } from '@inertiajs/vue3';
+import { useDark, useToggle } from '@vueuse/core'
+import { ref } from 'vue';
 import { onMounted } from 'vue';
 
 
-const showingNavigationDropdown = ref(false);
-const dark = ref(false)
-const isDark = useDark();
+const isDark = useDark(false);
 const toggleDark = useToggle(isDark);
+toggleDark(false)
 const showProfil = ref(false);
 const showAdminPanel = ref(true);
 

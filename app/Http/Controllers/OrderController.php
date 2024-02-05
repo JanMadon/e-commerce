@@ -107,7 +107,7 @@ class OrderController extends Controller
     {
         $request->validated();
         
-        $order = Order::find($request->orderId);
+        $order = Order::with('detalsOrder.product')->find($request->orderId);
         $url =  $this->payService->payByStripe($order);
         return response()->json([
             'paymentPage' => $url,
