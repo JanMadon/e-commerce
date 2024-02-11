@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
@@ -56,6 +55,18 @@ class Order extends Model
                 $shipmentCost = 0;       
         }
         return $shipmentCost;
+    }
+
+    public function amount(): Int 
+    {
+        $sum = 0;
+        $detals = $this->detalsOrder;
+        foreach($detals as $detal)
+        { 
+            $sum += ($detal->product->price * $detal->quantity);
+        }
+
+        return $sum + $this->shipingPrice();
     }
 
 }
