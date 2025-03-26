@@ -123,14 +123,32 @@ import NavLink from '@/Components/NavLink.vue';
 import Notification from '@/Components/App/Notification.vue'
 import CategoryBar from '@/Components/App/CategoryBar.vue';
 import FooterComponets from '@/Components/FooterComponets.vue'
-import { ref, onMounted } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { useDark, useToggle } from '@vueuse/core'
 
+const showProfil = ref(false);
+
 const isDark = useDark(false);
 const toggleDark = useToggle(isDark);
-toggleDark(false)
-const showProfil = ref(false);
+
+onMounted(() => {
+    const savedPreference = localStorage.getItem('darkMode');
+    if (savedPreference !== null) {
+        isDark.value = savedPreference === 'true';
+    } else {
+        // Użyj domyślnego trybu systemowego
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        isDark.value = prefersDark;
+    }
+
+
+});
+
+// Zapisywanie każdej zmiany w Local Storage
+watch(isDark, (newValue) => {
+    localStorage.setItem('darkMode', newValue.toString()); // Zapisz wartość jako string
+});
 
 
 onMounted(() => {
