@@ -34,17 +34,8 @@ class ProductService implements ProductServiceInterface
         $products = $query->paginate($perPage);
 
         foreach ($products as $product) {
-            $photoNames = Storage::files("product/$product->id");
-            if($photoNames) {
-                $photoName = basename($photoNames[0]);
-                $photo = Storage::get("product/$product->id/$photoName");
-                $base64Image = base64_encode($photo);
-                $product->photo = $base64Image;
-            } else {
-                $photo = Storage::get("product/notFound/photo.png");
-                $base64Image = base64_encode($photo);
-                $product->photo = $base64Image;
-            }
+            $photos_names = Storage::files("public/products/$product->id");
+            $product->srcPhotos = array_map(fn($file) => '/storage/products/'.$product->id.'/'. basename($file), $photos_names);
         }
         return $products;
     }
@@ -60,7 +51,7 @@ class ProductService implements ProductServiceInterface
             $photo = Storage::get("product/$id/$photoName");
             $base64Image = base64_encode($photo);
             $photosData[] = $base64Image;
-            
+
         }
         $product->photos = $photosData;
         return $product;

@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Services\ProductServiceInterface;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class LayoutController extends Controller
 {
@@ -15,14 +16,13 @@ class LayoutController extends Controller
         $this->productService = $productService;
     }
 
-    public function showProdyctBoard(Request $rquest)
+    public function showProductsBoard(Request $request, $category, $subcategory = null): Response
     {
-        $category = $rquest->route('category');
-        $subcategory = $rquest->route('subcategory');
-        $search = $rquest->query('search');
+
+        $search = $request->query('search');
 
         $products = $this->productService->getAllProductsWithMainPhotos($search, 8, $category, $subcategory);
-
+    
         return Inertia::render('MainPage', [
             'products' => $products,
         ]);
